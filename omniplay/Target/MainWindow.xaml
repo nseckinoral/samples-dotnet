@@ -1,0 +1,13 @@
+﻿<Window x:Class="Target.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Omni-Play Sample Target Application" Height="350" Width="525">
+    <Grid>
+        <StackPanel Width="400">
+            <TextBlock Text="Step 1 : Registering target device to Omni-Discovery" />
+            <Button Content="Register to Omni-Discovery" x:Name="btn_RegisterDevice"/>
+            <TextBlock Text="Step 2 : Start polling for incomming sessions" />
+            <Button Content="Start Omni-Play Polling" x:Name="btn_PollSession"/>            
+        </StackPanel>
+    </Grid>
+</Window>
