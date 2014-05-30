@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using System.Net;
@@ -83,35 +82,5 @@ namespace Source
 
             return pollingResult;
         }
-    }
-
-    public class PII_RequestObject
-    {
-        public string UserName { get; set; }
-        public string Name { get; set; }
-    }
-    public class PII_ResponseObject
-    {
-        public Data Data { get; set; }
-    }
-    public class Data
-    {
-        public string UserName { get; set; }
-        public string Password { get; set; }
-        public object Name { get; set; }
-        public string PIIUserType { get; set; }
-    }
-
-    public class Device
-    {
-        public string DeviceId { get; set; }
-        public string Description { get; set; }
-    }
-
-    public class DiscoveryResponseObject
-    {
-        public bool IsSuccess { get; set; }
-        public HttpStatusCode HttpStatusCode { get; set; }
-        public List<Device> Data { get; set; }
     }
 }

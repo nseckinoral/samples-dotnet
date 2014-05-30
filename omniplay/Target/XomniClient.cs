@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Configuration;
-using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -78,38 +76,5 @@ namespace Target
                 return response.IsSuccessStatusCode;
             }
         }
-    }
-
-    public class Datum
-    {
-        public string OmniTicket { get; set; }
-        public string PIIDisplayName { get; set; }
-    }
-
-    public class PollingResponseObject
-    {
-        public bool IsSuccess { get; set; }
-        public HttpStatusCode HttpStatusCode { get; set; }
-        public List<Datum> Data { get; set; }
-    }
-    public class OmniTicket
-    {
-        public string Ticket { get; set; }
-    }
-
-    public class PIISessionData
-    {
-        public string SessionGuid { get; set; }
-    }
-
-    public class PIISession
-    {
-        public PIISessionData Data { get; set; }
-    }
-
-    public class RegisterRequestObject
-    {
-        public string DeviceId { get; set; }
-        public string Description { get; set; }
     }
 }
