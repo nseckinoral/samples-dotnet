@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using Source.Models;
+using System;
 using System.Configuration;
 using System.Linq;
 using System.Net;
@@ -36,7 +38,7 @@ namespace Source
             return client;
         });
 
-        public async Task<bool> SubscribeQueue(string piiUser, string piiPassword, string deviceId)
+        public async Task<bool> SubscribeQueueAsync(string piiUser, string piiPassword, string deviceId)
         {
             string path = string.Format("omniplay/devices/{0}", deviceId);
             HttpRequestMessage requestMessage = new HttpRequestMessage(HttpMethod.Post, path);
@@ -48,7 +50,7 @@ namespace Source
             }
         }
 
-        public async Task<PII_ResponseObject> RequestAnonymousPii(PII_RequestObject piiRequestObject)
+        public async Task<PII_ResponseObject> RequestAnonymousPiiAsync(PII_RequestObject piiRequestObject)
         {
             PII_ResponseObject result = null;
             using (HttpResponseMessage response = await Client.Value.PostAsJsonAsync("pii/anonymous", piiRequestObject))
@@ -62,7 +64,7 @@ namespace Source
             return result;
         }
 
-        public async Task<DiscoveryResponseObject> GetDiscoverableDevices()
+        public async Task<DiscoveryResponseObject> GetDiscoverableDevicesAsync()
         {
             DiscoveryResponseObject pollingResult;
             using (HttpResponseMessage response = await Client.Value.GetAsync("omniplay/store/devices"))
@@ -81,6 +83,52 @@ namespace Source
             }
 
             return pollingResult;
+        }
+
+        public async Task<CreateWishlistResponseObject> CreateWishlistAsync(Wishlist wishlist, string piiUser, string piiPassword)
+        {
+            CreateWishlistResponseObject result;
+            HttpRequestMessage requestMessage = new HttpRequestMessage(HttpMethod.Post, "pii/wishlist");
+            requestMessage.Content = new StringContent(JsonConvert.SerializeObject(wishlist), Encoding.UTF8, "application/json");
+            string encodedHeaderPiiValue = Convert.ToBase64String(Encoding.UTF8.GetBytes(String.Format(PiiHeaderFormat, piiUser, piiPassword)));
+            requestMessage.Headers.Add(PiiTokenHeaderName, encodedHeaderPiiValue);
+            using (HttpResponseMessage response = await Client.Value.SendAsync(requestMessage))
+            {
+                if (response.IsSuccessStatusCode)
+                {
+                    result = await response.Content.ReadAsAsync<CreateWishlistResponseObject>();
+                }
+                else
+                {
+                    result = new CreateWishlistResponseObject();
+                }
+                result.IsSuccess = response.IsSuccessStatusCode;
+                result.HttpStatusCode = response.StatusCode;
+            }
+            return result;
+        }
+
+        public async Task<AddWishlistItemResponse> AddWishlistItemAsync(WishlistItem wishlistItem, string wishlistUniqueKey, string piiUser, string piiPassword)
+        {
+            AddWishlistItemResponse result;
+            HttpRequestMessage requestMessage = new HttpRequestMessage(HttpMethod.Post, string.Format("pii/wishlistitem?wishlistUniqueKey={0}", wishlistUniqueKey));
+            requestMessage.Content = new StringContent(JsonConvert.SerializeObject(wishlistItem), Encoding.UTF8, "application/json");
+            string encodedHeaderPiiValue = Convert.ToBase64String(Encoding.UTF8.GetBytes(String.Format(PiiHeaderFormat, piiUser, piiPassword)));
+            requestMessage.Headers.Add(PiiTokenHeaderName, encodedHeaderPiiValue);
+            using (HttpResponseMessage response = await Client.Value.SendAsync(requestMessage))
+            {
+                if (response.IsSuccessStatusCode)
+                {
+                    result = await response.Content.ReadAsAsync<AddWishlistItemResponse>();
+                }
+                else
+                {
+                    result = new AddWishlistItemResponse();
+                }
+                result.IsSuccess = response.IsSuccessStatusCode;
+                result.HttpStatusCode = response.StatusCode;
+            }
+            return result;
         }
     }
 }

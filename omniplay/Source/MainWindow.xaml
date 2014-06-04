@@ -17,7 +17,9 @@
             <TextBlock Text="Step 5 : Create a local PII Session to be moved to somewhere else." />
             <Button Content="Create an anonymous PII" x:Name="btn_AnonymousPII"/>
             <TextBox x:Name="txt_PIIPassword" ></TextBox>
-            <TextBlock Text="Step 6 : Move the session to the target device." />
+            <TextBlock Text="Step 6 : Create wishList and populate." />
+            <Button Content="Create wishList and populate." x:Name="btn_CreateAndPopulateWishlist"/>
+            <TextBlock Text="Step 7 : Move the session to the target device." />
             <Button Content="Move current devices session to the selected device" x:Name="btn_Move"/>
         </StackPanel>
     </Grid>

@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections;
 using System.Linq;
 using System.Net;
 using System.Text;
 using System.Windows;
 using System.Windows.Threading;
+using Target.Models;
 
 namespace Target
 {
@@ -33,7 +36,7 @@ namespace Target
             //See for reference: http://dev.xomni.com/v2-0/http-api/public-apis/omniplay/device/fetching-pii-user-omnitickets-on-omniplay-device-queue
 
             XomniClient xomniClient = new XomniClient();
-            PollingResponseObject pollingResult = await xomniClient.GetIncomingDevices(currentTargetDeviceId);
+            PollingResponseObject pollingResult = await xomniClient.GetIncomingDevicesAsync(currentTargetDeviceId);
             if (pollingResult.IsSuccess)
             {
                 //Getting the first session in the queue
@@ -48,10 +51,24 @@ namespace Target
 
                     //Time to exchange incomming Omni-Token with a PII Session.
                     //See for reference: http://dev.xomni.com/v2-0/http-api/public-apis/omniplay/omniticket/using-omniticket-for-a-pii
-                    PIISession session = await xomniClient.ExchangeOmniTokenWithPiiSession(incommingOmniTicket);
-                    if(session != null)
+                    PIISession session = await xomniClient.ExchangeOmniTokenWithPiiSessionAsync(incommingOmniTicket);
+                    if (session != null)
                     {
-                        MessageBox.Show("This is the new PII Header on target device: " + Convert.ToBase64String(Encoding.UTF8.GetBytes("sessionGuid:" + session.Data.SessionGuid )));
+                        //Fetching wishlists of PII User
+                        //See for reference : http://dev.xomni.com/v2-0/http-api/public-apis/pii/wishlist/fetching-all-wish-lists 
+                        WishlistUniqueKeyResponse uniqueKeys = await xomniClient.GetWishlistUniqueKeysAsync(session.Data.SessionGuid);
+                        if (uniqueKeys.IsSuccess)
+                        {
+                            Guid uniqueKey = uniqueKeys.Data.FirstOrDefault();
+                            if (uniqueKey != default(Guid))
+                            {
+                                //Fetching wishlist items in a wishlist.
+                                //See for reference : http://dev.xomni.com/v2-0/http-api/public-apis/pii/wishlist/fetching-a-wish-list-with-a-wish-list-unique-key
+                                WishlistResponse wishlist = await xomniClient.GetWishlistAsync(uniqueKey.ToString(), session.Data.SessionGuid);
+                                List<int> itemIds = wishlist.Data.WishlistItems.Select(t => t.Item.Id).ToList();
+                                MessageBox.Show(string.Format("Wishlist name : {0}\nIds of items in wishlist:{1},{2}", wishlist.Data.Name, itemIds[0], itemIds[1]));
+                            }
+                        }
                     }
                     else
                     {
@@ -103,7 +120,7 @@ namespace Target
                 Description = "This is a device created on " + DateTime.Now.ToLongDateString() + " | " + DateTime.Now.ToLongTimeString(),
                 DeviceId = Guid.NewGuid().ToString()
             };
-            bool isRegistered = await xomniClient.RegisterDevice(reqOb);
+            bool isRegistered = await xomniClient.RegisterDeviceAsync(reqOb);
             if (isRegistered)
             {
                 //Save the DeviceId to be used in Omni-Discovery Polling

@@ -62,11 +62,16 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Models\AddWishlistItemResponse.cs" />
+    <Compile Include="Models\CreateWishlistResponseObject.cs" />
     <Compile Include="Models\Data.cs" />
     <Compile Include="Models\Device.cs" />
     <Compile Include="Models\DiscoveryResponseObject.cs" />
+    <Compile Include="Models\Location.cs" />
     <Compile Include="Models\PII_RequestObject.cs" />
     <Compile Include="Models\PII_ResponseObject.cs" />
+    <Compile Include="Models\Wishlist.cs" />
+    <Compile Include="Models\WishlistItem.cs" />
     <Compile Include="XomniClient.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
