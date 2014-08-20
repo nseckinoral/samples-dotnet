@@ -1,0 +1,33 @@
+﻿<Window x:Class="Source.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Omni-Play Sample Source Application" Height="450" Width="525">
+    <Grid>
+        <StackPanel Width="400">
+            <TextBlock Text="Step 3 : Use Omni-Discovery to find a device in the store." />
+            <Button Content="Start Discovery" x:Name="btn_OmniDiscover"/>
+            <TextBlock Text="Step 4 : Pick the target device from the list of devices below." />
+            <ListBox x:Name="list_DevicesFound" Height="200" >
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Description}" />
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+            <TextBlock Text="Step 5 : Create sample device storages" />
+            
+            <StackPanel Orientation="Horizontal">
+                <TextBox x:Name="txtStorageKey1" Text="Sample Storage Key 1" Width="195"></TextBox>
+                <TextBlock Text="=" />
+                <TextBox x:Name="txtStorageValue1" Text="Sample Storage Value 1" Width="195" ></TextBox>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <TextBox x:Name="txtStorageKey2" Text="Sample Storage Key 2" Width="195"></TextBox>
+                <TextBlock Text="=" />
+                <TextBox x:Name="txtStorageValue2" Text="Sample Storage Value 2" Width="195" ></TextBox>
+            </StackPanel>
+            
+            <Button Content="Create Device Storages" x:Name="btn_CreateDeviceStorages"/>
+        </StackPanel>
+    </Grid>
+</Window>
