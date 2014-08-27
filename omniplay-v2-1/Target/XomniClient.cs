@@ -73,12 +73,23 @@ namespace Target
             return result;
         }
 
-        public async Task<bool> RegisterDeviceAsync(RegisterRequestObject registerRequestObject)
+        public async Task<RegisterDeviceResponseObject> RegisterDeviceAsync(Device device)
         {
-            using (HttpResponseMessage response = await Client.Value.PostAsJsonAsync("company/devices", registerRequestObject))
+            RegisterDeviceResponseObject result;
+            using (HttpResponseMessage response = await Client.Value.PostAsJsonAsync("company/devices", device))
             {
-                return response.IsSuccessStatusCode;
+                if (response.IsSuccessStatusCode)
+                {
+                    result = await response.Content.ReadAsAsync<RegisterDeviceResponseObject>();
+                }
+                else
+                {
+                    result = new RegisterDeviceResponseObject();
+                }
+                result.IsSuccess = response.IsSuccessStatusCode;
+                result.HttpStatusCode = response.StatusCode;
             }
+            return result;
         }
 
         public async Task<WishlistUniqueKeyResponse> GetWishlistUniqueKeysAsync(string sessionGuid)

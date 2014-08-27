@@ -65,31 +65,58 @@ namespace Source
                     Value = txtStorageValue1.Text
                 };
 
-                CreateDeviceStorageItemResponseObject response = await client.CreateDeviceStorageItemAsync(deviceId, item1);
+                DeviceStorageItemResponseObject response = await client.CreateDeviceStorageItemAsync(item1);
                 if (response.IsSuccess)
                 {
                     MessageBox.Show("Device storage item 1 has successfully created.");
-
-                    DeviceStorageItem item2 = new DeviceStorageItem
-                    {
-                        DeviceId = deviceId,
-                        Key = txtStorageKey2.Text,
-                        Value = txtStorageValue2.Text
-                    };
-
-                    response = await client.CreateDeviceStorageItemAsync(deviceId, item2);
+                }
+                else if(response.HttpStatusCode == HttpStatusCode.Conflict)
+                {
+                    //See for reference : http://dev.xomni.com/v2-1/http-api/public-apis/company/device-storage/updating-an-existing-device-storage-data
+                    response = await client.UpdateDeviceStorageItemAsync(item1);
                     if (response.IsSuccess)
                     {
-                        MessageBox.Show("Device storage item 2 has successfully created.");
+                        MessageBox.Show("Device storage item 1 has successfully updated.");
                     }
                     else
                     {
-                        MessageBox.Show("An error occured while creating device storage item 2.");
+                        MessageBox.Show("An error occured while updating device storage item 1.");
                     }
                 }
                 else
                 {
                     MessageBox.Show("An error occured while creating device storage item 1.");
+                }
+
+
+                DeviceStorageItem item2 = new DeviceStorageItem
+                {
+                    DeviceId = deviceId,
+                    Key = txtStorageKey2.Text,
+                    Value = txtStorageValue2.Text
+                };
+
+                response = await client.CreateDeviceStorageItemAsync(item2);
+                if (response.IsSuccess)
+                {
+                    MessageBox.Show("Device storage item 2 has successfully created.");
+                }
+                else if (response.HttpStatusCode == HttpStatusCode.Conflict)
+                {
+                    //See for reference : http://dev.xomni.com/v2-1/http-api/public-apis/company/device-storage/updating-an-existing-device-storage-data
+                    response = await client.UpdateDeviceStorageItemAsync(item2);
+                    if (response.IsSuccess)
+                    {
+                        MessageBox.Show("Device storage item 2 has successfully updated.");
+                    }
+                    else
+                    {
+                        MessageBox.Show("An error occured while updating device storage item 2.");
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("An error occured while creating device storage item 2.");
                 }
             }
         }

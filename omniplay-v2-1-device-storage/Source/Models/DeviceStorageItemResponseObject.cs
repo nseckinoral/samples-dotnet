@@ -7,9 +7,10 @@ using System.Threading.Tasks;
 
 namespace Source
 {
-    public class CreateDeviceStorageItemResponseObject
+    public class DeviceStorageItemResponseObject
     {
         public bool IsSuccess { get; set; }
         public HttpStatusCode HttpStatusCode { get; set; }
+        public DeviceStorageItem Data { get; set; }
     }
 }

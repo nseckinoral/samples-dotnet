@@ -58,20 +58,41 @@ namespace Source
             return pollingResult;
         }
 
-        public async Task<CreateDeviceStorageItemResponseObject> CreateDeviceStorageItemAsync(string deviceId, DeviceStorageItem deviceStorageItem)
+        public async Task<DeviceStorageItemResponseObject> CreateDeviceStorageItemAsync(DeviceStorageItem deviceStorageItem)
         {
-            CreateDeviceStorageItemResponseObject result;
-            HttpRequestMessage requestMessage = new HttpRequestMessage(HttpMethod.Post, string.Format("company/devices/{0}/storage", deviceId));
+            DeviceStorageItemResponseObject result;
+            HttpRequestMessage requestMessage = new HttpRequestMessage(HttpMethod.Post, string.Format("company/devices/{0}/storage", deviceStorageItem.DeviceId));
             requestMessage.Content = new StringContent(JsonConvert.SerializeObject(deviceStorageItem), Encoding.UTF8, "application/json");
             using (HttpResponseMessage response = await Client.Value.SendAsync(requestMessage))
             {
                 if (response.IsSuccessStatusCode)
                 {
-                    result = await response.Content.ReadAsAsync<CreateDeviceStorageItemResponseObject>();
+                    result = await response.Content.ReadAsAsync<DeviceStorageItemResponseObject>();
                 }
                 else
                 {
-                    result = new CreateDeviceStorageItemResponseObject();
+                    result = new DeviceStorageItemResponseObject();
+                }
+                result.IsSuccess = response.IsSuccessStatusCode;
+                result.HttpStatusCode = response.StatusCode;
+            }
+            return result;
+        }
+
+        public async Task<DeviceStorageItemResponseObject> UpdateDeviceStorageItemAsync(DeviceStorageItem deviceStorageItem)
+        {
+            DeviceStorageItemResponseObject result;
+            HttpRequestMessage requestMessage = new HttpRequestMessage(HttpMethod.Put, string.Format("company/devices/{0}/storage", deviceStorageItem.DeviceId));
+            requestMessage.Content = new StringContent(JsonConvert.SerializeObject(deviceStorageItem), Encoding.UTF8, "application/json");
+            using (HttpResponseMessage response = await Client.Value.SendAsync(requestMessage))
+            {
+                if (response.IsSuccessStatusCode)
+                {
+                    result = await response.Content.ReadAsAsync<DeviceStorageItemResponseObject>();
+                }
+                else
+                {
+                    result = new DeviceStorageItemResponseObject();
                 }
                 result.IsSuccess = response.IsSuccessStatusCode;
                 result.HttpStatusCode = response.StatusCode;

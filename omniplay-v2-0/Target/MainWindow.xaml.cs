@@ -115,13 +115,13 @@ namespace Target
             //See for reference: http://dev.xomni.com/v2-0/http-api/public-apis/omniplay/device/registering-a-device-to-a-specific-license
 
             XomniClient xomniClient = new XomniClient();
-            RegisterRequestObject reqOb = new RegisterRequestObject()
+            Device reqOb = new Device()
             {
                 Description = "This is a device created on " + DateTime.Now.ToLongDateString() + " | " + DateTime.Now.ToLongTimeString(),
                 DeviceId = Guid.NewGuid().ToString()
             };
-            bool isRegistered = await xomniClient.RegisterDeviceAsync(reqOb);
-            if (isRegistered)
+            RegisterDeviceResponseObject response = await xomniClient.RegisterDeviceAsync(reqOb);
+            if (response.IsSuccess)
             {
                 //Save the DeviceId to be used in Omni-Discovery Polling
                 currentTargetDeviceId = reqOb.DeviceId;

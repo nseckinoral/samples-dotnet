@@ -69,7 +69,8 @@
     <Compile Include="Models\PIISession.cs" />
     <Compile Include="Models\PIISessionData.cs" />
     <Compile Include="Models\PollingResponseObject.cs" />
-    <Compile Include="Models\RegisterRequestObject.cs" />
+    <Compile Include="Models\RegisterDeviceResponseObject.cs" />
+    <Compile Include="Models\Device.cs" />
     <Compile Include="Models\Wishlist.cs" />
     <Compile Include="Models\WishlistItem.cs" />
     <Compile Include="Models\WishlistResponse.cs" />
