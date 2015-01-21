@@ -1,0 +1,166 @@
+body {
+	background: url("background-460px.png") top left no-repeat;
+	font-size: 12px;
+	font-family: Arial, sans-serif;
+	-webkit-user-select: none; 
+	-moz-user-select: none;
+	
+}
+#container {
+	width:320px;
+	height: 460px;
+	text-align: center;
+
+}
+
+.logo {
+width:198px;
+margin-top: 75px;
+
+}
+
+
+/* Login FORM Styles */
+.loginArea {
+	width: 200px;
+    margin-top: 40px;
+	color:#555555;
+	padding-bottom: 20px;
+    margin-left: auto;
+    margin-right: auto;
+	
+}
+.loginArea input[type=text]{
+    -moz-box-sizing:border-box;
+    -webkit-box-sizing:border-box;
+    box-sizing:border-box;
+    -webkit-border-radius:0px;
+	background: url("user.png") no-repeat 10px 9px #FFF;
+	width: 100%;
+    height: 30px;
+	box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.2) ;
+	border: 0px; 
+    outline: 0;
+	font-size: 17px;
+	padding-left: 35px;
+	margin-bottom: 10px;
+	padding-top: 5px;
+	color: #b7b7b7
+}
+
+.loginArea input[type=password] {
+    -moz-box-sizing:border-box;
+    -webkit-box-sizing:border-box;
+    box-sizing:border-box;
+    -webkit-border-radius:0px;
+	background: url("lock.png") no-repeat 12px 7px #FFF;
+    width: 100%;
+    height: 30px;
+	box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.2) ;
+	border: 0px; 
+    outline: 0;
+	font-size: 17px;
+	padding-left: 35px;
+	margin-bottom: 10px;
+	padding-top: 5px;
+	color: #b7b7b7
+
+}
+
+
+.loginArea .loginBttn{
+    -webkit-appearance:none;
+    -webkit-border-radius: 0;
+    -moz-box-sizing:border-box;
+    -webkit-box-sizing:border-box;
+    box-sizing:border-box;
+    border: none;
+	background: #97c93d;
+	color: #ffffff;
+	font-size: 17px;
+	display: block;
+    height: 30px;
+    width: 100%;
+	margin-left:auto;
+	margin-right:auto;
+	box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.2) ;
+	-moz-user-select: text;
+}
+
+/* New Register Line */
+.registerArea {
+    width:215px;
+    height:25px;
+	margin-right: auto;
+    margin-left:auto;
+	padding-top: -25px;
+}
+.registerArea .newReg {
+	float: left;
+	background:none;
+	border: none;
+	font-size: 10px;
+	text-decoration: underline;
+	color: rgba(255, 255, 255, 0.8);
+    
+}
+
+.registerArea .forgotPass {
+	float: right;
+
+	background:none;
+	border: none;
+	font-size: 10px;
+	text-decoration: underline;
+	color: rgba(255, 255, 255, 0.8);
+    margin-right:1px;
+}
+
+.forgotPass, .newReg, .loginBttn:hover{
+
+	cursor: pointer;
+
+}
+
+
+
+.successArea {
+    background-color: #fff;
+	width: 250px;
+	height: 150px;
+	margin-top: 50px;
+    margin-left: auto;
+    margin-right: auto;
+
+    box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.2) ;
+}
+
+
+.banner {
+	background-color: #97c93d;
+	width: 250px;
+	height: 23px;
+	padding-top:6px;
+    padding-bottom:4px;
+	font-size: 22px;
+    font-family:'Prenton Medium';
+    color: #fff;
+    letter-spacing: 1px;
+}
+
+.description {
+
+	width: 183px;
+	height: 116px;
+	font-size: 18px;
+    font-family:'Prenton';
+    color: rgba(0,0,0,0.5);
+    padding-top: 27px;
+    padding-left: 35px;
+}
+
+.content {
+    margin-top: 15px;
+
+
+}
