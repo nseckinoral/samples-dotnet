@@ -7,7 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
     <Page.Resources>
-        <Storyboard x:Name="Wishlistgel">
+        <Storyboard x:Name="Wishlist_incomming">
 			<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateX)" Storyboard.TargetName="sidebar">
 				<EasingDoubleKeyFrame KeyTime="0" Value="0">
 					<EasingDoubleKeyFrame.EasingFunction>
@@ -37,7 +37,7 @@
 				</EasingDoubleKeyFrame>
 			</DoubleAnimationUsingKeyFrames>
 		</Storyboard>
-		<Storyboard x:Name="Wishlistgit">
+		<Storyboard x:Name="Wishlist_outgoing">
 			<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateX)" Storyboard.TargetName="grid">
 				<EasingDoubleKeyFrame KeyTime="0" Value="0">
 					<EasingDoubleKeyFrame.EasingFunction>

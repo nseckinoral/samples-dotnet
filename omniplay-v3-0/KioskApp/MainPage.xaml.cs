@@ -36,12 +36,12 @@ namespace App1
 
         private void wishlist_btn_Click(object sender, RoutedEventArgs e)
         {
-            Wishlistgel.Begin();
+            Wishlist_incomming.Begin();
         }
 
         private void back_btn_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            Wishlistgit.Begin();
+            Wishlist_outgoing.Begin();
         }
 
         private void login_btn_Tapped(object sender, TappedRoutedEventArgs e)
