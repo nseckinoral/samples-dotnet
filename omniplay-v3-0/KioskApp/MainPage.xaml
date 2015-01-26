@@ -296,7 +296,27 @@
 				</Button>
 
 			</Grid>
-			<Grid x:Name="QR" IsHitTestVisible="False" Tapped="QR_Tapped" Opacity="0">
+			<Grid x:Name="QR" IsHitTestVisible="False" Opacity="0">
+				<Interactivity:Interaction.Behaviors>
+                    <Core:EventTriggerBehavior EventName="PointerPressed">
+                        <Media:ControlStoryboardAction Storyboard="{StaticResource Qr_Out}"/>
+                    </Core:EventTriggerBehavior>
+                    <Core:EventTriggerBehavior EventName="PointerPressed">
+                        <Core:ChangePropertyAction TargetObject="{Binding ElementName=login_btn}" PropertyName="IsEnabled" Value="False"/>
+                    </Core:EventTriggerBehavior>
+                    <Core:EventTriggerBehavior EventName="PointerPressed">
+                        <Core:ChangePropertyAction TargetObject="{Binding ElementName=logout_btn}" PropertyName="IsEnabled" Value="True"/>
+                    </Core:EventTriggerBehavior>
+                    <Core:EventTriggerBehavior EventName="PointerPressed">
+                        <Core:ChangePropertyAction TargetObject="{Binding ElementName=mycart_btn}" PropertyName="IsEnabled" Value="True"/>
+                    </Core:EventTriggerBehavior>
+                    <Core:EventTriggerBehavior EventName="PointerPressed">
+                        <Core:ChangePropertyAction TargetObject="{Binding ElementName=wishlist_btn}" PropertyName="IsEnabled" Value="True"/>
+                    </Core:EventTriggerBehavior>
+                    <Core:EventTriggerBehavior EventName="PointerPressed">
+                    	<Core:ChangePropertyAction TargetObject="{Binding ElementName=QR}" PropertyName="IsHitTestVisible" Value="False"/>
+                    </Core:EventTriggerBehavior>
+                </Interactivity:Interaction.Behaviors>
 				<Rectangle x:Name="qr_blackscreen" Fill="Black" Stroke="#00000000" Opacity="0.6" StrokeThickness="0"/>
 				<Grid x:Name="qr_rectangle" HorizontalAlignment="Center" Height="500" VerticalAlignment="Center" Width="500" Background="White" RenderTransformOrigin="0.5,0.5">
 					<Grid.RenderTransform>

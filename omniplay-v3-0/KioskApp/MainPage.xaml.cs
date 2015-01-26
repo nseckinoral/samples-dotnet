@@ -27,15 +27,5 @@ namespace App1
             QR.IsHitTestVisible = true;
             Qr_In.Begin();
         }
-
-        private void QR_Tapped(object sender, TappedRoutedEventArgs e)
-        {
-            Qr_Out.Begin();
-            QR.IsHitTestVisible = false;
-            login_btn.IsEnabled = false;
-            logout_btn.IsEnabled = true;
-            mycart_btn.IsEnabled = true;
-            wishlist_btn.IsEnabled = true;
-        }
     }
 }
