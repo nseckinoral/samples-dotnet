@@ -48,12 +48,12 @@ namespace App1
         {
             QR.Opacity = 100;
             QR.IsHitTestVisible = true;
-            Qrgel.Begin();
+            Qr_In.Begin();
         }
 
         private void QR_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            Qrgit.Begin();
+            Qr_Out.Begin();
             QR.IsHitTestVisible = false;
             login_btn.IsEnabled = false;
             logout_btn.IsEnabled = true;
