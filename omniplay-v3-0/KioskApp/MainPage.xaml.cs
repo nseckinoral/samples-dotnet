@@ -21,11 +21,6 @@ namespace App1
         {
             this.InitializeComponent();
         }
-        
-        private void wishlist_btn_Click(object sender, RoutedEventArgs e)
-        {
-            Wishlist_incomming.Begin();
-        }
 
         private void back_btn_Tapped(object sender, TappedRoutedEventArgs e)
         {
