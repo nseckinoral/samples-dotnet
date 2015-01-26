@@ -255,8 +255,25 @@
 				</Interactivity:Interaction.Behaviors>
 			</Button>
 			<Button x:Name="mycart_btn" Content="My Cart" HorizontalAlignment="Right" Height="43" Margin="0,20,170,0" VerticalAlignment="Top" Width="110" Background="White" Foreground="#FF2982B7" FontFamily="Prenton RP Cond Medium" CharacterSpacing="30" FontSize="15.333" BorderThickness="0" Style="{StaticResource CommonButtonStyle}" IsEnabled="False"/>
-			<Button x:Name="logout_btn" Content="Logout" HorizontalAlignment="Right" Height="43" Margin="0,20,30,0" VerticalAlignment="Top" Width="110" Background="White" Foreground="#FF2982B7" FontFamily="Prenton RP Cond Medium" CharacterSpacing="30" FontSize="15.333" BorderThickness="0" Style="{StaticResource CommonButtonStyle}" IsEnabled="False" Tapped="logout_btn_Tapped"/>
-			<Button x:Name="login_btn" Content="Login" HorizontalAlignment="Right" Height="43" Margin="0,20,30,0" VerticalAlignment="Top" Width="110" Background="White" Foreground="#FF2982B7" FontFamily="Prenton RP Cond Medium" CharacterSpacing="30" FontSize="15.333" BorderThickness="0" Style="{StaticResource CommonButtonStyle}" Tapped="login_btn_Tapped"/>
+            <Button x:Name="logout_btn" Content="Logout" HorizontalAlignment="Right" Height="43" Margin="0,20,30,0" VerticalAlignment="Top" Width="110" Background="White" Foreground="#FF2982B7" FontFamily="Prenton RP Cond Medium" CharacterSpacing="30" FontSize="15.333" BorderThickness="0" Style="{StaticResource CommonButtonStyle}" IsEnabled="False" >
+                <Interactivity:Interaction.Behaviors>
+                    <Core:EventTriggerBehavior x:Name="eventTriggerBehavior" EventName="Click">
+                        <Core:ChangePropertyAction TargetObject="{Binding ElementName=login_btn}" PropertyName="IsEnabled" Value="True"/>
+                    </Core:EventTriggerBehavior>
+                    <Core:EventTriggerBehavior EventName="Click">
+                        <Core:ChangePropertyAction TargetObject="{Binding ElementName=logout_btn}" PropertyName="IsEnabled" Value="False"/>
+                    </Core:EventTriggerBehavior>
+                    <Core:EventTriggerBehavior EventName="Click">
+                        <Core:ChangePropertyAction TargetObject="{Binding ElementName=mycart_btn}" PropertyName="IsEnabled" Value="False"/>
+                    </Core:EventTriggerBehavior>
+                    <Core:EventTriggerBehavior EventName="Click">
+                        <Core:ChangePropertyAction TargetObject="{Binding ElementName=wishlist_btn}" PropertyName="IsEnabled" Value="False"/>
+                    </Core:EventTriggerBehavior>
+                </Interactivity:Interaction.Behaviors>
+            </Button>
+			<Button x:Name="login_btn" Content="Login" HorizontalAlignment="Right" Height="43" Margin="0,20,30,0" VerticalAlignment="Top" Width="110" Background="White" Foreground="#FF2982B7" FontFamily="Prenton RP Cond Medium" CharacterSpacing="30" FontSize="15.333" BorderThickness="0" Style="{StaticResource CommonButtonStyle}" Tapped="login_btn_Tapped">
+				
+			</Button>
 			<Image x:Name="wishlist_bg" Margin="0" Source="Assets/wishlist bg.png" Stretch="Fill" Opacity="0" IsHitTestVisible="False"/>
 			<Grid x:Name="grid" RenderTransformOrigin="0.5,0.5" Margin="0">
 				<Grid.RenderTransform>

@@ -37,13 +37,5 @@ namespace App1
             mycart_btn.IsEnabled = true;
             wishlist_btn.IsEnabled = true;
         }
-
-        private void logout_btn_Tapped(object sender, TappedRoutedEventArgs e)
-        {
-            login_btn.IsEnabled = true;
-            logout_btn.IsEnabled = false;
-            mycart_btn.IsEnabled = false;
-            wishlist_btn.IsEnabled = false;
-        }
     }
 }
