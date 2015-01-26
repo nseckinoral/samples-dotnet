@@ -1,13 +1,13 @@
 ﻿<Page
-    x:Class="App1.MainPage"
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:App1"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d">
-    <Page.Resources>
-        <Storyboard x:Name="Wishlist_incomming">
+	x:Class="App1.MainPage"
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:local="using:App1"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	mc:Ignorable="d">
+	<Page.Resources>
+		<Storyboard x:Name="Wishlist_incomming">
 			<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateX)" Storyboard.TargetName="sidebar">
 				<EasingDoubleKeyFrame KeyTime="0" Value="0">
 					<EasingDoubleKeyFrame.EasingFunction>
@@ -189,7 +189,7 @@
 				</Setter.Value>
 			</Setter>
 		</Style>
-        <Storyboard x:Name="Qr_In">
+		<Storyboard x:Name="Qr_In">
 			<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="qr_blackscreen">
 				<EasingDoubleKeyFrame KeyTime="0" Value="0"/>
 				<EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="0.6"/>
@@ -230,55 +230,55 @@
 		</Storyboard>
 	</Page.Resources>
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-    	<Image Margin="0" Source="Assets/fakedata .png" Stretch="Fill"/>
-    	<Image x:Name="logo" Source="Assets/logo_full_white.png" Stretch="None" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,-822,-233">
-    		<Image.RenderTransform>
-    			<CompositeTransform ScaleX="0.1" ScaleY="0.1"/>
-    		</Image.RenderTransform>
-    	</Image>
-    	<Image x:Name="sidebar" Margin="0" Source="Assets/Side Bar.png" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Left" VerticalAlignment="Top">
-    		<Image.RenderTransform>
-    			<CompositeTransform/>
-    		</Image.RenderTransform>
-    		<Image.Projection>
-    			<PlaneProjection/>
-    		</Image.Projection>
-    	</Image>
-    	<Button x:Name="wishlist_btn" Content="Wishlist" HorizontalAlignment="Left" Height="43" Margin="337,20,0,0" VerticalAlignment="Top" Width="110" Background="White" Foreground="#FF2982B7" FontFamily="Prenton RP Cond Medium" CharacterSpacing="30" FontSize="15.333" BorderThickness="0" Click="wishlist_btn_Click" Style="{StaticResource CommonButtonStyle}" IsEnabled="False"/>
-    	<Button x:Name="mycart_btn" Content="My Cart" HorizontalAlignment="Right" Height="43" Margin="0,20,170,0" VerticalAlignment="Top" Width="110" Background="White" Foreground="#FF2982B7" FontFamily="Prenton RP Cond Medium" CharacterSpacing="30" FontSize="15.333" BorderThickness="0" Style="{StaticResource CommonButtonStyle}" IsEnabled="False"/>
-    	<Button x:Name="logout_btn" Content="Logout" HorizontalAlignment="Right" Height="43" Margin="0,20,30,0" VerticalAlignment="Top" Width="110" Background="White" Foreground="#FF2982B7" FontFamily="Prenton RP Cond Medium" CharacterSpacing="30" FontSize="15.333" BorderThickness="0" Style="{StaticResource CommonButtonStyle}" IsEnabled="False" Tapped="logout_btn_Tapped"/>
-    	<Button x:Name="login_btn" Content="Login" HorizontalAlignment="Right" Height="43" Margin="0,20,30,0" VerticalAlignment="Top" Width="110" Background="White" Foreground="#FF2982B7" FontFamily="Prenton RP Cond Medium" CharacterSpacing="30" FontSize="15.333" BorderThickness="0" Style="{StaticResource CommonButtonStyle}" Tapped="login_btn_Tapped"/>
-    	<Image x:Name="wishlist_bg" Margin="0" Source="Assets/wishlist bg.png" Stretch="Fill" Opacity="0" IsHitTestVisible="False"/>
-    	<Grid x:Name="grid" RenderTransformOrigin="0.5,0.5" Margin="0">
-    		<Grid.RenderTransform>
-    			<CompositeTransform TranslateX="-633"/>
-    		</Grid.RenderTransform>
-    		<Image x:Name="wishlist" Margin="0" Source="Assets/wishlist.png" HorizontalAlignment="Left" RenderTransformOrigin="0.5,0.5">
-    			<Image.RenderTransform>
-    				<CompositeTransform/>
-    			</Image.RenderTransform>
-    			<Image.Projection>
-    				<PlaneProjection/>
-    			</Image.Projection>
-    		</Image>
-    		<Button Content="Button" HorizontalAlignment="Left" Margin="14,0,0,0" Style="{StaticResource BackButtonStyle}" VerticalAlignment="Top"/>
+	<Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+		<Image Margin="0" Source="Assets/fakedata .png" Stretch="Fill"/>
+		<Image x:Name="logo" Source="Assets/logo_full_white.png" Stretch="None" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,-822,-233">
+			<Image.RenderTransform>
+				<CompositeTransform ScaleX="0.1" ScaleY="0.1"/>
+			</Image.RenderTransform>
+		</Image>
+		<Image x:Name="sidebar" Margin="0" Source="Assets/Side Bar.png" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Left" VerticalAlignment="Top">
+			<Image.RenderTransform>
+				<CompositeTransform/>
+			</Image.RenderTransform>
+			<Image.Projection>
+				<PlaneProjection/>
+			</Image.Projection>
+		</Image>
+		<Button x:Name="wishlist_btn" Content="Wishlist" HorizontalAlignment="Left" Height="43" Margin="337,20,0,0" VerticalAlignment="Top" Width="110" Background="White" Foreground="#FF2982B7" FontFamily="Prenton RP Cond Medium" CharacterSpacing="30" FontSize="15.333" BorderThickness="0" Click="wishlist_btn_Click" Style="{StaticResource CommonButtonStyle}" IsEnabled="False"/>
+		<Button x:Name="mycart_btn" Content="My Cart" HorizontalAlignment="Right" Height="43" Margin="0,20,170,0" VerticalAlignment="Top" Width="110" Background="White" Foreground="#FF2982B7" FontFamily="Prenton RP Cond Medium" CharacterSpacing="30" FontSize="15.333" BorderThickness="0" Style="{StaticResource CommonButtonStyle}" IsEnabled="False"/>
+		<Button x:Name="logout_btn" Content="Logout" HorizontalAlignment="Right" Height="43" Margin="0,20,30,0" VerticalAlignment="Top" Width="110" Background="White" Foreground="#FF2982B7" FontFamily="Prenton RP Cond Medium" CharacterSpacing="30" FontSize="15.333" BorderThickness="0" Style="{StaticResource CommonButtonStyle}" IsEnabled="False" Tapped="logout_btn_Tapped"/>
+		<Button x:Name="login_btn" Content="Login" HorizontalAlignment="Right" Height="43" Margin="0,20,30,0" VerticalAlignment="Top" Width="110" Background="White" Foreground="#FF2982B7" FontFamily="Prenton RP Cond Medium" CharacterSpacing="30" FontSize="15.333" BorderThickness="0" Style="{StaticResource CommonButtonStyle}" Tapped="login_btn_Tapped"/>
+		<Image x:Name="wishlist_bg" Margin="0" Source="Assets/wishlist bg.png" Stretch="Fill" Opacity="0" IsHitTestVisible="False"/>
+		<Grid x:Name="grid" RenderTransformOrigin="0.5,0.5" Margin="0">
+			<Grid.RenderTransform>
+				<CompositeTransform TranslateX="-633"/>
+			</Grid.RenderTransform>
+			<Image x:Name="wishlist" Margin="0" Source="Assets/wishlist.png" HorizontalAlignment="Left" RenderTransformOrigin="0.5,0.5">
+				<Image.RenderTransform>
+					<CompositeTransform/>
+				</Image.RenderTransform>
+				<Image.Projection>
+					<PlaneProjection/>
+				</Image.Projection>
+			</Image>
+			<Button Content="Button" HorizontalAlignment="Left" Margin="14,0,0,0" Style="{StaticResource BackButtonStyle}" VerticalAlignment="Top"/>
 
-    	</Grid>
-    	<Grid x:Name="QR" IsHitTestVisible="False" Tapped="QR_Tapped" Opacity="0">
-    		<Rectangle x:Name="qr_blackscreen" Fill="Black" Stroke="#00000000" Opacity="0.6" StrokeThickness="0"/>
-    		<Grid x:Name="qr_rectangle" HorizontalAlignment="Center" Height="500" VerticalAlignment="Center" Width="500" Background="White" RenderTransformOrigin="0.5,0.5">
-    			<Grid.RenderTransform>
-    				<CompositeTransform/>
-    			</Grid.RenderTransform>
-    			<StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0">
-    				<Image Margin="0" Source="Assets/strassmann-queller-qr-code.jpg" Stretch="Fill" HorizontalAlignment="Center" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5" Width="200" Height="200"/>
-    				<TextBlock Height="122" Width="392" Foreground="#FF020000" FontFamily="Arial" FontSize="32" TextAlignment="Center" Margin="0,40,0,0" TextWrapping="Wrap" Text="Please scan the QR code with your mobile phone to login"/>
-    				<TextBlock TextWrapping="Wrap" FontSize="18.667" Foreground="Black" Text="Touch the screen to go back" TextAlignment="Center" FontFamily="Arial" Opacity="0.5" Margin="0,20,0,0"/>
-    			</StackPanel>
-    		</Grid>
+		</Grid>
+		<Grid x:Name="QR" IsHitTestVisible="False" Tapped="QR_Tapped" Opacity="0">
+			<Rectangle x:Name="qr_blackscreen" Fill="Black" Stroke="#00000000" Opacity="0.6" StrokeThickness="0"/>
+			<Grid x:Name="qr_rectangle" HorizontalAlignment="Center" Height="500" VerticalAlignment="Center" Width="500" Background="White" RenderTransformOrigin="0.5,0.5">
+				<Grid.RenderTransform>
+					<CompositeTransform/>
+				</Grid.RenderTransform>
+				<StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0">
+					<Image Margin="0" Source="Assets/strassmann-queller-qr-code.jpg" Stretch="Fill" HorizontalAlignment="Center" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5" Width="200" Height="200"/>
+					<TextBlock Height="122" Width="392" Foreground="#FF020000" FontFamily="Arial" FontSize="32" TextAlignment="Center" Margin="0,40,0,0" TextWrapping="Wrap" Text="Please scan the QR code with your mobile phone to login"/>
+					<TextBlock TextWrapping="Wrap" FontSize="18.667" Foreground="Black" Text="Touch the screen to go back" TextAlignment="Center" FontFamily="Arial" Opacity="0.5" Margin="0,20,0,0"/>
+				</StackPanel>
+			</Grid>
 
-    	</Grid>
+		</Grid>
 
-    </Grid>
+	</Grid>
 </Page>

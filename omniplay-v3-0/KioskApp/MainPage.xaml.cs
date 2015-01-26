@@ -13,27 +13,15 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
-// The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
-
 namespace App1
 {
-    /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
-    /// </summary>
     public sealed partial class MainPage : Page
     {
         public MainPage()
         {
             this.InitializeComponent();
-            this.Loaded += MainPage_Loaded;
         }
-
-        void MainPage_Loaded(object sender, RoutedEventArgs e)
-        {
-            
-            
-        }
-
+        
         private void wishlist_btn_Click(object sender, RoutedEventArgs e)
         {
             Wishlist_incomming.Begin();
@@ -67,10 +55,6 @@ namespace App1
             logout_btn.IsEnabled = false;
             mycart_btn.IsEnabled = false;
             wishlist_btn.IsEnabled = false;
-            
-
         }
-
-
     }
 }
