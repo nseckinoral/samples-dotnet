@@ -21,12 +21,6 @@ namespace App1
         {
             this.InitializeComponent();
         }
-
-        private void back_btn_Tapped(object sender, TappedRoutedEventArgs e)
-        {
-            Wishlist_outgoing.Begin();
-        }
-
         private void login_btn_Tapped(object sender, TappedRoutedEventArgs e)
         {
             QR.Opacity = 100;

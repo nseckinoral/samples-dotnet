@@ -179,12 +179,11 @@
 									<VisualState x:Name="PointerOver"/>
 								</VisualStateGroup>
 							</VisualStateManager.VisualStateGroups>
-							<Image x:Name="back_btn" RenderTransformOrigin="0.5,0.5" Source="Assets/CircledArrow Left - 01.png" Stretch="None" Tapped="back_btn_Tapped">
+							<Image x:Name="back_btn" RenderTransformOrigin="0.5,0.5" Source="Assets/CircledArrow Left - 01.png" Stretch="None">
 								<Image.RenderTransform>
 									<CompositeTransform ScaleY="0.6" ScaleX="0.6"/>
 								</Image.RenderTransform>
 							</Image>
-							<ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" Content=""/>
 						</Grid>
 					</ControlTemplate>
 				</Setter.Value>
@@ -271,7 +270,13 @@
 						<PlaneProjection/>
 					</Image.Projection>
 				</Image>
-				<Button Content="Button" HorizontalAlignment="Left" Margin="14,0,0,0" Style="{StaticResource BackButtonStyle}" VerticalAlignment="Top"/>
+				<Button Content="Button" HorizontalAlignment="Left" Margin="14,0,0,0" Style="{StaticResource BackButtonStyle}" VerticalAlignment="Top">
+					<Interactivity:Interaction.Behaviors>
+						<Core:EventTriggerBehavior EventName="Click">
+							<Media:ControlStoryboardAction Storyboard="{StaticResource Wishlist_outgoing}"/>
+						</Core:EventTriggerBehavior>
+					</Interactivity:Interaction.Behaviors>
+				</Button>
 
 			</Grid>
 			<Grid x:Name="QR" IsHitTestVisible="False" Tapped="QR_Tapped" Opacity="0">
