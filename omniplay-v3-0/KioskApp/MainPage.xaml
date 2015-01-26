@@ -271,7 +271,18 @@
                     </Core:EventTriggerBehavior>
                 </Interactivity:Interaction.Behaviors>
             </Button>
-			<Button x:Name="login_btn" Content="Login" HorizontalAlignment="Right" Height="43" Margin="0,20,30,0" VerticalAlignment="Top" Width="110" Background="White" Foreground="#FF2982B7" FontFamily="Prenton RP Cond Medium" CharacterSpacing="30" FontSize="15.333" BorderThickness="0" Style="{StaticResource CommonButtonStyle}" Tapped="login_btn_Tapped">
+			<Button x:Name="login_btn" Content="Login" HorizontalAlignment="Right" Height="43" Margin="0,20,30,0" VerticalAlignment="Top" Width="110" Background="White" Foreground="#FF2982B7" FontFamily="Prenton RP Cond Medium" CharacterSpacing="30" FontSize="15.333" BorderThickness="0" Style="{StaticResource CommonButtonStyle}">
+				<Interactivity:Interaction.Behaviors>
+					<Core:EventTriggerBehavior EventName="Click">
+						<Core:ChangePropertyAction TargetObject="{Binding ElementName=QR}" PropertyName="Opacity" Value="1"/>
+					</Core:EventTriggerBehavior>
+					<Core:EventTriggerBehavior EventName="Click">
+						<Core:ChangePropertyAction TargetObject="{Binding ElementName=QR}" PropertyName="IsHitTestVisible" Value="True"/>
+					</Core:EventTriggerBehavior>
+					<Core:EventTriggerBehavior EventName="Click">
+						<Media:ControlStoryboardAction Storyboard="{StaticResource Qr_In}"/>
+					</Core:EventTriggerBehavior>
+				</Interactivity:Interaction.Behaviors>
 				
 			</Button>
 			<Image x:Name="wishlist_bg" Margin="0" Source="Assets/wishlist bg.png" Stretch="Fill" Opacity="0" IsHitTestVisible="False"/>

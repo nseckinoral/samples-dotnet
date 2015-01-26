@@ -21,11 +21,5 @@ namespace App1
         {
             this.InitializeComponent();
         }
-        private void login_btn_Tapped(object sender, TappedRoutedEventArgs e)
-        {
-            QR.Opacity = 100;
-            QR.IsHitTestVisible = true;
-            Qr_In.Begin();
-        }
     }
 }
