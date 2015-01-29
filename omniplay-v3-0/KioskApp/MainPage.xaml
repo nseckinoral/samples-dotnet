@@ -8,277 +8,301 @@
     mc:Ignorable="d">
     <Page.Resources>
         <Storyboard x:Name="Wishlistgel">
-			<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateX)" Storyboard.TargetName="sidebar">
-				<EasingDoubleKeyFrame KeyTime="0" Value="0">
-					<EasingDoubleKeyFrame.EasingFunction>
-						<ExponentialEase EasingMode="EaseIn" Exponent="3"/>
-					</EasingDoubleKeyFrame.EasingFunction>
-				</EasingDoubleKeyFrame>
-				<EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="-320">
-					<EasingDoubleKeyFrame.EasingFunction>
-						<ExponentialEase EasingMode="EaseIn" Exponent="3"/>
-					</EasingDoubleKeyFrame.EasingFunction>
-				</EasingDoubleKeyFrame>
-			</DoubleAnimationUsingKeyFrames>
-			<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="wishlist_bg">
-				<EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="0"/>
-				<EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="1"/>
-			</DoubleAnimationUsingKeyFrames>
-			<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateX)" Storyboard.TargetName="grid">
-				<EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="-633">
-					<EasingDoubleKeyFrame.EasingFunction>
-						<ExponentialEase EasingMode="EaseIn" Exponent="3"/>
-					</EasingDoubleKeyFrame.EasingFunction>
-				</EasingDoubleKeyFrame>
-				<EasingDoubleKeyFrame KeyTime="0:0:0.6" Value="0">
-					<EasingDoubleKeyFrame.EasingFunction>
-						<ExponentialEase EasingMode="EaseIn" Exponent="3"/>
-					</EasingDoubleKeyFrame.EasingFunction>
-				</EasingDoubleKeyFrame>
-			</DoubleAnimationUsingKeyFrames>
-		</Storyboard>
-		<Storyboard x:Name="Wishlistgit">
-			<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateX)" Storyboard.TargetName="grid">
-				<EasingDoubleKeyFrame KeyTime="0" Value="0">
-					<EasingDoubleKeyFrame.EasingFunction>
-						<ExponentialEase EasingMode="EaseIn" Exponent="3"/>
-					</EasingDoubleKeyFrame.EasingFunction>
-				</EasingDoubleKeyFrame>
-				<EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="-633">
-					<EasingDoubleKeyFrame.EasingFunction>
-						<ExponentialEase EasingMode="EaseIn" Exponent="3"/>
-					</EasingDoubleKeyFrame.EasingFunction>
-				</EasingDoubleKeyFrame>
-			</DoubleAnimationUsingKeyFrames>
-			<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="wishlist_bg">
-				<EasingDoubleKeyFrame KeyTime="0" Value="1"/>
-				<EasingDoubleKeyFrame KeyTime="0:0:0.4" Value="0"/>
-			</DoubleAnimationUsingKeyFrames>
-			<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateX)" Storyboard.TargetName="sidebar">
-				<EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="-310">
-					<EasingDoubleKeyFrame.EasingFunction>
-						<ExponentialEase EasingMode="EaseIn" Exponent="3"/>
-					</EasingDoubleKeyFrame.EasingFunction>
-				</EasingDoubleKeyFrame>
-				<EasingDoubleKeyFrame KeyTime="0:0:0.6" Value="0">
-					<EasingDoubleKeyFrame.EasingFunction>
-						<ExponentialEase EasingMode="EaseIn" Exponent="3"/>
-					</EasingDoubleKeyFrame.EasingFunction>
-				</EasingDoubleKeyFrame>
-			</DoubleAnimationUsingKeyFrames>
-		</Storyboard>
-		<Style x:Key="CommonButtonStyle" TargetType="Button">
-			<Setter Property="Background" Value="{ThemeResource ButtonBackgroundThemeBrush}"/>
-			<Setter Property="Foreground" Value="{ThemeResource ButtonForegroundThemeBrush}"/>
-			<Setter Property="BorderBrush" Value="{ThemeResource ButtonBorderThemeBrush}"/>
-			<Setter Property="BorderThickness" Value="{ThemeResource ButtonBorderThemeThickness}"/>
-			<Setter Property="Padding" Value="12,4,12,4"/>
-			<Setter Property="HorizontalAlignment" Value="Left"/>
-			<Setter Property="VerticalAlignment" Value="Center"/>
-			<Setter Property="FontFamily" Value="{ThemeResource ContentControlThemeFontFamily}"/>
-			<Setter Property="FontWeight" Value="SemiBold"/>
-			<Setter Property="FontSize" Value="{ThemeResource ControlContentThemeFontSize}"/>
-			<Setter Property="Template">
-				<Setter.Value>
-					<ControlTemplate TargetType="Button">
-						<Grid x:Name="grid">
-							<VisualStateManager.VisualStateGroups>
-								<VisualStateGroup x:Name="CommonStates">
-									<VisualState x:Name="Normal"/>
-									<VisualState x:Name="PointerOver">
-										<Storyboard>
-											<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Background" Storyboard.TargetName="Border">
-												<DiscreteObjectKeyFrame KeyTime="0">
-													<DiscreteObjectKeyFrame.Value>
-														<SolidColorBrush Color="White"/>
-													</DiscreteObjectKeyFrame.Value>
-												</DiscreteObjectKeyFrame>
-											</ObjectAnimationUsingKeyFrames>
-											<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Foreground" Storyboard.TargetName="ContentPresenter">
-												<DiscreteObjectKeyFrame KeyTime="0">
-													<DiscreteObjectKeyFrame.Value>
-														<SolidColorBrush Color="#FF2982B7"/>
-													</DiscreteObjectKeyFrame.Value>
-												</DiscreteObjectKeyFrame>
-											</ObjectAnimationUsingKeyFrames>
-										</Storyboard>
-									</VisualState>
-									<VisualState x:Name="Pressed">
-										<Storyboard>
-											<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Background" Storyboard.TargetName="Border">
-												<DiscreteObjectKeyFrame KeyTime="0">
-													<DiscreteObjectKeyFrame.Value>
-														<SolidColorBrush Color="#7FFFFFFF"/>
-													</DiscreteObjectKeyFrame.Value>
-												</DiscreteObjectKeyFrame>
-											</ObjectAnimationUsingKeyFrames>
-											<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Foreground" Storyboard.TargetName="ContentPresenter">
-												<DiscreteObjectKeyFrame KeyTime="0">
-													<DiscreteObjectKeyFrame.Value>
-														<SolidColorBrush Color="#BF2982B7"/>
-													</DiscreteObjectKeyFrame.Value>
-												</DiscreteObjectKeyFrame>
-											</ObjectAnimationUsingKeyFrames>
-										</Storyboard>
-									</VisualState>
-									<VisualState x:Name="Disabled">
-										<Storyboard>
-											<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Background" Storyboard.TargetName="Border">
-												<DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonDisabledBackgroundThemeBrush}"/>
-											</ObjectAnimationUsingKeyFrames>
-											<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="BorderBrush" Storyboard.TargetName="Border">
-												<DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonDisabledBorderThemeBrush}"/>
-											</ObjectAnimationUsingKeyFrames>
-											<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Foreground" Storyboard.TargetName="ContentPresenter">
-												<DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonDisabledForegroundThemeBrush}"/>
-											</ObjectAnimationUsingKeyFrames>
-											<DoubleAnimation Duration="0" To="0" Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="grid" d:IsOptimized="True"/>
-										</Storyboard>
-									</VisualState>
-								</VisualStateGroup>
-								<VisualStateGroup x:Name="FocusStates">
-									<VisualState x:Name="Focused">
-										<Storyboard>
-											<DoubleAnimation Duration="0" To="1" Storyboard.TargetProperty="Opacity" Storyboard.TargetName="FocusVisualWhite"/>
-											<DoubleAnimation Duration="0" To="1" Storyboard.TargetProperty="Opacity" Storyboard.TargetName="FocusVisualBlack"/>
-										</Storyboard>
-									</VisualState>
-									<VisualState x:Name="Unfocused"/>
-									<VisualState x:Name="PointerFocused"/>
-								</VisualStateGroup>
-							</VisualStateManager.VisualStateGroups>
-							<Border x:Name="Border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Margin="3">
-								<ContentPresenter x:Name="ContentPresenter" AutomationProperties.AccessibilityView="Raw" ContentTemplate="{TemplateBinding ContentTemplate}" ContentTransitions="{TemplateBinding ContentTransitions}" Content="{TemplateBinding Content}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" Margin="0,2,0,0"/>
-							</Border>
-							<Rectangle x:Name="FocusVisualWhite" IsHitTestVisible="False" Opacity="0" StrokeDashOffset="1.5" StrokeEndLineCap="Square" Stroke="{ThemeResource FocusVisualWhiteStrokeThemeBrush}" StrokeDashArray="1,1"/>
-							<Rectangle x:Name="FocusVisualBlack" IsHitTestVisible="False" Opacity="0" StrokeDashOffset="0.5" StrokeEndLineCap="Square" Stroke="{ThemeResource FocusVisualBlackStrokeThemeBrush}" StrokeDashArray="1,1"/>
-						</Grid>
-					</ControlTemplate>
-				</Setter.Value>
-			</Setter>
-		</Style>
-		<Style x:Key="BackButtonStyle" TargetType="Button">
-			<Setter Property="Template">
-				<Setter.Value>
-					<ControlTemplate TargetType="Button">
-						<Grid>
-							<VisualStateManager.VisualStateGroups>
-								<VisualStateGroup x:Name="CommonStates">
-									<VisualState x:Name="Normal"/>
-									<VisualState x:Name="Pressed">
-										<Storyboard>
-											<DoubleAnimation Duration="0" To="0.5" Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="back_btn" d:IsOptimized="True"/>
-										</Storyboard>
-									</VisualState>
-									<VisualState x:Name="Disabled">
-										<Storyboard>
-											<DoubleAnimation Duration="0" To="0" Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="back_btn" d:IsOptimized="True"/>
-										</Storyboard>
-									</VisualState>
-									<VisualState x:Name="PointerOver"/>
-								</VisualStateGroup>
-							</VisualStateManager.VisualStateGroups>
-							<Image x:Name="back_btn" RenderTransformOrigin="0.5,0.5" Source="Assets/CircledArrow Left - 01.png" Stretch="None" Tapped="back_btn_Tapped">
-								<Image.RenderTransform>
-									<CompositeTransform ScaleY="0.6" ScaleX="0.6"/>
-								</Image.RenderTransform>
-							</Image>
-							<ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" Content=""/>
-						</Grid>
-					</ControlTemplate>
-				</Setter.Value>
-			</Setter>
-		</Style>
-		<Storyboard x:Name="Qrgel">
-			<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="qr_blackscreen">
-				<EasingDoubleKeyFrame KeyTime="0" Value="0"/>
-				<EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="0.6"/>
-			</DoubleAnimationUsingKeyFrames>
-			<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="qr_rectangle">
-				<EasingDoubleKeyFrame KeyTime="0" Value="0"/>
-				<EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="0"/>
-				<EasingDoubleKeyFrame KeyTime="0:0:0.6" Value="1"/>
-			</DoubleAnimationUsingKeyFrames>
-			<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.ScaleX)" Storyboard.TargetName="qr_rectangle">
-				<EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="0.25"/>
-				<EasingDoubleKeyFrame KeyTime="0:0:0.6" Value="1"/>
-			</DoubleAnimationUsingKeyFrames>
-			<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.ScaleY)" Storyboard.TargetName="qr_rectangle">
-				<EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="0.25"/>
-				<EasingDoubleKeyFrame KeyTime="0:0:0.6" Value="1"/>
-			</DoubleAnimationUsingKeyFrames>
-		</Storyboard>
-		<Storyboard x:Name="Qrgit">
-			<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.ScaleX)" Storyboard.TargetName="qr_rectangle">
-				<EasingDoubleKeyFrame KeyTime="0" Value="1"/>
-				<EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="0.499512"/>
-				<EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="0.25"/>
-			</DoubleAnimationUsingKeyFrames>
-			<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.ScaleY)" Storyboard.TargetName="qr_rectangle">
-				<EasingDoubleKeyFrame KeyTime="0" Value="1"/>
-				<EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="0.499512"/>
-				<EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="0.25"/>
-			</DoubleAnimationUsingKeyFrames>
-			<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="qr_blackscreen">
-				<EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="0.6"/>
-				<EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="0"/>
-			</DoubleAnimationUsingKeyFrames>
-			<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="qr_rectangle">
-				<EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="1"/>
-				<EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="0"/>
-			</DoubleAnimationUsingKeyFrames>
-		</Storyboard>
-	</Page.Resources>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateX)" Storyboard.TargetName="sidebar">
+                <EasingDoubleKeyFrame KeyTime="0" Value="0">
+                    <EasingDoubleKeyFrame.EasingFunction>
+                        <ExponentialEase EasingMode="EaseIn" Exponent="3"/>
+                    </EasingDoubleKeyFrame.EasingFunction>
+                </EasingDoubleKeyFrame>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="-320">
+                    <EasingDoubleKeyFrame.EasingFunction>
+                        <ExponentialEase EasingMode="EaseIn" Exponent="3"/>
+                    </EasingDoubleKeyFrame.EasingFunction>
+                </EasingDoubleKeyFrame>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="wishlist_bg">
+                <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="0"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="1"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateX)" Storyboard.TargetName="grid">
+                <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="-633">
+                    <EasingDoubleKeyFrame.EasingFunction>
+                        <ExponentialEase EasingMode="EaseIn" Exponent="3"/>
+                    </EasingDoubleKeyFrame.EasingFunction>
+                </EasingDoubleKeyFrame>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.6" Value="0">
+                    <EasingDoubleKeyFrame.EasingFunction>
+                        <ExponentialEase EasingMode="EaseIn" Exponent="3"/>
+                    </EasingDoubleKeyFrame.EasingFunction>
+                </EasingDoubleKeyFrame>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+        <Storyboard x:Name="Wishlistgit">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateX)" Storyboard.TargetName="grid">
+                <EasingDoubleKeyFrame KeyTime="0" Value="0">
+                    <EasingDoubleKeyFrame.EasingFunction>
+                        <ExponentialEase EasingMode="EaseIn" Exponent="3"/>
+                    </EasingDoubleKeyFrame.EasingFunction>
+                </EasingDoubleKeyFrame>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="-633">
+                    <EasingDoubleKeyFrame.EasingFunction>
+                        <ExponentialEase EasingMode="EaseIn" Exponent="3"/>
+                    </EasingDoubleKeyFrame.EasingFunction>
+                </EasingDoubleKeyFrame>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="wishlist_bg">
+                <EasingDoubleKeyFrame KeyTime="0" Value="1"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.4" Value="0"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateX)" Storyboard.TargetName="sidebar">
+                <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="-310">
+                    <EasingDoubleKeyFrame.EasingFunction>
+                        <ExponentialEase EasingMode="EaseIn" Exponent="3"/>
+                    </EasingDoubleKeyFrame.EasingFunction>
+                </EasingDoubleKeyFrame>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.6" Value="0">
+                    <EasingDoubleKeyFrame.EasingFunction>
+                        <ExponentialEase EasingMode="EaseIn" Exponent="3"/>
+                    </EasingDoubleKeyFrame.EasingFunction>
+                </EasingDoubleKeyFrame>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+        <Style x:Key="CommonButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="{ThemeResource ButtonBackgroundThemeBrush}"/>
+            <Setter Property="Foreground" Value="{ThemeResource ButtonForegroundThemeBrush}"/>
+            <Setter Property="BorderBrush" Value="{ThemeResource ButtonBorderThemeBrush}"/>
+            <Setter Property="BorderThickness" Value="{ThemeResource ButtonBorderThemeThickness}"/>
+            <Setter Property="Padding" Value="12,4,12,4"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="FontFamily" Value="{ThemeResource ContentControlThemeFontFamily}"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="FontSize" Value="{ThemeResource ControlContentThemeFontSize}"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Grid x:Name="grid">
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup x:Name="CommonStates">
+                                    <VisualState x:Name="Normal"/>
+                                    <VisualState x:Name="PointerOver">
+                                        <Storyboard>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Background" Storyboard.TargetName="Border">
+                                                <DiscreteObjectKeyFrame KeyTime="0">
+                                                    <DiscreteObjectKeyFrame.Value>
+                                                        <SolidColorBrush Color="White"/>
+                                                    </DiscreteObjectKeyFrame.Value>
+                                                </DiscreteObjectKeyFrame>
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Foreground" Storyboard.TargetName="ContentPresenter">
+                                                <DiscreteObjectKeyFrame KeyTime="0">
+                                                    <DiscreteObjectKeyFrame.Value>
+                                                        <SolidColorBrush Color="#FF2982B7"/>
+                                                    </DiscreteObjectKeyFrame.Value>
+                                                </DiscreteObjectKeyFrame>
+                                            </ObjectAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState x:Name="Pressed">
+                                        <Storyboard>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Background" Storyboard.TargetName="Border">
+                                                <DiscreteObjectKeyFrame KeyTime="0">
+                                                    <DiscreteObjectKeyFrame.Value>
+                                                        <SolidColorBrush Color="#7FFFFFFF"/>
+                                                    </DiscreteObjectKeyFrame.Value>
+                                                </DiscreteObjectKeyFrame>
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Foreground" Storyboard.TargetName="ContentPresenter">
+                                                <DiscreteObjectKeyFrame KeyTime="0">
+                                                    <DiscreteObjectKeyFrame.Value>
+                                                        <SolidColorBrush Color="#BF2982B7"/>
+                                                    </DiscreteObjectKeyFrame.Value>
+                                                </DiscreteObjectKeyFrame>
+                                            </ObjectAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState x:Name="Disabled">
+                                        <Storyboard>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Background" Storyboard.TargetName="Border">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonDisabledBackgroundThemeBrush}"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="BorderBrush" Storyboard.TargetName="Border">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonDisabledBorderThemeBrush}"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Foreground" Storyboard.TargetName="ContentPresenter">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonDisabledForegroundThemeBrush}"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <DoubleAnimation Duration="0" To="0" Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="grid" d:IsOptimized="True"/>
+                                        </Storyboard>
+                                    </VisualState>
+                                </VisualStateGroup>
+                                <VisualStateGroup x:Name="FocusStates">
+                                    <VisualState x:Name="Focused">
+                                        <Storyboard>
+                                            <DoubleAnimation Duration="0" To="1" Storyboard.TargetProperty="Opacity" Storyboard.TargetName="FocusVisualWhite"/>
+                                            <DoubleAnimation Duration="0" To="1" Storyboard.TargetProperty="Opacity" Storyboard.TargetName="FocusVisualBlack"/>
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState x:Name="Unfocused"/>
+                                    <VisualState x:Name="PointerFocused"/>
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+                            <Border x:Name="Border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Margin="3">
+                                <ContentPresenter x:Name="ContentPresenter" AutomationProperties.AccessibilityView="Raw" ContentTemplate="{TemplateBinding ContentTemplate}" ContentTransitions="{TemplateBinding ContentTransitions}" Content="{TemplateBinding Content}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" Margin="0,2,0,0"/>
+                            </Border>
+                            <Rectangle x:Name="FocusVisualWhite" IsHitTestVisible="False" Opacity="0" StrokeDashOffset="1.5" StrokeEndLineCap="Square" Stroke="{ThemeResource FocusVisualWhiteStrokeThemeBrush}" StrokeDashArray="1,1"/>
+                            <Rectangle x:Name="FocusVisualBlack" IsHitTestVisible="False" Opacity="0" StrokeDashOffset="0.5" StrokeEndLineCap="Square" Stroke="{ThemeResource FocusVisualBlackStrokeThemeBrush}" StrokeDashArray="1,1"/>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="BackButtonStyle" TargetType="Button">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Grid>
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup x:Name="CommonStates">
+                                    <VisualState x:Name="Normal"/>
+                                    <VisualState x:Name="Pressed">
+                                        <Storyboard>
+                                            <DoubleAnimation Duration="0" To="0.5" Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="back_btn" d:IsOptimized="True"/>
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState x:Name="Disabled">
+                                        <Storyboard>
+                                            <DoubleAnimation Duration="0" To="0" Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="back_btn" d:IsOptimized="True"/>
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState x:Name="PointerOver"/>
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+                            <Image x:Name="back_btn" RenderTransformOrigin="0.5,0.5" Source="Assets/CircledArrow Left - 01.png" Stretch="None" Tapped="back_btn_Tapped">
+                                <Image.RenderTransform>
+                                    <CompositeTransform ScaleY="0.6" ScaleX="0.6"/>
+                                </Image.RenderTransform>
+                            </Image>
+                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" Content=""/>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Storyboard x:Name="Qrgel">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="qr_blackscreen">
+                <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="0.6"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="qr_rectangle">
+                <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="0"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.6" Value="1"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.ScaleX)" Storyboard.TargetName="qr_rectangle">
+                <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="0.25"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.6" Value="1"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.ScaleY)" Storyboard.TargetName="qr_rectangle">
+                <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="0.25"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.6" Value="1"/>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+        <Storyboard x:Name="Qrgit">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.ScaleX)" Storyboard.TargetName="qr_rectangle">
+                <EasingDoubleKeyFrame KeyTime="0" Value="1"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="0.499512"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="0.25"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.ScaleY)" Storyboard.TargetName="qr_rectangle">
+                <EasingDoubleKeyFrame KeyTime="0" Value="1"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="0.499512"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="0.25"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="qr_blackscreen">
+                <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="0.6"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="0"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="qr_rectangle">
+                <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="1"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="0"/>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+    </Page.Resources>
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-    	<Image Margin="0" Source="Assets/fakedata .png" Stretch="Fill"/>
-    	<Image x:Name="logo" Source="Assets/logo_full_white.png" Stretch="None" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,-822,-233">
-    		<Image.RenderTransform>
-    			<CompositeTransform ScaleX="0.1" ScaleY="0.1"/>
-    		</Image.RenderTransform>
-    	</Image>
-    	<Image x:Name="sidebar" Margin="0" Source="Assets/Side Bar.png" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Left" VerticalAlignment="Top">
-    		<Image.RenderTransform>
-    			<CompositeTransform/>
-    		</Image.RenderTransform>
-    		<Image.Projection>
-    			<PlaneProjection/>
-    		</Image.Projection>
-    	</Image>
-    	<Button x:Name="wishlist_btn" Content="Wishlist" HorizontalAlignment="Left" Height="43" Margin="337,20,0,0" VerticalAlignment="Top" Width="110" Background="White" Foreground="#FF2982B7" FontFamily="Prenton RP Cond Medium" CharacterSpacing="30" FontSize="15.333" BorderThickness="0" Click="wishlist_btn_Click" Style="{StaticResource CommonButtonStyle}" IsEnabled="False"/>
-    	<Button x:Name="mycart_btn" Content="My Cart" HorizontalAlignment="Right" Height="43" Margin="0,20,170,0" VerticalAlignment="Top" Width="110" Background="White" Foreground="#FF2982B7" FontFamily="Prenton RP Cond Medium" CharacterSpacing="30" FontSize="15.333" BorderThickness="0" Style="{StaticResource CommonButtonStyle}" IsEnabled="False"/>
-    	<Button x:Name="logout_btn" Content="Logout" HorizontalAlignment="Right" Height="43" Margin="0,20,30,0" VerticalAlignment="Top" Width="110" Background="White" Foreground="#FF2982B7" FontFamily="Prenton RP Cond Medium" CharacterSpacing="30" FontSize="15.333" BorderThickness="0" Style="{StaticResource CommonButtonStyle}" IsEnabled="False" Tapped="logout_btn_Tapped"/>
-    	<Button x:Name="login_btn" Content="Login" HorizontalAlignment="Right" Height="43" Margin="0,20,30,0" VerticalAlignment="Top" Width="110" Background="White" Foreground="#FF2982B7" FontFamily="Prenton RP Cond Medium" CharacterSpacing="30" FontSize="15.333" BorderThickness="0" Style="{StaticResource CommonButtonStyle}" Tapped="login_btn_Tapped"/>
-    	<Image x:Name="wishlist_bg" Margin="0" Source="Assets/wishlist bg.png" Stretch="Fill" Opacity="0" IsHitTestVisible="False"/>
-    	<Grid x:Name="grid" RenderTransformOrigin="0.5,0.5" Margin="0">
-    		<Grid.RenderTransform>
-    			<CompositeTransform TranslateX="-633"/>
-    		</Grid.RenderTransform>
-    		<Image x:Name="wishlist" Margin="0" Source="Assets/wishlist.png" HorizontalAlignment="Left" RenderTransformOrigin="0.5,0.5">
-    			<Image.RenderTransform>
-    				<CompositeTransform/>
-    			</Image.RenderTransform>
-    			<Image.Projection>
-    				<PlaneProjection/>
-    			</Image.Projection>
-    		</Image>
-    		<Button Content="Button" HorizontalAlignment="Left" Margin="14,0,0,0" Style="{StaticResource BackButtonStyle}" VerticalAlignment="Top"/>
+        <Image Margin="0" Source="Assets/fakedata .png" Stretch="Fill"/>
+        <Image x:Name="logo" Source="Assets/logo_full_white.png" Stretch="None" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,-822,-233">
+            <Image.RenderTransform>
+                <CompositeTransform ScaleX="0.1" ScaleY="0.1"/>
+            </Image.RenderTransform>
+        </Image>
+        <Image x:Name="sidebar" Margin="0" Source="Assets/Side Bar.png" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Left" VerticalAlignment="Top">
+            <Image.RenderTransform>
+                <CompositeTransform/>
+            </Image.RenderTransform>
+            <Image.Projection>
+                <PlaneProjection/>
+            </Image.Projection>
+        </Image>
+        <Button x:Name="wishlist_btn" Content="Wishlist" HorizontalAlignment="Left" Height="43" Margin="337,20,0,0" VerticalAlignment="Top" Width="110" Background="White" Foreground="#FF2982B7" FontFamily="Prenton RP Cond Medium" CharacterSpacing="30" FontSize="15.333" BorderThickness="0" Click="wishlist_btn_Click" Style="{StaticResource CommonButtonStyle}" IsEnabled="False"/>
+        <Button x:Name="mycart_btn" Content="My Cart" HorizontalAlignment="Right" Height="43" Margin="0,20,170,0" VerticalAlignment="Top" Width="110" Background="White" Foreground="#FF2982B7" FontFamily="Prenton RP Cond Medium" CharacterSpacing="30" FontSize="15.333" BorderThickness="0" Style="{StaticResource CommonButtonStyle}" IsEnabled="False"/>
+        <Button x:Name="logout_btn" Content="Logout" HorizontalAlignment="Right" Height="43" Margin="0,20,30,0" VerticalAlignment="Top" Width="110" Background="White" Foreground="#FF2982B7" FontFamily="Prenton RP Cond Medium" CharacterSpacing="30" FontSize="15.333" BorderThickness="0" Style="{StaticResource CommonButtonStyle}" IsEnabled="False" Tapped="logout_btn_Tapped"/>
+        <Button x:Name="login_btn" Content="Login" HorizontalAlignment="Right" Height="43" Margin="0,20,30,0" VerticalAlignment="Top" Width="110" Background="White" Foreground="#FF2982B7" FontFamily="Prenton RP Cond Medium" CharacterSpacing="30" FontSize="15.333" BorderThickness="0" Style="{StaticResource CommonButtonStyle}" Tapped="login_btn_Tapped"/>
+        <Image x:Name="wishlist_bg" Margin="0" Source="Assets/wishlist bg.png" Stretch="Fill" Opacity="0" IsHitTestVisible="False"/>
+        <Grid x:Name="grid" RenderTransformOrigin="0.5,0.5" Margin="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="550"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RenderTransform>
+                <CompositeTransform TranslateX="-633"/>
+            </Grid.RenderTransform>
+            <Image x:Name="wishlist" Margin="0" Source="Assets/wishlist.png" HorizontalAlignment="Left" RenderTransformOrigin="0.5,0.5" Grid.Column="0">
+                <Image.RenderTransform>
+                    <CompositeTransform/>
+                </Image.RenderTransform>
+                <Image.Projection>
+                    <PlaneProjection/>
+                </Image.Projection>
+            </Image>
+            <Button Content="Button" HorizontalAlignment="Left" Margin="14,0,0,0" Style="{StaticResource BackButtonStyle}" VerticalAlignment="Top"/>
+            <GridView x:Name="WishlistItems" HorizontalAlignment="Left" Grid.Column="0" SelectionMode="None" IsHitTestVisible="False" Margin="0,80,0,0" VerticalAlignment="Top">
+                <GridView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Height="218" Width="150" Margin="7,0,7,0">
+                            <Grid.Background>
+                                <ImageBrush ImageSource="Assets/wishlistitembackground.png"/>
+                            </Grid.Background>
+                            <TextBlock Text="{Binding Item.Title}" Padding="10,0,10,0" Foreground="#FF2982B7" Margin="0,120,0,0" VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="Prenton RP Cond Medium" FontSize="14" CharacterSpacing="3" FontWeight="Medium"  IsHitTestVisible="False" TextTrimming="CharacterEllipsis" TextAlignment="Center"/>
+                            <Rectangle HorizontalAlignment="Center" VerticalAlignment="Center" Width="100" Height="120" Margin="0,0,0,40">
+                            	<Rectangle.Fill>
+                            		<ImageBrush ImageSource="Assets/Qr.png"/>
+                            	</Rectangle.Fill>
+                            </Rectangle> 
+                            <!-- TODO: Price tag 
+                            <TextBlock x:Name="PriceBase" Text="29" />
+                             -->
+                        </Grid>
+                    </DataTemplate>
+                </GridView.ItemTemplate>
+            </GridView>
 
-    	</Grid>
-    	<Grid x:Name="QR" IsHitTestVisible="False" Tapped="QR_Tapped" Opacity="0">
-    		<Rectangle x:Name="qr_blackscreen" Fill="Black" Stroke="#00000000" Opacity="0.6" StrokeThickness="0"/>
-    		<Grid x:Name="qr_rectangle" HorizontalAlignment="Center" Height="500" VerticalAlignment="Center" Width="500" Background="White" RenderTransformOrigin="0.5,0.5">
-    			<Grid.RenderTransform>
-    				<CompositeTransform/>
-    			</Grid.RenderTransform>
-    			<StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0">
-    				<Image Margin="0" Source="Assets/strassmann-queller-qr-code.jpg" Stretch="Fill" HorizontalAlignment="Center" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5" Width="200" Height="200"/>
-    				<TextBlock Height="122" Width="392" Foreground="#FF020000" FontFamily="Arial" FontSize="32" TextAlignment="Center" Margin="0,40,0,0" TextWrapping="Wrap" Text="Please scan the QR code with your mobile phone to login"/>
-    				<TextBlock TextWrapping="Wrap" FontSize="18.667" Foreground="Black" Text="Touch the screen to go back" TextAlignment="Center" FontFamily="Arial" Opacity="0.5" Margin="0,20,0,0"/>
-    			</StackPanel>
-    		</Grid>
+        </Grid>
+        <Grid x:Name="QR" IsHitTestVisible="False" Tapped="QR_Tapped" Opacity="0">
+            <Rectangle x:Name="qr_blackscreen" Fill="Black" Stroke="#00000000" Opacity="0.6" StrokeThickness="0"/>
+            <Grid x:Name="qr_rectangle" HorizontalAlignment="Center" Height="500" VerticalAlignment="Center" Width="500" Background="White" RenderTransformOrigin="0.5,0.5">
+                <Grid.RenderTransform>
+                    <CompositeTransform/>
+                </Grid.RenderTransform>
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0">
+                    <Image x:Name="QRImage" Margin="0" Source="Assets/Qr.png" Stretch="Fill" HorizontalAlignment="Center" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5" Width="200" Height="200"/>
+                    <TextBlock Height="122" Width="392" Foreground="#FF020000" FontFamily="Arial" FontSize="32" TextAlignment="Center" Margin="0,40,0,0" TextWrapping="Wrap" Text="Please scan the QR code with your mobile phone to login"/>
+                    <TextBlock TextWrapping="Wrap" FontSize="18.667" Foreground="Black" Text="Touch the screen to go back" TextAlignment="Center" FontFamily="Arial" Opacity="0.5" Margin="0,20,0,0"/>
+                </StackPanel>
+            </Grid>
 
-    	</Grid>
+        </Grid>
 
     </Grid>
 </Page>
