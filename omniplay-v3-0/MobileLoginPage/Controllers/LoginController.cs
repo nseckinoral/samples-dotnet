@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using XOMNI.SDK.Public;
+using XOMNI.SDK.Public.Clients.OmniPlay;
 
 namespace MobileLoginPage.Controllers
 {
@@ -17,9 +20,26 @@ namespace MobileLoginPage.Controllers
         }
 
         [HttpPost]
-        public ActionResult Index(Models.User user)
-        {   
-                       
+        public async Task<ActionResult>  Index(Models.User user)
+        {
+            var tenantUserName = System.Web.Configuration.WebConfigurationManager.AppSettings["TenantUsername"];
+            var tenantPassword = System.Web.Configuration.WebConfigurationManager.AppSettings["TenantPassword"];
+            var serviceUri = System.Web.Configuration.WebConfigurationManager.AppSettings["ServiceUri"];
+
+            var clientcontext = new ClientContext(tenantUserName,tenantPassword,serviceUri);
+
+            clientcontext.PIIUser = new XOMNI.SDK.Public.Models.PII.User()
+            {
+                Password = user.Password,
+                UserName = user.Username
+            };
+
+            var deviceId = Request.QueryString["deviceId"];
+            if(deviceId != null)
+            {
+                await clientcontext.Of<DeviceClient>().SubscribeToDevice(deviceId);
+            }
+            
             return RedirectToAction("Success", "Login");
         }
 
@@ -28,5 +48,7 @@ namespace MobileLoginPage.Controllers
             return View();
             
         }
+
+
     }
 }
