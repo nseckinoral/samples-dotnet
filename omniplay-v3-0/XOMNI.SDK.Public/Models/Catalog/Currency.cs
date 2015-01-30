@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace XOMNI.SDK.Public.Models.Company
+namespace XOMNI.SDK.Public.Models.Catalog
 {
-    public class Device
+    public class Currency
     {
-        public string DeviceId { get; set; }
+        public int Id { get; set; }
         public string Description { get; set; }
-
+        public string CurrencySymbol { get; set; }
     }
 }

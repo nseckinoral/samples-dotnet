@@ -6,10 +6,12 @@ using System.Threading.Tasks;
 
 namespace XOMNI.SDK.Public.Models.Company
 {
-    public class Device
+    public class Store
     {
-        public string DeviceId { get; set; }
+        public int Id { get; set; }
         public string Description { get; set; }
-
+        public Location Location { get; set; }
+        public string Name { get; set; }
+        public string Address { get; set; }
     }
 }
