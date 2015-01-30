@@ -148,21 +148,13 @@ namespace App1
 
         public async Task SetImageFromByteArray(byte[] data, Windows.UI.Xaml.Controls.Image image)
         {
-            using (InMemoryRandomAccessStream randomStream =
-                new InMemoryRandomAccessStream())
+            using (InMemoryRandomAccessStream randomStream = new InMemoryRandomAccessStream())
             {
                 using (DataWriter writer = new DataWriter(randomStream))
                 {
-                    // Write the bytes to the stream
                     writer.WriteBytes(data);
-
-                    // Store the bytes to the MemoryStream
                     await writer.StoreAsync();
-
-                    // Not necessary, but do it anyway
                     await writer.FlushAsync();
-
-                    // Detach from the Memory stream so we don't close it
                     writer.DetachStream();
                 }
 
