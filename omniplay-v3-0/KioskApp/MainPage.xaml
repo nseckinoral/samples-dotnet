@@ -3,6 +3,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:App1"
+    xmlns:converters="using:App1.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
@@ -228,6 +229,33 @@
                 <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="0"/>
             </DoubleAnimationUsingKeyFrames>
         </Storyboard>
+        <Style x:Key="RatingStyle" TargetType="ProgressBar">
+            <Setter Property="Foreground" Value="{ThemeResource ProgressBarForegroundThemeBrush}"/>
+            <Setter Property="Background" Value="{ThemeResource ProgressBarBackgroundThemeBrush}"/>
+            <Setter Property="BorderBrush" Value="{ThemeResource ProgressBarBorderThemeBrush}"/>
+            <Setter Property="BorderThickness" Value="{ThemeResource ProgressBarBorderThemeThickness}"/>
+            <Setter Property="Maximum" Value="100"/>
+            <Setter Property="MinHeight" Value="{ThemeResource ProgressBarThemeMinHeight}"/>
+            <Setter Property="IsTabStop" Value="False"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ProgressBar">
+                        <Grid>
+                            <Border x:Name="DeterminateRoot" Background="{TemplateBinding Background}">
+                                <Rectangle x:Name="ProgressBarIndicator" Fill="{TemplateBinding Foreground}" StrokeThickness="0" Height="23" HorizontalAlignment="Left" Margin="1,0"/>
+                            </Border>
+                            <Grid Margin="0">
+                                <Image Margin="0" Source="Assets/ratingstars.png" Stretch="Fill"/>
+                            </Grid>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <converters:ProgressValueToRatingConverter x:Name="RatingConverter"/>
+        <converters:BasePriceConverter x:Name="BasePriceConverter"/>
+        <converters:DecimalPriceConverter x:Name="DecimalPriceConverter"/>
     </Page.Resources>
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
@@ -275,14 +303,22 @@
                                 <ImageBrush ImageSource="Assets/wishlistitembackground.png"/>
                             </Grid.Background>
                             <TextBlock Text="{Binding Item.Title}" Padding="10,0,10,0" Foreground="#FF2982B7" Margin="0,120,0,0" VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="Prenton RP Cond Medium" FontSize="14" CharacterSpacing="3" FontWeight="Medium"  IsHitTestVisible="False" TextTrimming="CharacterEllipsis" TextAlignment="Center"/>
-                            <Rectangle HorizontalAlignment="Center" VerticalAlignment="Center" Width="100" Height="120" Margin="0,0,0,40">
+                            <Rectangle HorizontalAlignment="Center" VerticalAlignment="Center" Width="84" Height="101" Margin="0,0,0,45">
                             	<Rectangle.Fill>
                             		<ImageBrush ImageSource="Assets/Qr.png"/>
                             	</Rectangle.Fill>
-                            </Rectangle> 
-                            <!-- TODO: Price tag 
-                            <TextBlock x:Name="PriceBase" Text="29" />
-                             -->
+                            </Rectangle>
+
+                            <ProgressBar HorizontalAlignment="Left" Height="25" VerticalAlignment="Top" Width="97" Margin="-5,5,0,0" Style="{StaticResource RatingStyle}" Background="White" Foreground="#FFBFBFBF" Maximum="95" Value="{Binding Item.Rating,Converter={StaticResource RatingConverter}}" RenderTransformOrigin="0.5,0.5" BorderBrush="{x:Null}">
+                            	<ProgressBar.RenderTransform>
+                            		<CompositeTransform ScaleX="0.65" ScaleY="0.65"/>
+                            	</ProgressBar.RenderTransform>
+                            </ProgressBar>
+                            <StackPanel Margin="0,10,12,0" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top">
+                            	<TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="$" VerticalAlignment="Top" Foreground="#FFB7B7B7" FontFamily="Arial" FontSize="16"/>
+                                <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="{Binding Item.Prices[0].NormalPrice,Converter={StaticResource BasePriceConverter}}" VerticalAlignment="Top" Foreground="#FFB7B7B7" FontFamily="Arial" FontSize="16"/>
+                                <TextBlock HorizontalAlignment="Right" TextWrapping="Wrap" Text="{Binding Item.Prices[0].NormalPrice,Converter={StaticResource DecimalPriceConverter}}" VerticalAlignment="Top" Foreground="#FFB7B7B7" FontFamily="Arial" FontSize="13.333" Margin="2,-3,0,0"/>
+                            </StackPanel>
                         </Grid>
                     </DataTemplate>
                 </GridView.ItemTemplate>
