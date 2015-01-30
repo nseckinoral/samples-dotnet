@@ -62,13 +62,23 @@ namespace App1
                 using (var clientContext = CreateClientContext())
                 {
                     var deviceClient = clientContext.Of<XOMNI.SDK.Public.Clients.Company.DeviceClient>();
-                    var registeredDevice = (await deviceClient.PostAsync(new XOMNI.SDK.Public.Models.Company.Device()
+                    try
                     {
-                        DeviceId = deviceId,
-                        Description = deviceDescription
-                    })).Data;
+                        var registeredDevice = (await deviceClient.PostAsync(new XOMNI.SDK.Public.Models.Company.Device()
+                        {
+                            DeviceId = deviceId,
+                            Description = deviceDescription
+                        })).Data;
+                    }
+                    catch (XOMNI.SDK.Public.Exceptions.XOMNIPublicAPIException ex)
+                    {
+                        if(ex.ApiExceptionResult.HttpStatusCode !=  System.Net.HttpStatusCode.Conflict)
+                        {
+                            throw ex;
+                        }
+                    }
 
-                    ApplicationData.Current.LocalSettings.Values.Add(isRegisteredKey, registeredDevice);
+                    ApplicationData.Current.LocalSettings.Values.Add(isRegisteredKey, true);
                 }
             }
 
