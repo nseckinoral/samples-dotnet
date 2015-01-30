@@ -31,10 +31,9 @@ namespace App1
     public sealed partial class MainPage : Page
     {
         const string isRegisteredKey = "isRegistered";
-        static readonly string apiUserName = "StagingApiTestUser";
-        static readonly string apiPassword = "StagingApiTestPass";
-        static readonly string apiServiceUri = "http://test.apistaging.xomni.com";
-        //XOMNI.SDK.Public.Models.ApiResponse<WishlistWithItems> latestWishlistItems;
+        static readonly string apiUserName = "{ApiUserName}";
+        static readonly string apiPassword = "{ApiUserPass}";
+        static readonly string apiServiceUri = "{ApiURI}";
         XOMNI.SDK.Public.Models.ApiResponse<OmniSession> omniSession;
         string deviceId;
         string deviceDescription;
@@ -95,11 +94,9 @@ namespace App1
                     var wishlistGuids = await wishlistClient.GetAsync();
 
                     var latestWishlist = wishlistGuids.Data.Last();
-                    var latestWishlistItems = await wishlistClient.GetAsync(latestWishlist, longitude, true, false, false, XOMNI.SDK.Public.Models.Catalog.AssetDetailType.None, XOMNI.SDK.Public.Models.Catalog.AssetDetailType.None, XOMNI.SDK.Public.Models.Catalog.AssetDetailType.None, examplemetadata, examplemetadata, latitude);
+                    var latestWishlistItems = await wishlistClient.GetAsync(latestWishlist, longitude, latitude,true, false, false, XOMNI.SDK.Public.Models.Catalog.AssetDetailType.None, XOMNI.SDK.Public.Models.Catalog.AssetDetailType.None, XOMNI.SDK.Public.Models.Catalog.AssetDetailType.None, examplemetadata, examplemetadata);
                     WishlistItems.ItemsSource = latestWishlistItems.Data.WishlistItems;
                     Wishlistgel.Begin();
-                    //var messageDialog = new MessageDialog(latestWishlistItems.Data.WishlistItems.First().Item.Name, "Name of the first item of your wishlist");
-                    //await messageDialog.ShowAsync();
                 }
 
 
