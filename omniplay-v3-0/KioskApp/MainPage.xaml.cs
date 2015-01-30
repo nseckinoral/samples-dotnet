@@ -1,29 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
 using Windows.Storage;
 using Windows.Storage.Streams;
 using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Navigation;
 using XOMNI.SDK.Public;
 using XOMNI.SDK.Public.Clients.Utility;
 using Windows.UI.Xaml.Media.Imaging;
 using System.Threading.Tasks;
-using XOMNI.SDK.Public.Clients.Company;
-using XOMNI.SDK.Public.Clients.OmniPlay;
 using XOMNI.SDK.Public.Clients.PII;
 using XOMNI.SDK.Public.Models.OmniPlay;
-using Windows.UI.Popups;
-using XOMNI.SDK.Public.Models.PII;
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
 namespace App1
