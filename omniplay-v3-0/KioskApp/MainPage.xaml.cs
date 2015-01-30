@@ -50,8 +50,9 @@ namespace App1
             this.pollingTimer.Tick += PollingTimer_TickAsync;
             this.pollingTimer.Interval = new TimeSpan(0, 0, 5);
 
-            this.deviceId = GetHostName();
-            this.deviceDescription = GetHostName();
+            this.deviceId = Helpers.DeviceIdentity.GetASHWID();
+            this.deviceDescription = Helpers.DeviceIdentity.GetFriendlyName();
+            
         }
 
         async void MainPage_Loaded(object sender, RoutedEventArgs e)
@@ -118,7 +119,7 @@ namespace App1
 
         private async void login_btn_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            var generatedQR = await GenerateQRCodeAsync("http://192.168.2.209/MobileLoginPage/", GetHostName());
+            var generatedQR = await GenerateQRCodeAsync("http://192.168.2.209/MobileLoginPage/", deviceDescription);
             await SetImageFromByteArray(generatedQR, QRImage);
         }
 
@@ -187,22 +188,6 @@ namespace App1
 
                 image.Source = bitMapImage;
             }
-        }
-
-        public string GetHostName()
-        {
-            var hostNamesList = Windows.Networking.Connectivity.NetworkInformation
-                .GetHostNames();
-
-            foreach (var entry in hostNamesList)
-            {
-                if (entry.Type == Windows.Networking.HostNameType.DomainName)
-                {
-                    return entry.CanonicalName;
-                }
-            }
-
-            return null;
         }
 
         private ClientContext CreateClientContext()
