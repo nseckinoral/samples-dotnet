@@ -88,7 +88,6 @@ namespace App1
 
         private async void wishlist_btn_Click(object sender, RoutedEventArgs e)
         {
-
             try
             {
                 using (var clientContext = CreateClientContext())
@@ -114,7 +113,6 @@ namespace App1
 
 
             }
-
         }
 
         private async void login_btn_Tapped(object sender, TappedRoutedEventArgs e)
