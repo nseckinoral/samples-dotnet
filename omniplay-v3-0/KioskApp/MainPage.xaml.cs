@@ -17,6 +17,7 @@ namespace App1
 {
     public sealed partial class MainPage : Page
     {
+        const string qrUri = "http://192.168.2.209/MobileLoginPage/?deviceId={0}";
         const string isRegisteredKey = "isRegistered";
         static readonly string apiUserName = "{ApiUserName}";
         static readonly string apiPassword = "{ApiUserPass}";
@@ -104,7 +105,7 @@ namespace App1
 
         private async void login_btn_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            var generatedQR = await GenerateQRCodeAsync("http://192.168.2.209/MobileLoginPage/", deviceDescription);
+            var generatedQR = await GenerateQRCodeAsync(this.deviceId);
             await SetImageFromByteArray(generatedQR, QRImage);
         }
 
@@ -172,12 +173,11 @@ namespace App1
             return new ClientContext(apiUserName, apiPassword, apiServiceUri);
         }
 
-        private async Task<byte[]> GenerateQRCodeAsync(string qrUri, string deviceId)
+        private async Task<byte[]> GenerateQRCodeAsync(string deviceId)
         {
-            // TODO: qrUri tepedeki readonly string variable lar gibi yazilacak
             using (var clientContext = CreateClientContext())
             {
-                return await clientContext.Of<QRCodeClient>().GetAsync(8, qrUri + string.Format("?deviceId={0}", deviceId));
+                return await clientContext.Of<QRCodeClient>().GetAsync(8, string.Format(qrUri, deviceId));
             }
         }
     }
