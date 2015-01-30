@@ -11,6 +11,7 @@ namespace App1.Converters
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
+            //TODO Noktadan sonrası 2 haneli olmalı
             var doubleValue = (double)value; 
             //var decimalValue = doubleValue-Math.Truncate(doubleValue);
             //var result = Math.Truncate(decimalValue*100);

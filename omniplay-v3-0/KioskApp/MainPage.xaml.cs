@@ -77,7 +77,7 @@ namespace App1
 
         private async void wishlist_btn_Click(object sender, RoutedEventArgs e)
         {
-            
+
             try
             {
                 using (var clientContext = CreateClientContext())
@@ -94,35 +94,22 @@ namespace App1
                     var wishlistGuids = await wishlistClient.GetAsync();
 
                     var latestWishlist = wishlistGuids.Data.Last();
-                    var latestWishlistItems = await wishlistClient.GetAsync(latestWishlist, longitude, latitude,true, false, false, XOMNI.SDK.Public.Models.Catalog.AssetDetailType.None, XOMNI.SDK.Public.Models.Catalog.AssetDetailType.None, XOMNI.SDK.Public.Models.Catalog.AssetDetailType.None, examplemetadata, examplemetadata);
+                    var latestWishlistItems = await wishlistClient.GetAsync(latestWishlist, longitude, latitude, true, false, false, XOMNI.SDK.Public.Models.Catalog.AssetDetailType.None, XOMNI.SDK.Public.Models.Catalog.AssetDetailType.None, XOMNI.SDK.Public.Models.Catalog.AssetDetailType.None, examplemetadata, examplemetadata);
                     WishlistItems.ItemsSource = latestWishlistItems.Data.WishlistItems;
-                    Wishlistgel.Begin();
                 }
-
-
             }
             catch
             {
 
 
             }
-          
-        }
 
-        private void back_btn_Tapped(object sender, TappedRoutedEventArgs e)
-        {
-            Wishlistgit.Begin();
         }
 
         private async void login_btn_Tapped(object sender, TappedRoutedEventArgs e)
         {
             var generatedQR = await GenerateQRCodeAsync("http://192.168.2.209/MobileLoginPage/", GetHostName());
             await SetImageFromByteArray(generatedQR, QRImage);
-            QR.Opacity = 100;
-            QR.IsHitTestVisible = true;
-            Qrgel.Begin();
-
-
         }
 
         async void PollingTimer_TickAsync(object sender, object e)
@@ -134,9 +121,6 @@ namespace App1
                     using (var clientContext = CreateClientContext())
                     {
                         var deviceClient = clientContext.Of<XOMNI.SDK.Public.Clients.OmniPlay.DeviceClient>();
-
-                        
-
                         var result = await deviceClient.GetIncomingsAsync(deviceId);
                         if (result.Data != null && result.Data.Any())
                         {
@@ -151,34 +135,19 @@ namespace App1
 
                             var omniTicketClient = clientContext.Of<XOMNI.SDK.Public.Clients.OmniPlay.OmniTicketClient>();
                             omniSession = await omniTicketClient.PostSessionAsync(new OmniTicket { Ticket = Guid.Parse(omniTicketString) });
-                            
-
                         }
                     }
-
                 }
                 catch
                 {
                     return;
                 }
-
             }
-        }
-
-        private void QR_Tapped(object sender, TappedRoutedEventArgs e)
-        {
-            Qrgit.Begin();
-            QR.IsHitTestVisible = false;
         }
 
         private void logout_btn_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            login_btn.IsEnabled = true;
-            logout_btn.IsEnabled = false;
-            mycart_btn.IsEnabled = false;
-            wishlist_btn.IsEnabled = false;
             isLoggedIn = false;
-
         }
 
         public async Task SetImageFromByteArray(byte[] data, Windows.UI.Xaml.Controls.Image image)
