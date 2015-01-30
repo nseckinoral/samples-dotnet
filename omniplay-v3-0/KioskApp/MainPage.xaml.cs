@@ -1,35 +1,23 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
 using Windows.Storage;
 using Windows.Storage.Streams;
 using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Navigation;
 using XOMNI.SDK.Public;
 using XOMNI.SDK.Public.Clients.Utility;
 using Windows.UI.Xaml.Media.Imaging;
 using System.Threading.Tasks;
-using XOMNI.SDK.Public.Clients.Company;
-using XOMNI.SDK.Public.Clients.OmniPlay;
 using XOMNI.SDK.Public.Clients.PII;
 using XOMNI.SDK.Public.Models.OmniPlay;
-using Windows.UI.Popups;
-using XOMNI.SDK.Public.Models.PII;
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
 namespace App1
 {
     public sealed partial class MainPage : Page
     {
+        const string qrUri = "http://192.168.2.209/MobileLoginPage/?deviceId={0}";
         const string isRegisteredKey = "isRegistered";
         static readonly string apiUserName = "{ApiUserName}";
         static readonly string apiPassword = "{ApiUserPass}";
@@ -50,8 +38,9 @@ namespace App1
             this.pollingTimer.Tick += PollingTimer_TickAsync;
             this.pollingTimer.Interval = new TimeSpan(0, 0, 5);
 
-            this.deviceId = GetHostName();
-            this.deviceDescription = GetHostName();
+            this.deviceId = Helpers.DeviceIdentity.GetASHWID();
+            this.deviceDescription = Helpers.DeviceIdentity.GetFriendlyName();
+            
         }
 
         async void MainPage_Loaded(object sender, RoutedEventArgs e)
@@ -62,13 +51,23 @@ namespace App1
                 using (var clientContext = CreateClientContext())
                 {
                     var deviceClient = clientContext.Of<XOMNI.SDK.Public.Clients.Company.DeviceClient>();
-                    var registeredDevice = (await deviceClient.PostAsync(new XOMNI.SDK.Public.Models.Company.Device()
+                    try
                     {
-                        DeviceId = deviceId,
-                        Description = deviceDescription
-                    })).Data;
+                        var registeredDevice = (await deviceClient.PostAsync(new XOMNI.SDK.Public.Models.Company.Device()
+                        {
+                            DeviceId = deviceId,
+                            Description = deviceDescription
+                        })).Data;
+                    }
+                    catch (XOMNI.SDK.Public.Exceptions.XOMNIPublicAPIException ex)
+                    {
+                        if(ex.ApiExceptionResult.HttpStatusCode !=  System.Net.HttpStatusCode.Conflict)
+                        {
+                            throw ex;
+                        }
+                    }
 
-                    ApplicationData.Current.LocalSettings.Values.Add(isRegisteredKey, registeredDevice);
+                    ApplicationData.Current.LocalSettings.Values.Add(isRegisteredKey, true);
                 }
             }
 
@@ -77,7 +76,6 @@ namespace App1
 
         private async void wishlist_btn_Click(object sender, RoutedEventArgs e)
         {
-
             try
             {
                 using (var clientContext = CreateClientContext())
@@ -103,12 +101,11 @@ namespace App1
 
 
             }
-
         }
 
         private async void login_btn_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            var generatedQR = await GenerateQRCodeAsync("http://192.168.2.209/MobileLoginPage/", GetHostName());
+            var generatedQR = await GenerateQRCodeAsync(this.deviceId);
             await SetImageFromByteArray(generatedQR, QRImage);
         }
 
@@ -152,21 +149,13 @@ namespace App1
 
         public async Task SetImageFromByteArray(byte[] data, Windows.UI.Xaml.Controls.Image image)
         {
-            using (InMemoryRandomAccessStream randomStream =
-                new InMemoryRandomAccessStream())
+            using (InMemoryRandomAccessStream randomStream = new InMemoryRandomAccessStream())
             {
                 using (DataWriter writer = new DataWriter(randomStream))
                 {
-                    // Write the bytes to the stream
                     writer.WriteBytes(data);
-
-                    // Store the bytes to the MemoryStream
                     await writer.StoreAsync();
-
-                    // Not necessary, but do it anyway
                     await writer.FlushAsync();
-
-                    // Detach from the Memory stream so we don't close it
                     writer.DetachStream();
                 }
 
@@ -179,33 +168,16 @@ namespace App1
             }
         }
 
-        public string GetHostName()
-        {
-            var hostNamesList = Windows.Networking.Connectivity.NetworkInformation
-                .GetHostNames();
-
-            foreach (var entry in hostNamesList)
-            {
-                if (entry.Type == Windows.Networking.HostNameType.DomainName)
-                {
-                    return entry.CanonicalName;
-                }
-            }
-
-            return null;
-        }
-
         private ClientContext CreateClientContext()
         {
             return new ClientContext(apiUserName, apiPassword, apiServiceUri);
         }
 
-        private async Task<byte[]> GenerateQRCodeAsync(string qrUri, string deviceId)
+        private async Task<byte[]> GenerateQRCodeAsync(string deviceId)
         {
-            // TODO: qrUri tepedeki readonly string variable lar gibi yazilacak
             using (var clientContext = CreateClientContext())
             {
-                return await clientContext.Of<QRCodeClient>().GetAsync(8, qrUri + string.Format("?deviceId={0}", deviceId));
+                return await clientContext.Of<QRCodeClient>().GetAsync(8, string.Format(qrUri, deviceId));
             }
         }
     }

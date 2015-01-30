@@ -113,6 +113,7 @@
     </Compile>
     <Compile Include="Converters\BasePriceConverter.cs" />
     <Compile Include="Converters\DecimalPriceConverter.cs" />
+    <Compile Include="Helpers\UUID.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
