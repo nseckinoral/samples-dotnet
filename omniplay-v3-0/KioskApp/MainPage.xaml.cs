@@ -19,9 +19,6 @@ namespace App1
     {
         const string qrUri = "http://192.168.2.209/MobileLoginPage/?deviceId={0}";
         const string isRegisteredKey = "isRegistered";
-        static readonly string apiUserName = "{ApiUserName}";
-        static readonly string apiPassword = "{ApiUserPass}";
-        static readonly string apiServiceUri = "{ApiURI}";
         XOMNI.SDK.Public.Models.ApiResponse<OmniSession> omniSession;
         string deviceId;
         string deviceDescription;
@@ -40,38 +37,47 @@ namespace App1
 
             this.deviceId = Helpers.DeviceIdentity.GetASHWID();
             this.deviceDescription = Helpers.DeviceIdentity.GetFriendlyName();
-            
         }
 
         async void MainPage_Loaded(object sender, RoutedEventArgs e)
         {
-            var isRegisteredLocalSetting = ApplicationData.Current.LocalSettings.Values[isRegisteredKey];
-            if (isRegisteredLocalSetting == null)
+            //Check if the app is already setup with required config data.
+            var ApiURI = ApplicationData.Current.LocalSettings.Values[AppSettingsFlyout.apiServiceUriConfigKey];
+            if(ApiURI == null)
             {
-                using (var clientContext = CreateClientContext())
-                {
-                    var deviceClient = clientContext.Of<XOMNI.SDK.Public.Clients.Company.DeviceClient>();
-                    try
-                    {
-                        var registeredDevice = (await deviceClient.PostAsync(new XOMNI.SDK.Public.Models.Company.Device()
-                        {
-                            DeviceId = deviceId,
-                            Description = deviceDescription
-                        })).Data;
-                    }
-                    catch (XOMNI.SDK.Public.Exceptions.XOMNIPublicAPIException ex)
-                    {
-                        if(ex.ApiExceptionResult.HttpStatusCode !=  System.Net.HttpStatusCode.Conflict)
-                        {
-                            throw ex;
-                        }
-                    }
-
-                    ApplicationData.Current.LocalSettings.Values.Add(isRegisteredKey, true);
-                }
+                AppSettingsFlyout settingsFlyout = new AppSettingsFlyout();
+                settingsFlyout.ShowIndependent();
             }
+            else
+            {
+                var isRegisteredLocalSetting = ApplicationData.Current.LocalSettings.Values[isRegisteredKey];
+                if (isRegisteredLocalSetting == null)
+                {
+                    using (var clientContext = CreateClientContext())
+                    {
+                        var deviceClient = clientContext.Of<XOMNI.SDK.Public.Clients.Company.DeviceClient>();
+                        try
+                        {
+                            var registeredDevice = (await deviceClient.PostAsync(new XOMNI.SDK.Public.Models.Company.Device()
+                            {
+                                DeviceId = deviceId,
+                                Description = deviceDescription
+                            })).Data;
+                        }
+                        catch (XOMNI.SDK.Public.Exceptions.XOMNIPublicAPIException ex)
+                        {
+                            if (ex.ApiExceptionResult.HttpStatusCode != System.Net.HttpStatusCode.Conflict)
+                            {
+                                throw ex;
+                            }
+                        }
 
-            pollingTimer.Start();
+                        ApplicationData.Current.LocalSettings.Values.Add(isRegisteredKey, true);
+                    }
+                }
+
+                pollingTimer.Start();
+            }
         }
 
         private async void wishlist_btn_Click(object sender, RoutedEventArgs e)
@@ -170,7 +176,11 @@ namespace App1
 
         private ClientContext CreateClientContext()
         {
-            return new ClientContext(apiUserName, apiPassword, apiServiceUri);
+            return new ClientContext(
+                ApplicationData.Current.LocalSettings.Values[AppSettingsFlyout.apiUserNameConfigKey].ToString(),
+                ApplicationData.Current.LocalSettings.Values[AppSettingsFlyout.apiUserPassConfigKey].ToString(),  
+                ApplicationData.Current.LocalSettings.Values[AppSettingsFlyout.apiServiceUriConfigKey].ToString()
+                );
         }
 
         private async Task<byte[]> GenerateQRCodeAsync(string deviceId)

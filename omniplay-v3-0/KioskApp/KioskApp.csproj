@@ -111,6 +111,9 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="AppSettingsFlyout.xaml.cs">
+      <DependentUpon>AppSettingsFlyout.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Converters\BasePriceConverter.cs" />
     <Compile Include="Converters\DecimalPriceConverter.cs" />
     <Compile Include="Helpers\UUID.cs" />
@@ -165,6 +168,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="AppSettingsFlyout.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
