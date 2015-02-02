@@ -8,7 +8,7 @@ namespace App1
     {
         public const string apiServiceUriConfigKey = "ApiURI";
         public const string apiUserNameConfigKey = "ApiUserName";
-        public const string apiUserPassConfigKey = "ApiUserPass"
+        public const string apiUserPassConfigKey = "ApiUserPass";
 
         public AppSettingsFlyout()
         {
