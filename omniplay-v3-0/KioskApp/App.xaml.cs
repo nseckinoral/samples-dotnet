@@ -101,7 +101,7 @@ namespace App1
         {
             SettingsPane.GetForCurrentView().CommandsRequested += (s, e) =>
             {
-                SettingsCommand defaultsCommand = new SettingsCommand("general", "API Settings",
+                SettingsCommand defaultsCommand = new SettingsCommand("general", "App Settings",
                     (handler) =>
                     {
                         AppSettingsFlyout sf = new AppSettingsFlyout();

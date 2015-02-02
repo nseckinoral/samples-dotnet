@@ -6,9 +6,14 @@ namespace App1
 {
     public sealed partial class AppSettingsFlyout : SettingsFlyout
     {
+
         public const string apiServiceUriConfigKey = "ApiURI";
+
         public const string apiUserNameConfigKey = "ApiUserName";
+
         public const string apiUserPassConfigKey = "ApiUserPass";
+
+        public const string loginUrlConfigKey = "LoginURL";
 
         public AppSettingsFlyout()
         {
@@ -19,28 +24,34 @@ namespace App1
 
         void AppSettingsFlyout_Loaded(object sender, RoutedEventArgs e)
         {
-            var ApiURI = ApplicationData.Current.LocalSettings.Values[AppSettingsFlyout.apiServiceUriConfigKey];
-            var ApiUserName = ApplicationData.Current.LocalSettings.Values[AppSettingsFlyout.apiUserNameConfigKey];
-            var ApiUserPass = ApplicationData.Current.LocalSettings.Values[AppSettingsFlyout.apiUserPassConfigKey];
-            if(ApiURI != null)
+            var apiURI = ApplicationData.Current.LocalSettings.Values[AppSettingsFlyout.apiServiceUriConfigKey];
+            var apiUserName = ApplicationData.Current.LocalSettings.Values[AppSettingsFlyout.apiUserNameConfigKey];
+            var apiUserPass = ApplicationData.Current.LocalSettings.Values[AppSettingsFlyout.apiUserPassConfigKey];
+            var loginUrl = ApplicationData.Current.LocalSettings.Values[AppSettingsFlyout.loginUrlConfigKey];
+            if(apiURI != null)
             {
-                txtApiEndpoint.Text = ApiURI.ToString();
+                txtApiEndpoint.Text = apiURI.ToString();
             }
-            if(ApiUserName != null)
+            if(apiUserName != null)
             {
-                txtApiUserName.Text = ApiUserName.ToString();
+                txtApiUserName.Text = apiUserName.ToString();
             }            
-            if(ApiUserPass != null)
+            if(apiUserPass != null)
             {
-                txtApiUserPass.Password = ApiUserPass.ToString();
-            }           
+                txtApiUserPass.Password = apiUserPass.ToString();
+            }
+            if (loginUrl != null)
+            {
+                txtLoginUrl.Text = loginUrl.ToString();
+            }    
         }
 
         void AppSettingsFlyout_Unloaded(object sender, RoutedEventArgs e)
         {
-            ApplicationData.Current.LocalSettings.Values.Add(AppSettingsFlyout.apiServiceUriConfigKey, txtApiEndpoint.Text);
-            ApplicationData.Current.LocalSettings.Values.Add(AppSettingsFlyout.apiUserNameConfigKey, txtApiUserName.Text);
-            ApplicationData.Current.LocalSettings.Values.Add(AppSettingsFlyout.apiUserPassConfigKey, txtApiUserPass.Password);
+            ApplicationData.Current.LocalSettings.Values[AppSettingsFlyout.apiServiceUriConfigKey] = txtApiEndpoint.Text;
+            ApplicationData.Current.LocalSettings.Values[AppSettingsFlyout.apiUserNameConfigKey] = txtApiUserName.Text;
+            ApplicationData.Current.LocalSettings.Values[AppSettingsFlyout.apiUserPassConfigKey] = txtApiUserPass.Password;
+            ApplicationData.Current.LocalSettings.Values[AppSettingsFlyout.loginUrlConfigKey] = txtLoginUrl.Text;
         }
     }
 }

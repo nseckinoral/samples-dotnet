@@ -6,7 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    Title="API Settings"
+    Title="App Settings"
     d:DesignWidth="346">
     <StackPanel VerticalAlignment="Stretch" HorizontalAlignment="Stretch" >
         <StackPanel Style="{StaticResource SettingsFlyoutSectionStyle}">
@@ -16,6 +16,8 @@
             <TextBox x:Name="txtApiUserName" TextWrapping="Wrap" Width="250"/>
             <TextBlock Style="{StaticResource TitleTextBlockStyle}" Text="API Password" FontFamily="Global User Interface" Margin="0,15,0,10" />
             <PasswordBox x:Name="txtApiUserPass" FontFamily="Global User Interface" Width="250"/>
+            <TextBlock Style="{StaticResource TitleTextBlockStyle}" Text="Login URL" FontFamily="Global User Interface" Margin="0,15,0,10" />
+            <TextBox x:Name="txtLoginUrl" TextWrapping="Wrap" Width="250"/>
         </StackPanel>
     </StackPanel>
 </SettingsFlyout>
