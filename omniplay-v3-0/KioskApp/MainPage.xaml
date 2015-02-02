@@ -337,6 +337,7 @@
 						</Core:EventTriggerBehavior>
 					</Interactivity:Interaction.Behaviors>
 				</Button>
+				<ProgressRing x:Name="WishlistProgressRing" HorizontalAlignment="Center" VerticalAlignment="Center" Width="60" Height="60" IsActive="True" Foreground="#FF97C93D"/>
             <GridView x:Name="WishlistItems" HorizontalAlignment="Left" Grid.Column="0" SelectionMode="None" IsHitTestVisible="False" Margin="0,80,0,0" VerticalAlignment="Top">
                 <GridView.ItemTemplate>
                     <DataTemplate>
@@ -347,7 +348,7 @@
                             <TextBlock Text="{Binding Item.Title}" Padding="10,0,10,0" Foreground="#FF2982B7" Margin="0,120,0,0" VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="Prenton RP Cond Medium" FontSize="14" CharacterSpacing="3" FontWeight="Medium"  IsHitTestVisible="False" TextTrimming="CharacterEllipsis" TextAlignment="Center"/>
                             <Rectangle HorizontalAlignment="Center" VerticalAlignment="Center" Width="84" Height="101" Margin="0,0,0,45">
                             	<Rectangle.Fill>
-                            		<ImageBrush ImageSource="Assets/Qr.png"/>
+                                        <ImageBrush ImageSource="{Binding Item.ImageAssets[0].AssetUrl,FallbackValue=Assets/no_image.jpg}" Stretch="Uniform"/>
                             	</Rectangle.Fill>
                             </Rectangle>
 
@@ -358,8 +359,8 @@
                             </ProgressBar>
                             <StackPanel Margin="0,10,12,0" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top">
                             	<TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="$" VerticalAlignment="Top" Foreground="#FFB7B7B7" FontFamily="Arial" FontSize="16"/>
-                                <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="{Binding Item.Prices[0].NormalPrice,Converter={StaticResource BasePriceConverter}}" VerticalAlignment="Top" Foreground="#FFB7B7B7" FontFamily="Arial" FontSize="16"/>
-                                <TextBlock HorizontalAlignment="Right" TextWrapping="Wrap" Text="{Binding Item.Prices[0].NormalPrice,Converter={StaticResource DecimalPriceConverter}}" VerticalAlignment="Top" Foreground="#FFB7B7B7" FontFamily="Arial" FontSize="13.333" Margin="2,-3,0,0"/>
+                                <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="{Binding Item.Prices[0].NormalPrice,Converter={StaticResource BasePriceConverter},FallbackValue=00}" VerticalAlignment="Top" Foreground="#FFB7B7B7" FontFamily="Arial" FontSize="16"/>
+                                <TextBlock HorizontalAlignment="Right" TextWrapping="Wrap" Text="{Binding Item.Prices[0].NormalPrice,Converter={StaticResource DecimalPriceConverter},FallbackValue=00}" VerticalAlignment="Top" Foreground="#FFB7B7B7" FontFamily="Arial" FontSize="13.333" Margin="2,-3,0,0"/>
                             </StackPanel>
                         </Grid>
                     </DataTemplate>
@@ -373,18 +374,6 @@
                         <Media:ControlStoryboardAction Storyboard="{StaticResource Qr_Out}"/>
                     </Core:EventTriggerBehavior>
                     <Core:EventTriggerBehavior EventName="PointerPressed">
-                        <Core:ChangePropertyAction TargetObject="{Binding ElementName=login_btn}" PropertyName="IsEnabled" Value="False"/>
-                    </Core:EventTriggerBehavior>
-                    <Core:EventTriggerBehavior EventName="PointerPressed">
-                        <Core:ChangePropertyAction TargetObject="{Binding ElementName=logout_btn}" PropertyName="IsEnabled" Value="True"/>
-                    </Core:EventTriggerBehavior>
-                    <Core:EventTriggerBehavior EventName="PointerPressed">
-                        <Core:ChangePropertyAction TargetObject="{Binding ElementName=mycart_btn}" PropertyName="IsEnabled" Value="True"/>
-                    </Core:EventTriggerBehavior>
-                    <Core:EventTriggerBehavior EventName="PointerPressed">
-                        <Core:ChangePropertyAction TargetObject="{Binding ElementName=wishlist_btn}" PropertyName="IsEnabled" Value="True"/>
-                    </Core:EventTriggerBehavior>
-                    <Core:EventTriggerBehavior EventName="PointerPressed">
                     	<Core:ChangePropertyAction TargetObject="{Binding ElementName=QR}" PropertyName="IsHitTestVisible" Value="False"/>
                     </Core:EventTriggerBehavior>
                 </Interactivity:Interaction.Behaviors>
@@ -393,8 +382,9 @@
     			<Grid.RenderTransform>
     				<CompositeTransform/>
     			</Grid.RenderTransform>
-    			<StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0">
-                    <Image x:Name="QRImage" Margin="0" Source="Assets/Qr.png" Stretch="Fill" HorizontalAlignment="Center" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5" Width="200" Height="200"/>
+                    <ProgressRing x:Name="QRProgressRing" HorizontalAlignment="Center" VerticalAlignment="Top" Width="70" Height="70" IsActive="True" Foreground="#FF97C93D" Margin="0,110,0,0"/>
+                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0">
+                    <Image x:Name="QRImage" Margin="0" Stretch="Fill" HorizontalAlignment="Center" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5" Width="200" Height="200"/>
     				<TextBlock Height="122" Width="392" Foreground="#FF020000" FontFamily="Arial" FontSize="32" TextAlignment="Center" Margin="0,40,0,0" TextWrapping="Wrap" Text="Please scan the QR code with your mobile phone to login"/>
     				<TextBlock TextWrapping="Wrap" FontSize="18.667" Foreground="Black" Text="Touch the screen to go back" TextAlignment="Center" FontFamily="Arial" Opacity="0.5" Margin="0,20,0,0"/>
     			</StackPanel>

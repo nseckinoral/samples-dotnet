@@ -11,12 +11,11 @@ namespace App1.Converters
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            //TODO Noktadan sonrası 2 haneli olmalı
             var doubleValue = (double)value; 
-            //var decimalValue = doubleValue-Math.Truncate(doubleValue);
-            //var result = Math.Truncate(decimalValue*100);
-            return doubleValue.ToString("0:0.#");
-            //return result ;
+            string stringValue = doubleValue.ToString("0.00", System.Globalization.CultureInfo.InvariantCulture);
+            string[] stringValueParts = stringValue.Split('.');
+            string decimalValue = stringValueParts[1];
+            return decimalValue;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)
