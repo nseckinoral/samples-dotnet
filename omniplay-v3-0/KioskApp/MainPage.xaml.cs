@@ -17,12 +17,11 @@ namespace App1
 {
     public sealed partial class MainPage : Page
     {
-        const string qrUri = "http://192.168.2.209/MobileLoginPage/?deviceId={0}";
+        string loginURL = ApplicationData.Current.LocalSettings.Values[AppSettingsFlyout.loginUrlConfigKey].ToString();
         const string isRegisteredKey = "isRegistered";
         XOMNI.SDK.Public.Models.ApiResponse<OmniSession> omniSession;
         string deviceId;
         string deviceDescription;
-
         static bool isLoggedIn = false;
         DispatcherTimer pollingTimer;
 
@@ -100,6 +99,7 @@ namespace App1
                     var latestWishlist = wishlistGuids.Data.Last();
                     var latestWishlistItems = await wishlistClient.GetAsync(latestWishlist, longitude, latitude, true, false, false, XOMNI.SDK.Public.Models.Catalog.AssetDetailType.None, XOMNI.SDK.Public.Models.Catalog.AssetDetailType.None, XOMNI.SDK.Public.Models.Catalog.AssetDetailType.None, examplemetadata, examplemetadata);
                     WishlistItems.ItemsSource = latestWishlistItems.Data.WishlistItems;
+                    WishlistProgressRing.IsActive = false;
                 }
             }
             catch
@@ -113,6 +113,7 @@ namespace App1
         {
             var generatedQR = await GenerateQRCodeAsync(this.deviceId);
             await SetImageFromByteArray(generatedQR, QRImage);
+            QRProgressRing.IsActive = false;
         }
 
         async void PollingTimer_TickAsync(object sender, object e)
@@ -187,8 +188,10 @@ namespace App1
         {
             using (var clientContext = CreateClientContext())
             {
-                return await clientContext.Of<QRCodeClient>().GetAsync(8, string.Format(qrUri, deviceId));
+                return await clientContext.Of<QRCodeClient>().GetAsync(8, string.Format(loginURL + "?deviceId={0}", deviceId));
             }
         }
+
+
     }
 }
