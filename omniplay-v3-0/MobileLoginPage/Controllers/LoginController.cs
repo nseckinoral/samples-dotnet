@@ -35,12 +35,18 @@ namespace MobileLoginPage.Controllers
             };
 
             var deviceId = Request.QueryString["deviceId"];
-            if(deviceId != null)
+
+            try
             {
-                await clientcontext.Of<DeviceClient>().SubscribeToDevice(deviceId);
+              await clientcontext.Of<DeviceClient>().SubscribeToDevice(deviceId);
+              return RedirectToAction("Success", "Login");
             }
+            catch 
+            {
+             return View();
+            }
+
             
-            return RedirectToAction("Success", "Login");
         }
 
         public ActionResult Success(Models.User user)
