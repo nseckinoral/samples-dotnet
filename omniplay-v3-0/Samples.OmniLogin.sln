@@ -7,8 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KioskApp", "KioskApp\KioskA
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MobileLoginPage", "MobileLoginPage\MobileLoginPage.csproj", "{9FBF7173-39E1-4A81-AF12-68E9D81FEE0A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XOMNI.SDK.Public", "XOMNI.SDK.Public\XOMNI.SDK.Public.csproj", "{1A39082C-A7A4-4D53-A2DE-80C16D9C07B5}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -55,16 +53,6 @@ Global
 		{9FBF7173-39E1-4A81-AF12-68E9D81FEE0A}.Release|ARM.ActiveCfg = Release|Any CPU
 		{9FBF7173-39E1-4A81-AF12-68E9D81FEE0A}.Release|x64.ActiveCfg = Release|Any CPU
 		{9FBF7173-39E1-4A81-AF12-68E9D81FEE0A}.Release|x86.ActiveCfg = Release|Any CPU
-		{1A39082C-A7A4-4D53-A2DE-80C16D9C07B5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1A39082C-A7A4-4D53-A2DE-80C16D9C07B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1A39082C-A7A4-4D53-A2DE-80C16D9C07B5}.Debug|ARM.ActiveCfg = Debug|Any CPU
-		{1A39082C-A7A4-4D53-A2DE-80C16D9C07B5}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{1A39082C-A7A4-4D53-A2DE-80C16D9C07B5}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{1A39082C-A7A4-4D53-A2DE-80C16D9C07B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1A39082C-A7A4-4D53-A2DE-80C16D9C07B5}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1A39082C-A7A4-4D53-A2DE-80C16D9C07B5}.Release|ARM.ActiveCfg = Release|Any CPU
-		{1A39082C-A7A4-4D53-A2DE-80C16D9C07B5}.Release|x64.ActiveCfg = Release|Any CPU
-		{1A39082C-A7A4-4D53-A2DE-80C16D9C07B5}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

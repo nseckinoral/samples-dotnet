@@ -139,6 +139,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\WebGrease.1.6.0\lib\WebGrease.dll</HintPath>
     </Reference>
+    <Reference Include="XOMNI.SDK.Public">
+      <HintPath>..\packages\XOMNI.SDK.Public.3.0.0-alpha-003\lib\portable-net451+win81+wpa81\XOMNI.SDK.Public.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
@@ -238,12 +241,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\XOMNI.SDK.Public\XOMNI.SDK.Public.csproj">
-      <Project>{1a39082c-a7a4-4d53-a2de-80c16d9c07b5}</Project>
-      <Name>XOMNI.SDK.Public</Name>
-    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

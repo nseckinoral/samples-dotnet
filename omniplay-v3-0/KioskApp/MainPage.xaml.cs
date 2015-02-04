@@ -11,20 +11,18 @@ using Windows.UI.Xaml.Media.Imaging;
 using System.Threading.Tasks;
 using XOMNI.SDK.Public.Clients.PII;
 using XOMNI.SDK.Public.Models.OmniPlay;
+using Windows.UI.Popups;
+
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
-namespace App1
+namespace KioskApp
 {
     public sealed partial class MainPage : Page
     {
         string loginURL = ApplicationData.Current.LocalSettings.Values[AppSettingsFlyout.loginUrlConfigKey].ToString();
-        const string isRegisteredKey = "isRegistered";
         XOMNI.SDK.Public.Models.ApiResponse<OmniSession> omniSession;
-        string deviceId;
-        string deviceDescription;
         static bool isLoggedIn = false;
         DispatcherTimer pollingTimer;
-
         public MainPage()
         {
             this.InitializeComponent();
@@ -34,11 +32,9 @@ namespace App1
             this.pollingTimer.Tick += PollingTimer_TickAsync;
             this.pollingTimer.Interval = new TimeSpan(0, 0, 5);
 
-            this.deviceId = Helpers.DeviceIdentity.GetASHWID();
-            this.deviceDescription = Helpers.DeviceIdentity.GetFriendlyName();
         }
 
-        async void MainPage_Loaded(object sender, RoutedEventArgs e)
+        void MainPage_Loaded(object sender, RoutedEventArgs e)
         {
             //Check if the app is already setup with required config data.
             var ApiURI = ApplicationData.Current.LocalSettings.Values[AppSettingsFlyout.apiServiceUriConfigKey];
@@ -49,38 +45,15 @@ namespace App1
             }
             else
             {
-                var isRegisteredLocalSetting = ApplicationData.Current.LocalSettings.Values[isRegisteredKey];
-                if (isRegisteredLocalSetting == null)
-                {
-                    using (var clientContext = CreateClientContext())
-                    {
-                        var deviceClient = clientContext.Of<XOMNI.SDK.Public.Clients.Company.DeviceClient>();
-                        try
-                        {
-                            var registeredDevice = (await deviceClient.PostAsync(new XOMNI.SDK.Public.Models.Company.Device()
-                            {
-                                DeviceId = deviceId,
-                                Description = deviceDescription
-                            })).Data;
-                        }
-                        catch (XOMNI.SDK.Public.Exceptions.XOMNIPublicAPIException ex)
-                        {
-                            if (ex.ApiExceptionResult.HttpStatusCode != System.Net.HttpStatusCode.Conflict)
-                            {
-                                throw ex;
-                            }
-                        }
-
-                        ApplicationData.Current.LocalSettings.Values.Add(isRegisteredKey, true);
-                    }
-                }
-
                 pollingTimer.Start();
             }
         }
 
         private async void wishlist_btn_Click(object sender, RoutedEventArgs e)
         {
+            WishlistItems.ItemsSource = null;
+            bool Success = false;
+            wishlist_btn.IsHitTestVisible = false;
             try
             {
                 using (var clientContext = CreateClientContext())
@@ -101,19 +74,54 @@ namespace App1
                     WishlistItems.ItemsSource = latestWishlistItems.Data.WishlistItems;
                     WishlistProgressRing.IsActive = false;
                 }
+                Success = true;
             }
             catch
             {
-
+                WishlistItems.ItemsSource = null;
+                WishlistProgressRing.IsActive = true;
+                Success = false;
 
             }
+           if(Success==false)
+           {
+               MessageDialog messageBox = new MessageDialog("Please check your internet connection and try again.", "An error occured.");
+               messageBox.Commands.Add(new UICommand("Close", (command) =>
+               {
+                   Wishlist_outgoing.Begin();
+                   wishlist_btn.IsHitTestVisible = true;
+               }));
+               await messageBox.ShowAsync();
+           }
         }
 
         private async void login_btn_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            var generatedQR = await GenerateQRCodeAsync(this.deviceId);
-            await SetImageFromByteArray(generatedQR, QRImage);
-            QRProgressRing.IsActive = false;
+            bool Success = false;
+            try
+            {
+                var generatedQR = await GenerateQRCodeAsync(ApplicationData.Current.LocalSettings.Values[AppSettingsFlyout.deviceIdConfigKey].ToString());
+                await SetImageFromByteArray(generatedQR, QRImage);
+                QRProgressRing.IsActive = false;
+                Success = true;
+            }
+            catch
+            {
+                QRImage.Source = null;
+                QRProgressRing.IsActive = true;
+                Success = false;
+            }
+            if (Success == false)
+            {
+
+                MessageDialog messageBox = new MessageDialog("Please check your internet connection and try again.", "An error occured.");
+                messageBox.Commands.Add(new UICommand("Close", (command) =>
+                {
+                    Qr_Out.Begin();
+                    QR.IsHitTestVisible = false;
+                }));
+                await  messageBox.ShowAsync();
+            }
         }
 
         async void PollingTimer_TickAsync(object sender, object e)
@@ -125,7 +133,7 @@ namespace App1
                     using (var clientContext = CreateClientContext())
                     {
                         var deviceClient = clientContext.Of<XOMNI.SDK.Public.Clients.OmniPlay.DeviceClient>();
-                        var result = await deviceClient.GetIncomingsAsync(deviceId);
+                        var result = await deviceClient.GetIncomingsAsync(ApplicationData.Current.LocalSettings.Values[AppSettingsFlyout.deviceIdConfigKey].ToString());
                         if (result.Data != null && result.Data.Any())
                         {
                             login_btn.IsEnabled = false;
@@ -191,6 +199,7 @@ namespace App1
                 return await clientContext.Of<QRCodeClient>().GetAsync(8, string.Format(loginURL + "?deviceId={0}", deviceId));
             }
         }
+
 
 
     }

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Windows.UI.Xaml.Data;
 
-namespace App1.Converters
+namespace KioskApp.Converters
 {
     public class ProgressValueToRatingConverter : IValueConverter
     {
