@@ -72,7 +72,7 @@ This API enables a client application to assign a logical device presence to a s
 
 This is where the **Login Page** comes in. We get the users' credentials and create a new **[PII](http://en.wikipedia.org/wiki/Personally_identifiable_information) User**, then subscribe the user to the desired device queue.
 
-**Question:** How do we get the "**device ID**" of the public device?  **Answer** is simple, [querystring](http://www.w3schools.com/asp/coll_querystring.asp), the device ID was part of the URL during "QR Generation" process.
+**Question:** How do we get the "**device ID**" of the public device?  **Answer** is simple, [querystring](http://www.w3schools.com/asp/coll_querystring.asp), the device ID was part of the URL during the "QR Generation" process.
 
             var deviceId = Request.QueryString["deviceId"];
 
