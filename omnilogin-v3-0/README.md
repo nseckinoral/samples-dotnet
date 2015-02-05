@@ -27,7 +27,7 @@ Feel free to jump into our developer portal to look for more APIs and documentat
 
 # Architecture Diagram #
 
-![](https://raw.githubusercontent.com/nseckinoral/samples-dotnet/master/omniplay-v3-0/Diagram.PNG)
+![](https://raw.githubusercontent.com/nseckinoral/samples-dotnet/master/omnilogin-v3-0/Diagram.PNG)
 
 # How To #
 
@@ -47,7 +47,7 @@ Generating a QR code is pretty simple. **GetAsync** method of **QRCodeClient** t
 
 **Note:** A **device id** is used as a **querystring** in the following example. For more information, please refer to "**Subscribing to a Device Queue**".
 
-    	var loginURL= "http://www.example.com"
+		var loginURL= "http://www.example.com"
     	return await clientContext.Of<QRCodeClient>().GetAsync(8, string.Format(loginURL + "?deviceId={0}", "Device Id"));
 
 **Important:** **Response** body contains an **array of bytes** which corresponds to a **PNG image**. You will need to do a **"byte array to image"** conversion. We have excluded to conversion details for the sake of simplicity.
@@ -57,15 +57,15 @@ Generating a QR code is pretty simple. **GetAsync** method of **QRCodeClient** t
 This API enables a client application to assign a logical device presence to a specific license. Once you register your **device ID**, it can be used through multiple APIs, in this example while **subscribing to device queue**.
 
 
-    			   using (var clientContext = new ClientContext("UserName","Password","Service URL"))
-                   {
-                       var deviceClient = clientContext.Of<DeviceClient>();
-                       var registeredDevice = (await deviceClient.PostAsync(new Device()
-                       {
-                               DeviceId = "Device Id",
-                               Description = "Device Description"
-                       })).Data;
-                   }
+		using (var clientContext = new ClientContext("UserName","Password","Service URL"))
+		{
+          var deviceClient = clientContext.Of<DeviceClient>();
+          var registeredDevice = (await deviceClient.PostAsync(new Device()
+          {
+            DeviceId = "Device Id",
+            Description = "Device Description"
+          })).Data;
+       }
 
 **Important:** DeviceClient is under **Clients/Company** and Device model used in PostAsync method is under **Models/Company**
 ## Subscribing to a Device Queue ##
@@ -74,7 +74,7 @@ This is where the **Login Page** comes in. We get the users' credentials and cre
 
 **Question:** How do we get the "**device ID**" of the public device?  **Answer** is simple, [querystring](http://www.w3schools.com/asp/coll_querystring.asp), the device ID was part of the URL during the "QR Generation" process.
 
-            var deviceId = Request.QueryString["deviceId"];
+		var deviceId = Request.QueryString["deviceId"];
 
  Now for the main part of the topic, final code should look like this.
 
@@ -108,7 +108,7 @@ This part is where you start **polling**, which means waiting a user to **subscr
 
 
 
-    	using (var clientContext = new ClientContext("UserName","Password","Service URL"))
+		using (var clientContext = new ClientContext("UserName","Password","Service URL"))
     	{
     		var deviceClient = clientContext.Of<DeviceClient>();
     		var result = await deviceClient.GetIncomingsAsync(deviceId);
@@ -119,9 +119,7 @@ If a PII user subscribes to the queue successfully, API Response should look lik
 
 		"Data": [{
 			"OmniTicket": "Pbda570b0-cf86-4c86-830c-ac9445faf208",
-			"PIIDisplayName": "Example Name",
-		
-		}]
+			"PIIDisplayName": "Example Name",}]
 
 **Important:** **DeviceClient** used in the first example is under **Clients/Omniplay**.
 
@@ -146,7 +144,7 @@ Last step is to create an instance of OmniTicketClient and generate a session by
 
 Your final code will look like this:
 
-    	using (var clientContext = new ClientContext("UserName","Password","Service URL"))
+		using (var clientContext = new ClientContext("UserName","Password","Service URL"))
     	{
     		var deviceClient = clientContext.Of<DeviceClient>();
     		var result = await deviceClient.GetIncomingsAsync(deviceId);
@@ -164,14 +162,14 @@ Users might have more than one wishlist stored in the cloud. Before reaching a s
 
 After creating an instance of the **WishlistClient**, simply use the **GetAsync()** method. This method has a "**List of GUID**" return type.
 
-                using (var clientContext = new ClientContext("UserName","Password","Service URL"))
-                {
-                    clientContext.OmniSession = omniSession.Data;
+		using (var clientContext = new ClientContext("UserName","Password","Service URL"))
+		{
+           clientContext.OmniSession = omniSession.Data;
 
-                    var wishlistClient = clientContext.Of<WishlistClient>();
+           var wishlistClient = clientContext.Of<WishlistClient>();
 
-                    var wishlistGuids = await wishlistClient.GetAsync();
-                }
+           var wishlistGuids = await wishlistClient.GetAsync();
+		}
 
 ## Fetching a Wishlist With a Unique Key ##
 
@@ -213,18 +211,18 @@ Fetch the items in the wishlist by using **GetAsync** method and you can reach t
 
 Final code will look like below:
 
-                using (var clientContext = new ClientContext("UserName","Password","Service URL"))
-                {
-                    clientContext.OmniSession = omniSession.Data;
+		using (var clientContext = new ClientContext("UserName","Password","Service URL"))
+		{
+           clientContext.OmniSession = omniSession.Data;
 
-                    var wishlistClient = clientContext.Of<WishlistClient>();
+           var wishlistClient = clientContext.Of<WishlistClient>();
 
-                    var wishlistGuids = await wishlistClient.GetAsync();
+           var wishlistGuids = await wishlistClient.GetAsync();
 
-					var latestWishlist = wishlistGuids.Data.Last();
+		   var latestWishlist = wishlistGuids.Data.Last();
 
-					var latestWishlistItems = await wishlistClient.GetAsync(latestWishlist, 11, 12, true, false, false, AssetDetailType.None, AssetDetailType.None, AssetDetailType.None, "examplemetadata", "examplemetadata");
-                }
+		   var latestWishlistItems = await wishlistClient.GetAsync(latestWishlist, 11, 12, true, false, false, AssetDetailType.None, AssetDetailType.None, AssetDetailType.None, "examplemetadata", "examplemetadata");
+		}
 
 
 **Note:** Detailed information about **Parameters** and the **API Response** can be found [**here**](http://dev.xomni.com/v3-0/http-api/public-apis/pii/wishlist/fetching-a-wish-list-with-a-wish-list-unique-key).
