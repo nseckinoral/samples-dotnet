@@ -50,7 +50,7 @@ Generating a QR code is pretty simple. **GetAsync** method of **QRCodeClient** t
     	var loginURL= "http://www.example.com"
     	return await clientContext.Of<QRCodeClient>().GetAsync(8, string.Format(loginURL + "?deviceId={0}", "Device Id"));
 
-**Important:** **Response** body contains an **array of bytes** which corresponds to a **PNG image**. You will need to do a **"byte array to image"** conversion. We have exculded to conversion details for the sake of simplicity.
+**Important:** **Response** body contains an **array of bytes** which corresponds to a **PNG image**. You will need to do a **"byte array to image"** conversion. We have excluded to conversion details for the sake of simplicity.
 
 ## Registering a Device to a Spesific License ##
 
@@ -175,7 +175,7 @@ After creating an instance of the **WishlistClient**, simply use the **GetAsync(
 
 ## Fetching a Wishlist With a Unique Key ##
 
-Time for zooming in to the image and get the full list of products in a particular wishlist. 
+Time to zoom-in into the image and get the full list of products in a particular wishlist. 
 
 Pick a **wishlist** from the "List of Wishlist GUID" first. The following example gets the last one instead of picking a unique ID.
 
