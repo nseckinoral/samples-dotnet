@@ -1,4 +1,5 @@
-﻿using Windows.Storage;
+﻿using System;
+using Windows.Storage;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -65,41 +66,84 @@ namespace KioskApp
             ApplicationData.Current.LocalSettings.Values[AppSettingsFlyout.apiUserPassConfigKey] = txtApiUserPass.Password;
             ApplicationData.Current.LocalSettings.Values[AppSettingsFlyout.loginUrlConfigKey] = txtLoginUrl.Text;
 
-
-            if (ApplicationData.Current.LocalSettings.Values[AppSettingsFlyout.deviceIdConfigKey] != txtDeviceId.Text)
+            if (txtDeviceId.Text == string.Empty)
             {
-                #region using (Create Client Context)
-                using (var clientContext = new ClientContext(
-                ApplicationData.Current.LocalSettings.Values[AppSettingsFlyout.apiUserNameConfigKey].ToString(),
-                ApplicationData.Current.LocalSettings.Values[AppSettingsFlyout.apiUserPassConfigKey].ToString(),  
-                ApplicationData.Current.LocalSettings.Values[AppSettingsFlyout.apiServiceUriConfigKey].ToString()
-                ))
-                #endregion
+                var messageBox = new MessageDialog("Data validation failed. Device ID is required.", "An error occured");
+                messageBox.Commands.Add(new UICommand("Close", (command) =>
                 {
-                    var deviceClient = clientContext.Of<XOMNI.SDK.Public.Clients.Company.DeviceClient>();
+                    AppSettingsFlyout settingsFlyOut = new AppSettingsFlyout();
+                    settingsFlyOut.Show();
+                }));
+                await messageBox.ShowAsync();
+            }
+            else if(txtDeviceId.Text.Contains(" "))
+            {
+                var messageBox = new MessageDialog("Data validation failed. Device ID can not contain any whitespace.", "An error occured");
+                messageBox.Commands.Add(new UICommand("Close", (command) =>
+                {
+                    AppSettingsFlyout settingsFlyOut = new AppSettingsFlyout();
+                    settingsFlyOut.Show();
+                }));
+                await messageBox.ShowAsync();
+            }
 
-                    try
+            else if ((string)ApplicationData.Current.LocalSettings.Values[AppSettingsFlyout.deviceIdConfigKey] != txtDeviceId.Text)
+            {
+                try
+                {
+                    #region using (Create Client Context)
+                    using (var clientContext = new ClientContext(
+                    ApplicationData.Current.LocalSettings.Values[AppSettingsFlyout.apiUserNameConfigKey].ToString(),
+                    ApplicationData.Current.LocalSettings.Values[AppSettingsFlyout.apiUserPassConfigKey].ToString(),
+                    ApplicationData.Current.LocalSettings.Values[AppSettingsFlyout.apiServiceUriConfigKey].ToString()
+                    ))
+                    #endregion
                     {
-                        ApplicationData.Current.LocalSettings.Values[AppSettingsFlyout.deviceIdConfigKey] = txtDeviceId.Text;
-                        #region Register Device
-                        var registeredDevice = (await deviceClient.PostAsync(new XOMNI.SDK.Public.Models.Company.Device()
+                        var deviceClient = clientContext.Of<XOMNI.SDK.Public.Clients.Company.DeviceClient>();
+
+                        try
                         {
-                            DeviceId = ApplicationData.Current.LocalSettings.Values[AppSettingsFlyout.deviceIdConfigKey].ToString(),
-                            Description = deviceDescription
-                        })).Data;
-                        #endregion          
+                            ApplicationData.Current.LocalSettings.Values[AppSettingsFlyout.deviceIdConfigKey] = txtDeviceId.Text;
+                            #region Register Device
+                            var registeredDevice = (await deviceClient.PostAsync(new XOMNI.SDK.Public.Models.Company.Device()
+                            {
+                                DeviceId = ApplicationData.Current.LocalSettings.Values[AppSettingsFlyout.deviceIdConfigKey].ToString(),
+                                Description = deviceDescription
+                            })).Data;
+                            #endregion
+                            var messageBox = new MessageDialog("Device ID " + "'" + registeredDevice.DeviceId + "'" + " is successfully registered.", "Success!");
+                            await messageBox.ShowAsync();
+                        }
+
+                        catch(Exception ex)
+                        {
+                            var messageBox = new MessageDialog(ex.Message, "Please try again!");
+                            messageBox.Commands.Add(new UICommand("Close", (command) =>
+                            {
+                                AppSettingsFlyout settingsFlyOut = new AppSettingsFlyout();
+                                settingsFlyOut.Show();
+                            }));
+                            messageBox.ShowAsync();
+                            ApplicationData.Current.LocalSettings.Values[AppSettingsFlyout.deviceIdConfigKey] = string.Empty;
+                        }
                     }
-                    catch (XOMNI.SDK.Public.Exceptions.XOMNIPublicAPIException ex)
+
+                }
+
+                catch(Exception ex)
+                {
+                    var messageBox = new MessageDialog(ex.Message, "An error occured");
+                    messageBox.Commands.Add(new UICommand("Close", (command) =>
                     {
-                        var messagebox = new MessageDialog(ex.Message,"An error occured");
-                        messagebox.ShowAsync();
+                        AppSettingsFlyout settingsFlyOut = new AppSettingsFlyout();
+                        settingsFlyOut.Show();
+                    }));
+                    messageBox.ShowAsync();
+                    ApplicationData.Current.LocalSettings.Values[AppSettingsFlyout.deviceIdConfigKey] = string.Empty;
+                }
 
-                    }
-               }
-           }
-
-
+            }
 
         }
-      }
     }
+}
