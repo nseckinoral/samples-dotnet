@@ -48,7 +48,8 @@ Generating a QR code is pretty simple. **GetAsync** method of **QRCodeClient** t
 **Note:** A **device id** is used as a **querystring** in the following example. For more information, please refer to "**Subscribing to a Device Queue**".
 
 		var loginURL= "http://www.example.com"
-    	return await clientContext.Of<QRCodeClient>().GetAsync(8, string.Format(loginURL + "?deviceId={0}", "Device Id"));
+    	return await clientContext.Of<QRCodeClient>().GetAsync(8, string.Format(loginURL + 
+			"?deviceId={0}", "Device Id"));
 
 **Important:** **Response** body contains an **array of bytes** which corresponds to a **PNG image**. You will need to do a **"byte array to image"** conversion. We have excluded to conversion details for the sake of simplicity.
 
@@ -138,7 +139,8 @@ Second step is to get rid of the "P" (an identifier for "PII") at the beginning 
 Last step is to create an instance of OmniTicketClient and generate a session by using **PostSessionAsync** method. This method takes **OmniTicket** object as a **parameter** and **returns OmniSession** object.
 
 		var omniTicketClient = clientContext.Of<XOMNI.SDK.Public.Clients.OmniPlay.OmniTicketClient>();
-		omniSession = await omniTicketClient.PostSessionAsync(new OmniTicket { Ticket = Guid.Parse(omniTicketString) });
+		omniSession = await omniTicketClient.PostSessionAsync(new OmniTicket 
+			{ Ticket = Guid.Parse(omniTicketString) });
 
 **Note:** [Guid.Parse](https://msdn.microsoft.com/en-us/library/system.guid.parse%28v=vs.110%29.aspx) method is used for converting a string to a GUID  	
 
@@ -150,9 +152,11 @@ Your final code will look like this:
     		var result = await deviceClient.GetIncomingsAsync(deviceId);
 
 			var latestOmniTicket = result.Data.Last();
-			var omniTicketString = latestOmniTicket.OmniTicket.Substring(1, latestOmniTicket.OmniTicket.Length - 1);
+			var omniTicketString = latestOmniTicket.OmniTicket.Substring(1, 
+				latestOmniTicket.OmniTicket.Length - 1);
 			var omniTicketClient = clientContext.Of<XOMNI.SDK.Public.Clients.OmniPlay.OmniTicketClient>();
-			omniSession = await omniTicketClient.PostSessionAsync(new OmniTicket { Ticket = Guid.Parse(omniTicketString) });
+			omniSession = await omniTicketClient.PostSessionAsync(new OmniTicket { 
+				Ticket = Guid.Parse(omniTicketString) });
     	}
 
 	
@@ -181,7 +185,9 @@ Pick a **wishlist** from the "List of Wishlist GUID" first. The following exampl
 
 Fetch the items in the wishlist by using **GetAsync** method and you can reach to any detail associated with each item in the list.
 
-		var latestWishlistItems = await wishlistClient.GetAsync(latestWishlist, 11, 12, true, false, false, AssetDetailType.None, AssetDetailType.None, AssetDetailType.None, "examplemetadata", "examplemetadata");
+		var latestWishlistItems = await wishlistClient.GetAsync(latestWishlist, 11, 12, true, false, false,
+			AssetDetailType.None, AssetDetailType.None, AssetDetailType.None, "examplemetadata", 
+			"examplemetadata");
 
 **Important:** **AssetDetailType** model is under **Models/Catalog** and **None** corresponds to value **0**.
 
@@ -221,7 +227,9 @@ Final code will look like below:
 
 		   var latestWishlist = wishlistGuids.Data.Last();
 
-		   var latestWishlistItems = await wishlistClient.GetAsync(latestWishlist, 11, 12, true, false, false, AssetDetailType.None, AssetDetailType.None, AssetDetailType.None, "examplemetadata", "examplemetadata");
+		   var latestWishlistItems = await wishlistClient.GetAsync(latestWishlist, 11, 12, true, false, false,
+				AssetDetailType.None, AssetDetailType.None, AssetDetailType.None, "examplemetadata", 
+				"examplemetadata");
 		}
 
 
