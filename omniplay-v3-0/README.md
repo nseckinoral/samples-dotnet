@@ -27,7 +27,7 @@ Feel free to jump into our developer portal to look for more APIs and documentat
 
 # Architecture Diagram #
 
-![](http://i.imgur.com/LhPrUT2.png)
+![](https://raw.githubusercontent.com/nseckinoral/samples-dotnet/master/omniplay-v3-0/Diagram.PNG)
 
 # How To #
 
@@ -133,7 +133,7 @@ First step is getting the PII User's Omni Ticket. Following example gets the lat
 			
 		var latestOmniTicket = result.Data.Last();
 
-Second step is to get rid of the "P" at the beginning of PII's Ticket.
+Second step is to get rid of the "P" (an identifier for "PII") at the beginning of PII's Ticket.
 
 		var omniTicketString = latestOmniTicket.OmniTicket.Substring(1, latestOmniTicket.OmniTicket.Length - 1);
 
