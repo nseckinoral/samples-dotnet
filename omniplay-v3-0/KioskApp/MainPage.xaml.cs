@@ -19,7 +19,6 @@ namespace KioskApp
 {
     public sealed partial class MainPage : Page
     {
-        string loginURL = ApplicationData.Current.LocalSettings.Values[AppSettingsFlyout.loginUrlConfigKey].ToString();
         XOMNI.SDK.Public.Models.ApiResponse<OmniSession> omniSession;
         static bool isLoggedIn = false;
         DispatcherTimer pollingTimer;
@@ -52,8 +51,8 @@ namespace KioskApp
         private async void wishlist_btn_Click(object sender, RoutedEventArgs e)
         {
             WishlistItems.ItemsSource = null;
-            bool Success = false;
             wishlist_btn.IsHitTestVisible = false;
+
             try
             {
                 using (var clientContext = CreateClientContext())
@@ -65,8 +64,6 @@ namespace KioskApp
                     clientContext.OmniSession = omniSession.Data;
 
                     var wishlistClient = clientContext.Of<WishlistClient>();
-
-                    //TODO:NSO catch 404 exceptions.
                     var wishlistGuids = await wishlistClient.GetAsync();
 
                     var latestWishlist = wishlistGuids.Data.Last();
@@ -74,53 +71,43 @@ namespace KioskApp
                     WishlistItems.ItemsSource = latestWishlistItems.Data.WishlistItems;
                     WishlistProgressRing.IsActive = false;
                 }
-                Success = true;
             }
-            catch
+            catch(Exception ex)
             {
                 WishlistItems.ItemsSource = null;
                 WishlistProgressRing.IsActive = true;
-                Success = false;
+                MessageDialog messageBox = new MessageDialog(ex.Message, "An error occured.");
+                messageBox.Commands.Add(new UICommand("Close", (command) =>
+                {
+                    Wishlist_outgoing.Begin();
+                    wishlist_btn.IsHitTestVisible = true;
+                }));
+                messageBox.ShowAsync();
 
             }
-           if(Success==false)
-           {
-               MessageDialog messageBox = new MessageDialog("Please check your internet connection and try again.", "An error occured.");
-               messageBox.Commands.Add(new UICommand("Close", (command) =>
-               {
-                   Wishlist_outgoing.Begin();
-                   wishlist_btn.IsHitTestVisible = true;
-               }));
-               await messageBox.ShowAsync();
-           }
         }
 
         private async void login_btn_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            bool Success = false;
             try
             {
                 var generatedQR = await GenerateQRCodeAsync(ApplicationData.Current.LocalSettings.Values[AppSettingsFlyout.deviceIdConfigKey].ToString());
                 await SetImageFromByteArray(generatedQR, QRImage);
                 QRProgressRing.IsActive = false;
-                Success = true;
+
             }
-            catch
+            catch(Exception ex)
             {
                 QRImage.Source = null;
                 QRProgressRing.IsActive = true;
-                Success = false;
-            }
-            if (Success == false)
-            {
 
-                MessageDialog messageBox = new MessageDialog("Please check your internet connection and try again.", "An error occured.");
+                MessageDialog messageBox = new MessageDialog(ex.Message, "An error occured.");
                 messageBox.Commands.Add(new UICommand("Close", (command) =>
                 {
                     Qr_Out.Begin();
                     QR.IsHitTestVisible = false;
                 }));
-                await  messageBox.ShowAsync();
+                messageBox.ShowAsync();
             }
         }
 
@@ -196,7 +183,7 @@ namespace KioskApp
         {
             using (var clientContext = CreateClientContext())
             {
-                return await clientContext.Of<QRCodeClient>().GetAsync(8, string.Format(loginURL + "?deviceId={0}", deviceId));
+                return await clientContext.Of<QRCodeClient>().GetAsync(8, string.Format(ApplicationData.Current.LocalSettings.Values[AppSettingsFlyout.loginUrlConfigKey] + "?deviceId={0}", deviceId));
             }
         }
 
