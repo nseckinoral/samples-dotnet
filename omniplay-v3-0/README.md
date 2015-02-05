@@ -1,7 +1,7 @@
 # Introduction #
-OmniLogin is a sample app created by XOMNI to show you what you can do with the APIs provided by XOMNI. We know the frustration of  typing private credentials on a public device so it’s where XOMNI APIs come in. You can use your own mobile phone to login to the public device and use the application to see your wishlist with no doubts.
+This is a sample project showcasing how consumer devices can be used to login into an In-Store device using their mobile phones. We know the frustration of  typing private credentials on a public device so it’s where XOMNI APIs come in. You can use your own mobile phone to login to the public device and enjoy a presence aware In-Store experience without publicly exposing your password. 
 
-# APIs Used #
+# APIs Used  #
 
 - [Utility/ QR Code/ **Generate QR Code**](http://dev.xomni.com/v3-0/http-api/public-apis/utility/qr-code/generate-qr-code)
 - [Company/ Device/ **Registering a Device to a Spesific License**](http://dev.xomni.com/v3-0/http-api/public-apis/company/device/registering-a-device-to-a-specific-license)
@@ -11,19 +11,17 @@ OmniLogin is a sample app created by XOMNI to show you what you can do with the 
 - [PII/ Wishlist/ **Fetching  All Wishlists**](http://dev.xomni.com/v3-0/http-api/public-apis/pii/wishlist/fetching-all-wish-lists)
 - [PII/ Wishlist/ **Fetching a Wishlist With a Unique Key**](http://dev.xomni.com/v3-0/http-api/public-apis/pii/wishlist/fetching-a-wish-list-with-a-wish-list-unique-key)
 
-**Note:**  Public  API Version = **v3.0**
+**Note:**  The API version used in this sample is **v3.0**
 
 # XOMNI Public SDK for .NET #
 
 Preview version of XOMNI Public SDK is used.
 
-Additional information can be found [here](https://github.com/XomniCloud/xomni-sdk-dotnet-preview).
+The code repository for the SDK can be found [here](https://github.com/XomniCloud/xomni-sdk-dotnet-preview).
 
 # XOMNI Developer Portal #
 
-Unfortunately, we have so many APIs that we can't wrap all of them in a single page.
-
-If you want to check the APIs not documented in this page, you can click to the following link.
+Feel free to jump into our developer portal to look for more APIs and documentation. 
 
 [Developer Portal: Public APIs for v3.0](http://dev.xomni.com/v3-0/http-api/public-apis)
 
@@ -45,18 +43,18 @@ First step is to create a clientcontext instance with valid credentials and a va
 Generating a QR code is pretty simple. **GetAsync** method of **QRCodeClient** takes 2 parameters :
 
 - Module Size: Basicly the QR size. Additional information can be found [here](http://www.qrcode.com/en/howto/cell.html).
-- Data: Any data you want to encode. A dummy link is used in the example.
+- Data: Any data you want to encode. A dummy link is used in this example.
 
 **Note:** A **device id** is used as a **querystring** in the following example. For more information, please refer to "**Subscribing to a Device Queue**".
 
     	var loginURL= "http://www.example.com"
     	return await clientContext.Of<QRCodeClient>().GetAsync(8, string.Format(loginURL + "?deviceId={0}", "Device Id"));
 
-**Important:** **Response** body contains an **array of bytes** which corresponds to a **PNG image**. You will need to do a **"byte array to image"** conversion. This document **does not** include this part.
+**Important:** **Response** body contains an **array of bytes** which corresponds to a **PNG image**. You will need to do a **"byte array to image"** conversion. We have exculded to conversion details for the sake of simplicity.
 
 ## Registering a Device to a Spesific License ##
 
-This API enables a client application to assign a device information to a specific license. Once you register your **device ID**, it can be reached through **subscribing to device queue**.
+This API enables a client application to assign a logical device presence to a specific license. Once you register your **device ID**, it can be used through multiple APIs, in this example while **subscribing to device queue**.
 
 
     			   using (var clientContext = new ClientContext("UserName","Password","Service URL"))
@@ -72,9 +70,9 @@ This API enables a client application to assign a device information to a specif
 **Important:** DeviceClient is under **Clients/Company** and Device model used in PostAsync method is under **Models/Company**
 ## Subscribing to a Device Queue ##
 
-This is where **Login Page** comes in. We get the users' credentials and create a new **[PII](http://en.wikipedia.org/wiki/Personally_identifiable_information) User**, then subscribe the user to the desired device queue.
+This is where the **Login Page** comes in. We get the users' credentials and create a new **[PII](http://en.wikipedia.org/wiki/Personally_identifiable_information) User**, then subscribe the user to the desired device queue.
 
-**Question:** How do we get the "**device ID**" of the public device?  **Answer** is simple, [querystring](http://www.w3schools.com/asp/coll_querystring.asp), which is added to the url in the "QR Generation" process.
+**Question:** How do we get the "**device ID**" of the public device?  **Answer** is simple, [querystring](http://www.w3schools.com/asp/coll_querystring.asp), the device ID was part of the URL during the "QR Generation" process.
 
             var deviceId = Request.QueryString["deviceId"];
 
@@ -102,11 +100,11 @@ This is where **Login Page** comes in. We get the users' credentials and create 
 			//Do something
 		}
 
-**Important:** Users' **private information** is **never sent** to the public device (which device ID represents), a **PII Token** is sent instead.
+**Important:** Users' **private information** is **never sent** to the public device (represented by the device ID), a **PII Token** is sent instead.
 
 ## Fetching PII User OmniTickets ##
 
-This part is where you start **polling**, which means waiting a user to **subscribe** to your device. Following example shows how to do it **without** a timer, **only once**. 
+This part is where you start **polling**, which means waiting a user to **subscribe** to your device queue. Following example shows how to do it **without** a timer, **only once**. 
 
 
 
@@ -131,7 +129,7 @@ If a PII user subscribes to the queue successfully, API Response should look lik
 
 In order to get **PII User**'s data, User's **Ticket** should be converted to an **Omni Session**. 
 
-First step is getting the PII User's Omni Ticket. Following example gets the latest ticket assigned to the user.
+First step is getting the PII User's Omni Ticket. Following example gets the latest ticket assigned to the user from the appropriate API response.
 			
 		var latestOmniTicket = result.Data.Last();
 
@@ -139,14 +137,14 @@ Second step is to get rid of the "P" at the beginning of PII's Ticket.
 
 		var omniTicketString = latestOmniTicket.OmniTicket.Substring(1, latestOmniTicket.OmniTicket.Length - 1);
 
-Last step is creating an instance of OmniTicketClient and generating a session by using **PostSessionAsync** method. This method takes **OmniTicket** object as a **parameter** and **returns OmniSession** object.
+Last step is to create an instance of OmniTicketClient and generate a session by using **PostSessionAsync** method. This method takes **OmniTicket** object as a **parameter** and **returns OmniSession** object.
 
 		var omniTicketClient = clientContext.Of<XOMNI.SDK.Public.Clients.OmniPlay.OmniTicketClient>();
 		omniSession = await omniTicketClient.PostSessionAsync(new OmniTicket { Ticket = Guid.Parse(omniTicketString) });
 
 **Note:** [Guid.Parse](https://msdn.microsoft.com/en-us/library/system.guid.parse%28v=vs.110%29.aspx) method is used for converting a string to a GUID  	
 
-Final code should look like this:
+Your final code will look like this:
 
     	using (var clientContext = new ClientContext("UserName","Password","Service URL"))
     	{
@@ -177,13 +175,13 @@ After creating an instance of the **WishlistClient**, simply use the **GetAsync(
 
 ## Fetching a Wishlist With a Unique Key ##
 
-Time for zooming in to the image. 
+Time for zooming in to the image and get the full list of products in a particular wishlist. 
 
 Pick a **wishlist** from the "List of Wishlist GUID" first. The following example gets the last one instead of picking a unique ID.
 
 		var latestWishlist = wishlistGuids.Data.Last();
 
-Last but not least, fetch the items in the wishlist by using **GetAsync** method and you can reach to any detail associated with each item.
+Fetch the items in the wishlist by using **GetAsync** method and you can reach to any detail associated with each item in the list.
 
 		var latestWishlistItems = await wishlistClient.GetAsync(latestWishlist, 11, 12, true, false, false, AssetDetailType.None, AssetDetailType.None, AssetDetailType.None, "examplemetadata", "examplemetadata");
 
@@ -213,7 +211,7 @@ Last but not least, fetch the items in the wishlist by using **GetAsync** method
 - **4** Includes all video assets.
 - **8** Includes all video assets with metadata.
 
-Final could should look like this:
+Final code will look like below:
 
                 using (var clientContext = new ClientContext("UserName","Password","Service URL"))
                 {
@@ -230,3 +228,5 @@ Final could should look like this:
 
 
 **Note:** Detailed information about **Parameters** and the **API Response** can be found [**here**](http://dev.xomni.com/v3-0/http-api/public-apis/pii/wishlist/fetching-a-wish-list-with-a-wish-list-unique-key).
+
+Thanks for reading. Let us know what you think!
