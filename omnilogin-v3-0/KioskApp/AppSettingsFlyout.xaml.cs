@@ -66,7 +66,7 @@ namespace KioskApp
             ApplicationData.Current.LocalSettings.Values[AppSettingsFlyout.apiUserPassConfigKey] = txtApiUserPass.Password;
             ApplicationData.Current.LocalSettings.Values[AppSettingsFlyout.loginUrlConfigKey] = txtLoginUrl.Text;
 
-            if (txtDeviceId.Text == string.Empty)
+            if (string.IsNullOrEmpty(txtDeviceId.Text))
             {
                 var messageBox = new MessageDialog("Data validation failed. Device ID is required.", "An error occured");
                 messageBox.Commands.Add(new UICommand("Close", (command) =>
