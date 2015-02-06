@@ -5,11 +5,10 @@
     {
         @Html.TextBoxFor(t => t.Username, new { placeholder = "Username", autocomplete= "off", maxlength="10"})
         @Html.PasswordFor(t => t.Password, new { placeholder = "Password", autocomplete = "off", maxlength = "10" })
-        <input type="submit" class="loginBttn fontit" value="Login">
+        <input type="submit" class="loginBttn fontit" value="Login"/>
     }
 </div>
 <div class="registerArea">
     <button id="registerBtn" class="newReg">New here? Register!</button>
     <button id="registerBtn" class="forgotPass">Forgot Password?</button>
-
 </div>
