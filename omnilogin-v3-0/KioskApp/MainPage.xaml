@@ -9,7 +9,7 @@
 	x:Class="KioskApp.MainPage"
     mc:Ignorable="d">
     <Page.Resources>
-        <Storyboard x:Name="Wishlist_incomming">
+        <Storyboard x:Name="Wishlist_incoming">
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateX)" Storyboard.TargetName="sidebar">
                 <EasingDoubleKeyFrame KeyTime="0" Value="0">
                     <EasingDoubleKeyFrame.EasingFunction>
