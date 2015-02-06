@@ -338,6 +338,11 @@
 				</Button>
 				<ProgressRing x:Name="WishlistProgressRing" HorizontalAlignment="Center" VerticalAlignment="Center" Width="60" Height="60" IsActive="True" Foreground="#FF97C93D"/>
                 <GridView x:Name="WishlistItems" HorizontalAlignment="Left" Grid.Column="0" SelectionMode="None" IsHitTestVisible="False" Margin="0,80,0,0" VerticalAlignment="Top">
+                    <GridView.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapGrid Orientation="Horizontal" />
+                        </ItemsPanelTemplate>
+                    </GridView.ItemsPanel>
                     <GridView.ItemTemplate>
                         <DataTemplate>
                             <Grid Height="218" Width="150" Margin="7,0,7,0">
