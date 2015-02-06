@@ -86,7 +86,6 @@ namespace KioskApp
                 }));
                 await messageBox.ShowAsync();
             }
-
             else if ((string)ApplicationData.Current.LocalSettings.Values[AppSettingsFlyout.deviceIdConfigKey] != txtDeviceId.Text)
             {
                 try
