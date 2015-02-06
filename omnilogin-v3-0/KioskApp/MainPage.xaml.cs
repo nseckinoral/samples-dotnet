@@ -68,7 +68,7 @@ namespace KioskApp
 
                     var latestWishlist = wishlistGuids.Data.Last();
                     var latestWishlistItems = await wishlistClient.GetAsync(latestWishlist, longitude, latitude, true, false, false, 
-                        XOMNI.SDK.Public.Models.Catalog.AssetDetailType.None, 
+                        XOMNI.SDK.Public.Models.Catalog.AssetDetailType.IncludeOnlyDefault, 
                         XOMNI.SDK.Public.Models.Catalog.AssetDetailType.None, 
                         XOMNI.SDK.Public.Models.Catalog.AssetDetailType.None, 
                         examplemetadata, 
