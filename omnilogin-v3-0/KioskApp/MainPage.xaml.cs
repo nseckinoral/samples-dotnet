@@ -98,7 +98,6 @@ namespace KioskApp
                 var generatedQR = await GenerateQRCodeAsync(ApplicationData.Current.LocalSettings.Values[AppSettingsFlyout.deviceIdConfigKey].ToString());
                 await SetImageFromByteArray(generatedQR, QRImage);
                 QRProgressRing.IsActive = false;
-
             }
             catch(Exception ex)
             {

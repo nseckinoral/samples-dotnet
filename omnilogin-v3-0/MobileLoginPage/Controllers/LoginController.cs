@@ -11,9 +11,6 @@ namespace MobileLoginPage.Controllers
 {
     public class LoginController : Controller
     {
-        //
-        // GET: /Login/
-
         public ActionResult Index()
         {
             return View();
@@ -44,17 +41,12 @@ namespace MobileLoginPage.Controllers
             catch 
             {
              return View();
-            }
-
-            
+            }            
         }
 
         public ActionResult Success(Models.User user)
         { 
-            return View();
-            
+            return View();            
         }
-
-
     }
 }
