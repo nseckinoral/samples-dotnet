@@ -1,0 +1,25 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="initial-scale=1.18, user-scalable=no" />
+    <title>@ViewBag.Title Login</title>
+    @Styles.Render("~/Content/login.css")
+    @Styles.Render("~/Content/reset.css")
+    @Scripts.Render("~/bundles/modernizr")
+
+</head>
+<body>
+    <div class="container body-content">
+        <div id="container" class="container">
+            <img src="@Url.Content("~/Content/logo-460px.png")" class="logo" />
+            @RenderBody()
+        </div>
+    </div>
+    <script src="~/Scripts/jquery-1.8.2.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+</body>
+</html>
