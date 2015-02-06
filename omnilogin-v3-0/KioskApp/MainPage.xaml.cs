@@ -88,7 +88,6 @@ namespace KioskApp
                     wishlist_btn.IsHitTestVisible = true;
                 }));
                 messageBox.ShowAsync();
-
             }
         }
 
