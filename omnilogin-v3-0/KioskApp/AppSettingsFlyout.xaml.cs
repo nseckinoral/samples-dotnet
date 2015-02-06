@@ -110,7 +110,7 @@ namespace KioskApp
                                 Description = deviceDescription
                             })).Data;
                             #endregion
-                            var messageBox = new MessageDialog("Device ID " + "'" + registeredDevice.DeviceId + "'" + " is successfully registered.", "Success!");
+                            var messageBox = new MessageDialog(string.Format("Device ID '{0}' is successfully registered.", registeredDevice.DeviceId), "Success!");
                             await messageBox.ShowAsync();
                         }
 
