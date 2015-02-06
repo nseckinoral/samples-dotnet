@@ -67,7 +67,12 @@ namespace KioskApp
                     var wishlistGuids = await wishlistClient.GetAsync();
 
                     var latestWishlist = wishlistGuids.Data.Last();
-                    var latestWishlistItems = await wishlistClient.GetAsync(latestWishlist, longitude, latitude, true, false, false, XOMNI.SDK.Public.Models.Catalog.AssetDetailType.None, XOMNI.SDK.Public.Models.Catalog.AssetDetailType.None, XOMNI.SDK.Public.Models.Catalog.AssetDetailType.None, examplemetadata, examplemetadata);
+                    var latestWishlistItems = await wishlistClient.GetAsync(latestWishlist, longitude, latitude, true, false, false, 
+                        XOMNI.SDK.Public.Models.Catalog.AssetDetailType.None, 
+                        XOMNI.SDK.Public.Models.Catalog.AssetDetailType.None, 
+                        XOMNI.SDK.Public.Models.Catalog.AssetDetailType.None, 
+                        examplemetadata, 
+                        examplemetadata);
                     WishlistItems.ItemsSource = latestWishlistItems.Data.WishlistItems;
                     WishlistProgressRing.IsActive = false;
                 }
@@ -83,7 +88,6 @@ namespace KioskApp
                     wishlist_btn.IsHitTestVisible = true;
                 }));
                 messageBox.ShowAsync();
-
             }
         }
 
@@ -94,7 +98,6 @@ namespace KioskApp
                 var generatedQR = await GenerateQRCodeAsync(ApplicationData.Current.LocalSettings.Values[AppSettingsFlyout.deviceIdConfigKey].ToString());
                 await SetImageFromByteArray(generatedQR, QRImage);
                 QRProgressRing.IsActive = false;
-
             }
             catch(Exception ex)
             {

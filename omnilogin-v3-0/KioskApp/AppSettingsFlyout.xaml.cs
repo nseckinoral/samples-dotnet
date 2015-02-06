@@ -66,7 +66,7 @@ namespace KioskApp
             ApplicationData.Current.LocalSettings.Values[AppSettingsFlyout.apiUserPassConfigKey] = txtApiUserPass.Password;
             ApplicationData.Current.LocalSettings.Values[AppSettingsFlyout.loginUrlConfigKey] = txtLoginUrl.Text;
 
-            if (txtDeviceId.Text == string.Empty)
+            if (string.IsNullOrEmpty(txtDeviceId.Text))
             {
                 var messageBox = new MessageDialog("Data validation failed. Device ID is required.", "An error occured");
                 messageBox.Commands.Add(new UICommand("Close", (command) =>
@@ -86,7 +86,6 @@ namespace KioskApp
                 }));
                 await messageBox.ShowAsync();
             }
-
             else if ((string)ApplicationData.Current.LocalSettings.Values[AppSettingsFlyout.deviceIdConfigKey] != txtDeviceId.Text)
             {
                 try
@@ -111,7 +110,7 @@ namespace KioskApp
                                 Description = deviceDescription
                             })).Data;
                             #endregion
-                            var messageBox = new MessageDialog("Device ID " + "'" + registeredDevice.DeviceId + "'" + " is successfully registered.", "Success!");
+                            var messageBox = new MessageDialog(string.Format("Device ID '{0}' is successfully registered.", registeredDevice.DeviceId), "Success!");
                             await messageBox.ShowAsync();
                         }
 
