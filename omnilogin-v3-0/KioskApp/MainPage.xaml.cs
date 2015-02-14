@@ -1,5 +1,4 @@
 ﻿using System;
-using Windows.Storage;
 using Windows.Storage.Streams;
 using System.Linq;
 using Windows.UI.Xaml;
@@ -12,6 +11,8 @@ using System.Threading.Tasks;
 using XOMNI.SDK.Public.Clients.PII;
 using XOMNI.SDK.Public.Models.OmniPlay;
 using Windows.UI.Popups;
+using XOMNI.SDK.Public.Clients.OmniPlay;
+using XOMNI.SDK.Public.Models.Catalog;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -26,18 +27,15 @@ namespace KioskApp
         {
             this.InitializeComponent();
             this.Loaded += MainPage_Loaded;
-
             this.pollingTimer = new DispatcherTimer();
             this.pollingTimer.Tick += PollingTimer_TickAsync;
             this.pollingTimer.Interval = new TimeSpan(0, 0, 5);
-
         }
 
         void MainPage_Loaded(object sender, RoutedEventArgs e)
         {
             //Check if the app is already setup with required config data.
-            var ApiURI = ApplicationData.Current.LocalSettings.Values[AppSettingsFlyout.apiServiceUriConfigKey];
-            if(ApiURI == null)
+            if (string.IsNullOrEmpty(AppSettings.ApiUri))
             {
                 AppSettingsFlyout settingsFlyout = new AppSettingsFlyout();
                 settingsFlyout.ShowIndependent();
@@ -57,27 +55,27 @@ namespace KioskApp
             {
                 using (var clientContext = CreateClientContext())
                 {
-                    var longitude = 11;
-                    var latitude = 12;
-                    var examplemetadata = "test";
+                    int sampleLongitude = 11;
+                    int sampleLatitude = 12;
+                    string sampleMetadata = "test";
 
                     clientContext.OmniSession = omniSession.Data;
 
-                    var wishlistClient = clientContext.Of<WishlistClient>();
+                    WishlistClient wishlistClient = clientContext.Of<WishlistClient>();
                     var wishlistGuids = await wishlistClient.GetAsync();
 
-                    var latestWishlist = wishlistGuids.Data.Last();
-                    var latestWishlistItems = await wishlistClient.GetAsync(latestWishlist, longitude, latitude, true, false, false, 
-                        XOMNI.SDK.Public.Models.Catalog.AssetDetailType.IncludeOnlyDefault, 
-                        XOMNI.SDK.Public.Models.Catalog.AssetDetailType.None, 
-                        XOMNI.SDK.Public.Models.Catalog.AssetDetailType.None, 
-                        examplemetadata, 
-                        examplemetadata);
+                    Guid latestWishlistUniqueKey = wishlistGuids.Data.Last();
+                    var latestWishlistItems = await wishlistClient.GetAsync(latestWishlistUniqueKey, sampleLongitude, sampleLatitude, true, false, false,
+                        AssetDetailType.IncludeOnlyDefault,
+                        AssetDetailType.None,
+                        AssetDetailType.None,
+                        sampleMetadata,
+                        sampleMetadata);
                     WishlistItems.ItemsSource = latestWishlistItems.Data.WishlistItems;
                     WishlistProgressRing.IsActive = false;
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 WishlistItems.ItemsSource = null;
                 WishlistProgressRing.IsActive = true;
@@ -95,11 +93,11 @@ namespace KioskApp
         {
             try
             {
-                var generatedQR = await GenerateQRCodeAsync(ApplicationData.Current.LocalSettings.Values[AppSettingsFlyout.deviceIdConfigKey].ToString());
+                var generatedQR = await GenerateQRCodeAsync(AppSettings.DeviceId);
                 await SetImageFromByteArray(generatedQR, QRImage);
                 QRProgressRing.IsActive = false;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 QRImage.Source = null;
                 QRProgressRing.IsActive = true;
@@ -122,8 +120,8 @@ namespace KioskApp
                 {
                     using (var clientContext = CreateClientContext())
                     {
-                        var deviceClient = clientContext.Of<XOMNI.SDK.Public.Clients.OmniPlay.DeviceClient>();
-                        var result = await deviceClient.GetIncomingsAsync(ApplicationData.Current.LocalSettings.Values[AppSettingsFlyout.deviceIdConfigKey].ToString());
+                        var deviceClient = clientContext.Of<DeviceClient>();
+                        var result = await deviceClient.GetIncomingsAsync(AppSettings.DeviceId);
                         if (result.Data != null && result.Data.Any())
                         {
                             login_btn.IsEnabled = false;
@@ -132,17 +130,18 @@ namespace KioskApp
                             wishlist_btn.IsEnabled = true;
                             isLoggedIn = true;
 
-                            var latestOmniTicket = result.Data.Last();
-                            var omniTicketString = latestOmniTicket.OmniTicket.Substring(1, latestOmniTicket.OmniTicket.Length - 1);
+                            OmniTicketDetail latestOmniTicket = result.Data.Last();
+                            string omniTicket = latestOmniTicket.OmniTicket.Substring(1, latestOmniTicket.OmniTicket.Length - 1);
 
-                            var omniTicketClient = clientContext.Of<XOMNI.SDK.Public.Clients.OmniPlay.OmniTicketClient>();
-                            omniSession = await omniTicketClient.PostSessionAsync(new OmniTicket { Ticket = Guid.Parse(omniTicketString) });
+                            var omniTicketClient = clientContext.Of<OmniTicketClient>();
+                            omniSession = await omniTicketClient.PostSessionAsync(new OmniTicket { Ticket = Guid.Parse(omniTicket) });
                         }
                     }
                 }
                 catch
                 {
-                    return;
+                    MessageDialog dialog = new MessageDialog("An error occurred. Please try again.");
+                    dialog.ShowAsync();
                 }
             }
         }
@@ -165,32 +164,24 @@ namespace KioskApp
                 }
 
                 randomStream.Seek(0);
-
                 BitmapImage bitMapImage = new BitmapImage();
                 bitMapImage.SetSource(randomStream);
-
                 image.Source = bitMapImage;
             }
         }
 
         private ClientContext CreateClientContext()
         {
-            return new ClientContext(
-                ApplicationData.Current.LocalSettings.Values[AppSettingsFlyout.apiUserNameConfigKey].ToString(),
-                ApplicationData.Current.LocalSettings.Values[AppSettingsFlyout.apiUserPassConfigKey].ToString(),  
-                ApplicationData.Current.LocalSettings.Values[AppSettingsFlyout.apiServiceUriConfigKey].ToString()
-                );
+            return new ClientContext(AppSettings.ApiUsername, AppSettings.ApiUserPass, AppSettings.ApiUri);
         }
 
         private async Task<byte[]> GenerateQRCodeAsync(string deviceId)
         {
             using (var clientContext = CreateClientContext())
             {
-                return await clientContext.Of<QRCodeClient>().GetAsync(8, string.Format(ApplicationData.Current.LocalSettings.Values[AppSettingsFlyout.loginUrlConfigKey] + "?deviceId={0}", deviceId));
+                string loginUrl = string.Format(AppSettings.LoginUrl + "?deviceId={0}", deviceId);
+                return await clientContext.Of<QRCodeClient>().GetAsync(8, loginUrl);
             }
         }
-
-
-
     }
 }
