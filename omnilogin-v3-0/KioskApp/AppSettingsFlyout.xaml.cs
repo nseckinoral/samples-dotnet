@@ -1,70 +1,36 @@
 ﻿using System;
-using Windows.Storage;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using XOMNI.SDK.Public;
+using XOMNI.SDK.Public.Clients.Company;
+using XOMNI.SDK.Public.Models.Company;
 
 namespace KioskApp
 {
     public sealed partial class AppSettingsFlyout : SettingsFlyout
     {
-
-        public const string apiServiceUriConfigKey = "ApiURI";
-
-        public const string apiUserNameConfigKey = "ApiUserName";
-
-        public const string apiUserPassConfigKey = "ApiUserPass";
-
-        public const string loginUrlConfigKey = "LoginURL";
-
-        public const string deviceIdConfigKey = "DeviceId";
-
-        public string deviceDescription;
-
         public AppSettingsFlyout()
         {
             this.InitializeComponent();
             this.Loaded += AppSettingsFlyout_Loaded;
-            this.deviceDescription = Helpers.DeviceIdentity.GetFriendlyName();
         }
 
         void AppSettingsFlyout_Loaded(object sender, RoutedEventArgs e)
         {
-            var apiURI = ApplicationData.Current.LocalSettings.Values[AppSettingsFlyout.apiServiceUriConfigKey];
-            var apiUserName = ApplicationData.Current.LocalSettings.Values[AppSettingsFlyout.apiUserNameConfigKey];
-            var apiUserPass = ApplicationData.Current.LocalSettings.Values[AppSettingsFlyout.apiUserPassConfigKey];
-            var loginUrl = ApplicationData.Current.LocalSettings.Values[AppSettingsFlyout.loginUrlConfigKey];
-            var deviceId = ApplicationData.Current.LocalSettings.Values[AppSettingsFlyout.deviceIdConfigKey];
-
-            if(apiURI != null)
-            {
-                txtApiEndpoint.Text = apiURI.ToString();
-            }
-            if(apiUserName != null)
-            {
-                txtApiUserName.Text = apiUserName.ToString();
-            }            
-            if(apiUserPass != null)
-            {
-                txtApiUserPass.Password = apiUserPass.ToString();
-            }
-            if (loginUrl != null)
-            {
-                txtLoginUrl.Text = loginUrl.ToString();
-            }
-            if (deviceId != null)
-            {
-                txtDeviceId.Text = deviceId.ToString();
-            }  
+            txtApiEndpoint.Text = AppSettings.ApiUri ?? string.Empty;
+            txtApiUserName.Text = AppSettings.ApiUsername ?? string.Empty;
+            txtApiUserPass.Password = AppSettings.ApiUserPass ?? string.Empty;
+            txtLoginUrl.Text = AppSettings.LoginUrl ?? string.Empty;
+            txtDeviceId.Text = AppSettings.DeviceId ?? string.Empty;
         }
 
         private async void btnSave_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
         {
-            ApplicationData.Current.LocalSettings.Values[AppSettingsFlyout.apiServiceUriConfigKey] = txtApiEndpoint.Text;
-            ApplicationData.Current.LocalSettings.Values[AppSettingsFlyout.apiUserNameConfigKey] = txtApiUserName.Text;
-            ApplicationData.Current.LocalSettings.Values[AppSettingsFlyout.apiUserPassConfigKey] = txtApiUserPass.Password;
-            ApplicationData.Current.LocalSettings.Values[AppSettingsFlyout.loginUrlConfigKey] = txtLoginUrl.Text;
+            AppSettings.ApiUri = txtApiEndpoint.Text;
+            AppSettings.ApiUsername = txtApiUserName.Text;
+            AppSettings.ApiUserPass = txtApiUserPass.Password;
+            AppSettings.LoginUrl = txtLoginUrl.Text;
 
             if (string.IsNullOrEmpty(txtDeviceId.Text))
             {
@@ -76,7 +42,7 @@ namespace KioskApp
                 }));
                 await messageBox.ShowAsync();
             }
-            else if(txtDeviceId.Text.Contains(" "))
+            else if (txtDeviceId.Text.Contains(" "))
             {
                 var messageBox = new MessageDialog("Data validation failed. Device ID can not contain any whitespace.", "An error occured");
                 messageBox.Commands.Add(new UICommand("Close", (command) =>
@@ -86,35 +52,26 @@ namespace KioskApp
                 }));
                 await messageBox.ShowAsync();
             }
-            else if ((string)ApplicationData.Current.LocalSettings.Values[AppSettingsFlyout.deviceIdConfigKey] != txtDeviceId.Text)
+            else if (AppSettings.DeviceId != txtDeviceId.Text)
             {
                 try
                 {
-                    #region using (Create Client Context)
-                    using (var clientContext = new ClientContext(
-                    ApplicationData.Current.LocalSettings.Values[AppSettingsFlyout.apiUserNameConfigKey].ToString(),
-                    ApplicationData.Current.LocalSettings.Values[AppSettingsFlyout.apiUserPassConfigKey].ToString(),
-                    ApplicationData.Current.LocalSettings.Values[AppSettingsFlyout.apiServiceUriConfigKey].ToString()
-                    ))
-                    #endregion
+                    using (var clientContext = new ClientContext(AppSettings.ApiUsername, AppSettings.ApiUserPass, AppSettings.ApiUri))
                     {
-                        var deviceClient = clientContext.Of<XOMNI.SDK.Public.Clients.Company.DeviceClient>();
-
+                        var deviceClient = clientContext.Of<DeviceClient>();
                         try
                         {
-                            ApplicationData.Current.LocalSettings.Values[AppSettingsFlyout.deviceIdConfigKey] = txtDeviceId.Text;
-                            #region Register Device
-                            var registeredDevice = (await deviceClient.PostAsync(new XOMNI.SDK.Public.Models.Company.Device()
+                            var registeredDevice = (await deviceClient.PostAsync(new Device()
                             {
-                                DeviceId = ApplicationData.Current.LocalSettings.Values[AppSettingsFlyout.deviceIdConfigKey].ToString(),
-                                Description = deviceDescription
+                                DeviceId = txtDeviceId.Text,
+                                Description = Helpers.DeviceIdentity.GetFriendlyName()
                             })).Data;
-                            #endregion
+                            AppSettings.DeviceId = txtDeviceId.Text;
                             var messageBox = new MessageDialog(string.Format("Device ID '{0}' is successfully registered.", registeredDevice.DeviceId), "Success!");
                             await messageBox.ShowAsync();
                         }
 
-                        catch(Exception ex)
+                        catch (Exception ex)
                         {
                             var messageBox = new MessageDialog(ex.Message, "Please try again!");
                             messageBox.Commands.Add(new UICommand("Close", (command) =>
@@ -123,13 +80,10 @@ namespace KioskApp
                                 settingsFlyOut.Show();
                             }));
                             messageBox.ShowAsync();
-                            ApplicationData.Current.LocalSettings.Values[AppSettingsFlyout.deviceIdConfigKey] = string.Empty;
                         }
                     }
-
                 }
-
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     var messageBox = new MessageDialog(ex.Message, "An error occured");
                     messageBox.Commands.Add(new UICommand("Close", (command) =>
@@ -138,11 +92,8 @@ namespace KioskApp
                         settingsFlyOut.Show();
                     }));
                     messageBox.ShowAsync();
-                    ApplicationData.Current.LocalSettings.Values[AppSettingsFlyout.deviceIdConfigKey] = string.Empty;
                 }
-
             }
-
         }
     }
 }
