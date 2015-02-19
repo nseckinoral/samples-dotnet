@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -27,9 +28,33 @@ namespace KioskApp
 
         private async void btnSave_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
         {
-            AppSettings.ApiUri = txtApiEndpoint.Text;
-            AppSettings.ApiUsername = txtApiUserName.Text;
-            AppSettings.ApiUserPass = txtApiUserPass.Password;
+
+
+            if (string.IsNullOrEmpty(txtApiEndpoint.Text) || string.IsNullOrEmpty(txtApiUserName.Text) || string.IsNullOrEmpty(txtApiUserPass.Password))
+            {
+
+                MessageDialog messageBox = new MessageDialog("API settings can't be empty.", "An error occured");
+                messageBox.Commands.Add(new UICommand("Close", (command) =>
+                {
+                    AppSettingsFlyout settingsFlyOut = new AppSettingsFlyout();
+                    settingsFlyOut.Show();
+                }));
+                await messageBox.ShowAsync();
+            }
+
+
+            if(string.IsNullOrEmpty(txtLoginUrl.Text))
+            {
+                MessageDialog messageBox = new MessageDialog("Login URL can't be empty.", "An error occured");
+                messageBox.Commands.Add(new UICommand("Close", (command) =>
+                {
+                    AppSettingsFlyout settingsFlyOut = new AppSettingsFlyout();
+                    settingsFlyOut.Show();
+                }));
+                await messageBox.ShowAsync();
+
+            }
+                
             AppSettings.LoginUrl = txtLoginUrl.Text;
 
             if (string.IsNullOrEmpty(txtDeviceId.Text))
@@ -52,10 +77,40 @@ namespace KioskApp
                 }));
                 await messageBox.ShowAsync();
             }
-            else if (AppSettings.DeviceId != txtDeviceId.Text)
+            else if (AppSettings.DeviceId != txtDeviceId.Text || AppSettings.ApiUri != txtApiEndpoint.Text)
             {
-                try
+                var frame = (Frame)Window.Current.Content;
+                var mainPage = (MainPage)frame.Content;
+                mainPage.mainPageProgressRing.IsActive = true;
+                mainPage.mainPageDisabled.Opacity = 100;
+                mainPage.mainPageDisabled.IsHitTestVisible = false;
+
+                var confirmationMessage = new MessageDialog("Previous Device ID will be unregistered. Do you confirm?","Warning!");
+                confirmationMessage.Commands.Add(new UICommand("OK", async (command) =>
                 {
+                    await UnRegisterDevice();
+                    await RegisterDevice();
+                }));
+
+                confirmationMessage.Commands.Add(new UICommand("Cancel",(command) =>
+                {
+                    mainPage.mainPageProgressRing.IsActive = false;
+                    if(AppSettings.IsRegistered == "true")
+                    {
+                        mainPage.EnableMainPage();                     
+                    }
+                    AppSettingsFlyout settingsFlyOut = new AppSettingsFlyout();
+                    settingsFlyOut.Show();
+                }));
+                await confirmationMessage.ShowAsync();
+            }
+
+
+        }
+
+
+        private async Task RegisterDevice()
+        {
                     using (var clientContext = new ClientContext(AppSettings.ApiUsername, AppSettings.ApiUserPass, AppSettings.ApiUri))
                     {
                         var deviceClient = clientContext.Of<DeviceClient>();
@@ -67,8 +122,17 @@ namespace KioskApp
                                 Description = Helpers.DeviceIdentity.GetFriendlyName()
                             })).Data;
                             AppSettings.DeviceId = txtDeviceId.Text;
+
                             var messageBox = new MessageDialog(string.Format("Device ID '{0}' is successfully registered.", registeredDevice.DeviceId), "Success!");
+                            messageBox.Commands.Add(new UICommand("OK", (command) =>
+                            {
+                                var frame = (Frame)Window.Current.Content;
+                                var mainPage = (MainPage)frame.Content;
+                                mainPage.EnableMainPage();
+                                mainPage.mainPageProgressRing.IsActive = false;
+                            }));
                             await messageBox.ShowAsync();
+                            AppSettings.IsRegistered = "true";
                         }
 
                         catch (Exception ex)
@@ -78,22 +142,66 @@ namespace KioskApp
                             {
                                 AppSettingsFlyout settingsFlyOut = new AppSettingsFlyout();
                                 settingsFlyOut.Show();
+
                             }));
                             messageBox.ShowAsync();
+
+                            var frame = (Frame)Window.Current.Content;
+                            var mainPage = (MainPage)frame.Content;
+                            mainPage.mainPageDisabled.IsHitTestVisible = true;
+                            mainPage.mainPageProgressRing.IsActive = false;
                         }
                     }
-                }
-                catch (Exception ex)
+        }
+
+        private async Task UnRegisterDevice()
+        {
+
+                using (var clientContext = new ClientContext(AppSettings.ApiUsername, AppSettings.ApiUserPass, AppSettings.ApiUri))
                 {
-                    var messageBox = new MessageDialog(ex.Message, "An error occured");
-                    messageBox.Commands.Add(new UICommand("Close", (command) =>
+                    var deviceClient = clientContext.Of<DeviceClient>();
+                    try
                     {
-                        AppSettingsFlyout settingsFlyOut = new AppSettingsFlyout();
-                        settingsFlyOut.Show();
-                    }));
-                    messageBox.ShowAsync();
+                        await deviceClient.DeleteAsync(AppSettings.DeviceId);
+                        AppSettings.IsRegistered = "false";
+                    }
+
+                    catch
+                    {
+                        AppSettings.IsRegistered = "false";
+                    }
                 }
+                AppSettings.ApiUri = txtApiEndpoint.Text;
+                AppSettings.ApiUsername = txtApiUserName.Text;
+                AppSettings.ApiUserPass = txtApiUserPass.Password;
+        }
+
+        private void txtApiEndpoint_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if(AppSettings.ApiUri == txtApiEndpoint.Text )
+            {
+                btnSave.IsEnabled = false;
+            }
+            else
+            {
+                btnSave.IsEnabled = true;
             }
         }
-    }
+
+        private void txtDeviceId_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (AppSettings.DeviceId == txtDeviceId.Text)
+            {
+                btnSave.IsEnabled = false;
+            }
+            else
+            {
+                btnSave.IsEnabled = true;
+            }
+        }
+
+     }
+
+
 }
+
