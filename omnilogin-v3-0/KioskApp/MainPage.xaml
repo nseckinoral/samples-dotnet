@@ -258,8 +258,9 @@
         <converters:DecimalPriceConverter x:Name="DecimalPriceConverter"/>
     </Page.Resources>
     <Viewbox>
-		<Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Height="768" Width="1366">
-    	<Image Margin="0" Source="Assets/fakedata .png" Stretch="Fill"/>
+        <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Height="768" Width="1366">
+            <Image Margin="0" Source="Assets/fakedata .png" Stretch="Fill"/>
+            
     	<Image x:Name="logo" Source="Assets/logo_full_white.png" Stretch="None" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,-822,-233">
     		<Image.RenderTransform>
     			<CompositeTransform ScaleX="0.1" ScaleY="0.1"/>
@@ -393,6 +394,11 @@
                     </StackPanel>
                 </Grid>
             </Grid>
+            <Grid x:Name="mainPageDisabled" x:FieldModifier="Public" IsHitTestVisible="True" Opacity="100">
+                <Rectangle x:Name="mainPageBlackScreen" x:FieldModifier="Public" Fill="Black" Opacity="0.8"/>
+                <ProgressRing x:Name="mainPageProgressRing" x:FieldModifier="Public" HorizontalAlignment="Center" VerticalAlignment="Center" Height="80" Width="80" IsActive="False" Foreground="#FF97C93D"/>
+            </Grid>
+
         </Grid>
 	</Viewbox>
 </Page>

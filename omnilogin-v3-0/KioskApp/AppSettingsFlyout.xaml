@@ -11,7 +11,7 @@
     <StackPanel VerticalAlignment="Stretch" HorizontalAlignment="Stretch" >
         <StackPanel Style="{StaticResource SettingsFlyoutSectionStyle}">
             <TextBlock Style="{StaticResource TitleTextBlockStyle}" Text="API Endpoint" FontFamily="Global User Interface" Margin="0,15,0,10" />
-            <TextBox x:Name="txtApiEndpoint" TextWrapping="Wrap" Width="250"/>
+            <TextBox x:Name="txtApiEndpoint" TextWrapping="Wrap" Width="250" TextChanged="txtApiEndpoint_TextChanged"/>
             <TextBlock Style="{StaticResource TitleTextBlockStyle}" Text="API User Name" FontFamily="Global User Interface" Margin="0,15,0,10" />
             <TextBox x:Name="txtApiUserName" TextWrapping="Wrap" Width="250"/>
             <TextBlock Style="{StaticResource TitleTextBlockStyle}" Text="API Password" FontFamily="Global User Interface" Margin="0,15,0,10" />
@@ -19,7 +19,7 @@
             <TextBlock Style="{StaticResource TitleTextBlockStyle}" Text="Login URL" FontFamily="Global User Interface" Margin="0,15,0,10" />
             <TextBox x:Name="txtLoginUrl" TextWrapping="Wrap" Width="250"/>
             <TextBlock Style="{StaticResource TitleTextBlockStyle}" Text="Device ID" FontFamily="Global User Interface" Margin="0,15,0,10" />
-            <TextBox x:Name="txtDeviceId" TextWrapping="Wrap" Width="250" MaxLength="50"/>
+            <TextBox x:Name="txtDeviceId" TextWrapping="Wrap" Width="250" MaxLength="50" TextChanged="txtDeviceId_TextChanged"/>
             <Button x:Name="btnSave" Content="Save" Background="#FF464646" Foreground="White" HorizontalAlignment="Right" Margin="0,30,0,0" VerticalAlignment="Center" Padding="15,5" ScrollViewer.VerticalScrollBarVisibility="Disabled" Tapped="btnSave_Tapped"/>
         </StackPanel>
     </StackPanel>
