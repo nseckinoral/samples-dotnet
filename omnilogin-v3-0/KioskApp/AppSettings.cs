@@ -9,6 +9,7 @@ namespace KioskApp
         private const string apiUserPassConfigKey = "ApiUserPass";
         private const string loginUrlConfigKey = "LoginURL";
         private const string deviceIdConfigKey = "DeviceId";
+        private const string isRegisteredConfigKey = "false";
 
         public static string ApiUri
         {
@@ -97,6 +98,24 @@ namespace KioskApp
             set
             {
                 ApplicationData.Current.LocalSettings.Values[deviceIdConfigKey] = value;
+            }
+        }
+
+        public static string IsRegistered
+        {
+            get
+            {
+                string retVal = null;
+                object value = ApplicationData.Current.LocalSettings.Values[isRegisteredConfigKey];
+                if (value != null)
+                {
+                    retVal = value.ToString();
+                }
+                return retVal;
+            }
+            set
+            {
+                ApplicationData.Current.LocalSettings.Values[isRegisteredConfigKey] = value;
             }
         }
     }
