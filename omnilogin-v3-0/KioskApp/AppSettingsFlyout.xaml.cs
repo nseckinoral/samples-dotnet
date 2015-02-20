@@ -28,20 +28,9 @@ namespace KioskApp
 
         private async void btnSave_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
         {
-            //Check if API Settings are empty or not
-            if (string.IsNullOrEmpty(txtApiEndpoint.Text) || string.IsNullOrEmpty(txtApiUserName.Text) || string.IsNullOrEmpty(txtApiUserPass.Password))
-            {
 
-                MessageDialog messageBox = new MessageDialog("API settings can't be empty.", "An error occured");
-                messageBox.Commands.Add(new UICommand("Close", (command) =>
-                {
-                    AppSettingsFlyout settingsFlyOut = new AppSettingsFlyout();
-                    settingsFlyOut.Show();
-                }));
-                await messageBox.ShowAsync();
-            }
 
-            //Check if API Settings are empty or not
+            //Check if Login URL is empty or not
             if(string.IsNullOrEmpty(txtLoginUrl.Text))
             {
                 MessageDialog messageBox = new MessageDialog("Login URL can't be empty.", "An error occured");
@@ -61,8 +50,20 @@ namespace KioskApp
                 return;
             }
 
+            //Check if API Settings are empty or not
+            if (string.IsNullOrEmpty(txtApiEndpoint.Text) || string.IsNullOrEmpty(txtApiUserName.Text) || string.IsNullOrEmpty(txtApiUserPass.Password))
+            {
+
+                MessageDialog messageBox = new MessageDialog("API settings can't be empty.", "An error occured");
+                messageBox.Commands.Add(new UICommand("Close", (command) =>
+                {
+                    AppSettingsFlyout settingsFlyOut = new AppSettingsFlyout();
+                    settingsFlyOut.Show();
+                }));
+                await messageBox.ShowAsync();
+            }
             //Check if Device ID is empty or not
-            if (string.IsNullOrEmpty(txtDeviceId.Text))
+            else if (string.IsNullOrEmpty(txtDeviceId.Text))
             {
                 var messageBox = new MessageDialog("Data validation failed. Device ID is required.", "An error occured");
                 messageBox.Commands.Add(new UICommand("Close", (command) =>
