@@ -28,8 +28,7 @@ namespace KioskApp
 
         private async void btnSave_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
         {
-
-
+            //Check if API Settings are empty or not
             if (string.IsNullOrEmpty(txtApiEndpoint.Text) || string.IsNullOrEmpty(txtApiUserName.Text) || string.IsNullOrEmpty(txtApiUserPass.Password))
             {
 
@@ -42,7 +41,7 @@ namespace KioskApp
                 await messageBox.ShowAsync();
             }
 
-
+            //Check if API Settings are empty or not
             if(string.IsNullOrEmpty(txtLoginUrl.Text))
             {
                 MessageDialog messageBox = new MessageDialog("Login URL can't be empty.", "An error occured");
@@ -54,9 +53,15 @@ namespace KioskApp
                 await messageBox.ShowAsync();
 
             }
-                
-            AppSettings.LoginUrl = txtLoginUrl.Text;
+            //If Login URL is the only changed textbox, save it and don't register.
+            else if (AppSettings.ApiUri == txtApiEndpoint.Text && AppSettings.ApiUsername == txtApiUserName.Text && AppSettings.ApiUserPass == txtApiUserPass.Password && AppSettings.DeviceId == txtDeviceId.Text && AppSettings.LoginUrl != txtLoginUrl.Text)
+            {
+                AppSettings.LoginUrl = txtLoginUrl.Text;
+                btnSave.IsEnabled = false;
+                return;
+            }
 
+            //Check if Device ID is empty or not
             if (string.IsNullOrEmpty(txtDeviceId.Text))
             {
                 var messageBox = new MessageDialog("Data validation failed. Device ID is required.", "An error occured");
@@ -67,6 +72,7 @@ namespace KioskApp
                 }));
                 await messageBox.ShowAsync();
             }
+            //Check if Device ID contains whitespace
             else if (txtDeviceId.Text.Contains(" "))
             {
                 var messageBox = new MessageDialog("Data validation failed. Device ID can not contain any whitespace.", "An error occured");
@@ -77,7 +83,9 @@ namespace KioskApp
                 }));
                 await messageBox.ShowAsync();
             }
-            else if (AppSettings.DeviceId != txtDeviceId.Text || AppSettings.ApiUri != txtApiEndpoint.Text)
+
+            //Registration
+            else
             {
                 var frame = (Frame)Window.Current.Content;
                 var mainPage = (MainPage)frame.Content;
@@ -135,7 +143,7 @@ namespace KioskApp
                             AppSettings.IsRegistered = "true";
                         }
 
-                        catch (Exception ex)
+                        catch (XOMNI.SDK.Public.Exceptions.XOMNIPublicAPIException ex)
                         {
                             var messageBox = new MessageDialog(ex.Message, "Please try again!");
                             messageBox.Commands.Add(new UICommand("Close", (command) =>
@@ -146,6 +154,21 @@ namespace KioskApp
                             }));
                             messageBox.ShowAsync();
 
+                            var frame = (Frame)Window.Current.Content;
+                            var mainPage = (MainPage)frame.Content;
+                            mainPage.mainPageDisabled.IsHitTestVisible = true;
+                            mainPage.mainPageProgressRing.IsActive = false;
+                        }
+                        catch (System.Exception)
+                        {
+                            var messageBox = new MessageDialog("We're having trouble accomplishing your request. Please make sure your API Settings are correct.", "Please try again!");
+                            messageBox.Commands.Add(new UICommand("Close", (command) =>
+                            {
+                                AppSettingsFlyout settingsFlyOut = new AppSettingsFlyout();
+                                settingsFlyOut.Show();
+
+                            }));
+                            messageBox.ShowAsync();
                             var frame = (Frame)Window.Current.Content;
                             var mainPage = (MainPage)frame.Content;
                             mainPage.mainPageDisabled.IsHitTestVisible = true;
@@ -174,11 +197,12 @@ namespace KioskApp
                 AppSettings.ApiUri = txtApiEndpoint.Text;
                 AppSettings.ApiUsername = txtApiUserName.Text;
                 AppSettings.ApiUserPass = txtApiUserPass.Password;
+                AppSettings.LoginUrl = txtLoginUrl.Text;
         }
 
         private void txtApiEndpoint_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if(AppSettings.ApiUri == txtApiEndpoint.Text )
+            if (AppSettings.ApiUri == txtApiEndpoint.Text)
             {
                 btnSave.IsEnabled = false;
             }
@@ -186,6 +210,44 @@ namespace KioskApp
             {
                 btnSave.IsEnabled = true;
             }
+        }
+
+        private void txtApiUserName_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (AppSettings.ApiUsername == txtApiUserName.Text)
+            {
+                btnSave.IsEnabled = false;
+            }
+            else
+            {
+                btnSave.IsEnabled = true;
+            }
+
+        }
+
+        private void txtApiUserPass_PasswordChanged(object sender, RoutedEventArgs e)
+        {
+            if (AppSettings.ApiUserPass == txtApiUserPass.Password)
+            {
+                btnSave.IsEnabled = false;
+            }
+            else
+            {
+                btnSave.IsEnabled = true;
+            }
+        }
+
+        private void txtLoginUrl_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (AppSettings.LoginUrl == txtLoginUrl.Text)
+            {
+                btnSave.IsEnabled = false;
+            }
+            else
+            {
+                btnSave.IsEnabled = true;
+            }
+
         }
 
         private void txtDeviceId_TextChanged(object sender, TextChangedEventArgs e)
@@ -200,8 +262,7 @@ namespace KioskApp
             }
         }
 
-     }
-
+    }
 
 }
 
