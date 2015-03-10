@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.System;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -13,6 +14,8 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using XOMNI.SDK.Public;
+using XOMNI.SDK.Public.Clients.Catalog;
 
 // The Settings Flyout item template is documented at http://go.microsoft.com/fwlink/?LinkId=273769
 
@@ -50,17 +53,46 @@ namespace Inventory_Sample_App
                 await messageBox.ShowAsync();
             }
 
-            //Save
             else
             {
-                AppSettings.ApiUri = txtApiEndpoint.Text;
-                AppSettings.ApiUsername = txtApiUserName.Text;
-                AppSettings.ApiUserPass = txtApiUserPass.Password;
-                AppSettings.ItemId = txtItemId.Text;
-                btnSave.IsEnabled = false;
+                try
+                {
+                    //Validate through APIs
+                    using(var clientContext = new ClientContext(txtApiUserName.Text,txtApiUserPass.Password,txtApiEndpoint.Text))
+                    {
+                        var itemId = Int32.Parse(txtItemId.Text);
+                        var itemClient = clientContext.Of<ItemClient>();
+                        var itemValidation = await itemClient.GetAsync(itemId);
+                    }
+
+                    //Save
+                    AppSettings.ApiUri = txtApiEndpoint.Text;
+                    AppSettings.ApiUsername = txtApiUserName.Text;
+                    AppSettings.ApiUserPass = txtApiUserPass.Password;
+                    AppSettings.ItemId = txtItemId.Text;
+                    btnSave.IsEnabled = false;
+                }
+                catch(XOMNI.SDK.Public.Exceptions.XOMNIPublicAPIException ex)
+                {
+                    var messageBox = new MessageDialog("Make sure your settings are valid.", "Validation failed");
+                    messageBox.Commands.Add(new UICommand("Close", (command) =>
+                    {
+                        AppSettingsFlyout settingsFlyOut = new AppSettingsFlyout();
+                        settingsFlyOut.Show();
+                    }));
+                    messageBox.ShowAsync();                  
+                }
+                catch (Exception ex)
+                {
+                    var messageBox = new MessageDialog(ex.Message, "An error occurred");
+                    messageBox.Commands.Add(new UICommand("Close", (command) =>
+                    {
+                        AppSettingsFlyout settingsFlyOut = new AppSettingsFlyout();
+                        settingsFlyOut.Show();
+                    }));
+                    messageBox.ShowAsync();
+                }
             }
-
-
         }
 
         private void txtApiEndpoint_TextChanged(object sender, TextChangedEventArgs e)
