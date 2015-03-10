@@ -17,7 +17,7 @@
             <TextBlock Style="{StaticResource TitleTextBlockStyle}" Text="API Password" FontFamily="Global User Interface" Margin="0,15,0,10" />
             <PasswordBox x:Name="txtApiUserPass" FontFamily="Global User Interface" Width="250" PasswordChanged="txtApiUserPass_PasswordChanged"/>
             <TextBlock Style="{StaticResource TitleTextBlockStyle}" Text="Item ID" FontFamily="Global User Interface" Margin="0,15,0,10" />
-            <TextBox x:Name="txtItemId" TextWrapping="Wrap" Width="250" TextChanged="txtItemId_TextChanged"/>
+            <TextBox x:Name="txtItemId" TextWrapping="Wrap" InputScope="Number" Width="250" TextChanged="txtItemId_TextChanged" KeyDown="txtItemId_KeyDown"/>
             <Button x:Name="btnSave" Content="Save" Background="#FF464646" Foreground="White" HorizontalAlignment="Right" Margin="0,30,0,0" VerticalAlignment="Center" Padding="15,5" ScrollViewer.VerticalScrollBarVisibility="Disabled" Tapped="btnSave_Tapped"/>
         </StackPanel>
     </StackPanel>
