@@ -64,7 +64,6 @@ namespace Inventory_Sample_App
                 {
                     var itemClient = clientContext.Of<XOMNI.SDK.Public.Clients.Catalog.ItemClient>();
                     sampleItem = await itemClient.GetAsync(Int32.Parse(AppSettings.ItemId), true, true, true, AssetDetailType.IncludeOnlyDefault);
-                    //var sampleItem = itemClient.GetAsync(Int32.Parse(AppSettings.ItemId), includeItemInStoreMetadata :true, imageAssetDetail: AssetDetailType.IncludeOnlyDefault).;
                     ItemDetailScreen.DataContext = sampleItem.Data.Item;
                 }
                 commonProgressRing.IsActive = false;
@@ -113,7 +112,7 @@ namespace Inventory_Sample_App
                     // Fetching the In-Store Metadata CompanyWide 
                     //var metadataList = await clientContext.Of<ItemInStoreMetadataClient>().GetAsync(Int32.Parse(AppSettings.ItemId), 0, 100, "instock", "true", null, true);
                     
-                    //FAKE:Searching Stores With GPS Location
+                    //Searching Stores With GPS Location
                     storeList = await clientContext.Of<StoreClient>().GetAsync(new XOMNI.SDK.Public.Models.Location() { Longitude = -75.952134, Latitude = 40.801112}, 1, 0, 10);
                     storeList.Data.Results.RemoveAt(3);
                     StoreList.ItemsSource = storeList.Data.Results;
@@ -132,18 +131,9 @@ namespace Inventory_Sample_App
                 messageBox.ShowAsync();
             }
 
-            //FAKE: Preparing the map for fake location
+            //Preparing the map for fake location
             Bing.Maps.Location myFakeLocation = new Bing.Maps.Location(40.801112, -75.952134);
             Map.SetView(myFakeLocation, 14.0f);
-
-
-            ////Preparing the map
-            //var cancellationTokenSource = new CancellationTokenSource();
-            //CancellationToken cancellationToken = cancellationTokenSource.Token;
-            //Geolocator geolocator = new Geolocator();
-            //Geoposition position = await geolocator.GetGeopositionAsync().AsTask(cancellationToken);
-            //Bing.Maps.Location myLocation = new Bing.Maps.Location(position.Coordinate.Point.Position.Latitude, position.Coordinate.Point.Position.Longitude);
-            //Map.SetView(myLocation, 7.0f);
 
             //Preparing pushpins for stores
             try
