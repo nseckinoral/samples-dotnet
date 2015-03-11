@@ -1,5 +1,5 @@
 # Introduction #
-This is a sample project showcasing how retailers may use XOMNI InStoreMetadata API to see stock details of their products, both for a spesific store and also for other stores related to their company. Even though this document is about "stock details", InStoreMetadata API can also be used for your other needs such as [**buraya bir iki ekstra örnek gelecek**]
+This is a sample project showcasing how you can use [InStoreMetadata APIs](http://dev.xomni.com/v3-0/http-api/public-apis/catalog/item-in-store-metadata) to see stock details of products for a spesific store or look-up across multiple stores for availability. Even though in this document we are only going to discuss inventory aspect of our APIs, InStoreMetadata APIs are designed in a generic way to give you flexibility implementing different scenarios where you might need store specific contextual data.
 
 # APIs Used #
  - [Catalog/Item/**Fetching a Single Item**](http://dev.xomni.com/v3-0/http-api/public-apis/catalog/item/fetching-a-single-item)
@@ -11,11 +11,11 @@ This is a sample project showcasing how retailers may use XOMNI InStoreMetadata 
 # XOMNI SDK for .NET #
 
 
-The code repository for the SDK can be found [here](https://github.com/XomniCloud/xomni-sdk-dotnet).
+The code repository for the .NET SDK used in this article can be found [here](https://github.com/XomniCloud/xomni-sdk-dotnet).
 
 # XOMNI Developer Portal #
 
-Feel free to jump into our developer portal to look for more APIs and documentation. 
+Feel free to jump into our developer portal to look for more APIs and related documentation. 
 
 [Developer Portal: Public APIs for v3.0](http://dev.xomni.com/v3-0/http-api/public-apis)
 
@@ -30,7 +30,7 @@ First step is to create a clientcontext instance with valid credentials and a va
 
 		ClientContext sampleClientContext = new ClientContext("UserName","Password","Service URL");
 ## Fetch a Single Item ##
-Fetching a single item is fairly easy. All you need to do is using the **GetAsync** method of **ItemClient**.
+Fetching a single item is fairly easy. All you need to do is to use the **GetAsync** method of **ItemClient**.
 
 **Usage:**
 
@@ -50,14 +50,14 @@ Make sure you set "**includeItemInStoreMetadata**" paramater to **true** as we'r
  - **4** : Includes all image assets
  - **8** : Includes all image assets with metadata
 
-After fetching the Item you desire, you can simply use the **InStoreMetadata** of it to see if the item is **in stock** or if it is, how many of it is remaining.
+After fetching the Item you desire, you can simply use the **InStoreMetadata** of the item to see if the product is **in stock**. 
 
-## Fetching the In-Store Metadata CompanyWide ##
+## Fetching the In-Store Metadata Across Multiple Stores ##
 If you need the **In-Store Metadata** of an item **for all stores**, you need to use the **GetAsync** method of **ItemInStoreMetadataClient**
 
 **Usage:**
 
-Fetching instore metadata has 2 different ways. First one is using a **key-value** pair, second one is using a **keyprefix**.
+Fetching in-store metadata has two different ways. You can use a **key-value** pair or a **keyprefix**.
 
 **Using Key-Value Pair:**
 
@@ -68,7 +68,7 @@ Fetching instore metadata has 2 different ways. First one is using a **key-value
 		companyWide: true);
     }
 
-If you search with a **key-value** pair (e.g. key= "instock" value= "true"), you only get **exact matching results**. (Only in-stock items in this case.)
+If your search includes a **key-value** pair (e.g. key= "instock" value= "true"), you will only get **exact matching results**. (Only the items in stock in this case.)
 
 **Using KeyPrefix:**
 
@@ -79,4 +79,4 @@ If you search with a **key-value** pair (e.g. key= "instock" value= "true"), you
 		companyWide: true);
     }
 
-However, if you search with a **keyprefix** (e.g. keyprefix= **"instock"**), you can fetch **more than one key** which includes the keyprefix that you defined. (e.g. Results: key= "instock" value= "true", key= "instock_quantity" value="100" etc.)
+However, if you search with a **keyprefix** (e.g. keyprefix= **"instock"**), you can fetch **more than one key** including your keyprefix. (e.g. Results: key= "instock" value= "true", key= "instock_quantity" value="100" etc.)
