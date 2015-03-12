@@ -7,8 +7,8 @@ namespace Inventory_Sample_App
         private const string apiServiceUriConfigKey = "ApiURI";
         private const string apiUserNameConfigKey = "ApiUserName";
         private const string apiUserPassConfigKey = "ApiUserPass";
-        private const string inStockItemIdConfigKey = "ItemId";
-        private const string outOfStockItemIdConfigKey = "ItemId";
+        private const string inStockItemIdConfigKey = "InStockItemId";
+        private const string outOfStockItemIdConfigKey = "OutOfStockItemId";
 
         public static string ApiUri
         {

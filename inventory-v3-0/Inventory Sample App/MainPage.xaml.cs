@@ -51,15 +51,8 @@ namespace Inventory_Sample_App
             }
         }
 
-
-
-        private async void Item_Tapped(object sender, TappedRoutedEventArgs e)
+        private async void InStockItem_Tapped(object sender, TappedRoutedEventArgs e)
         {           
-            //Prepare Screen
-            BlackScreen.IsHitTestVisible = true;
-            ItemDetail_In.Begin();
-            ItemDetailScreen.IsHitTestVisible = true;
-
             //Fetch Item Details
             var sampleInStockItem = new ApiResponse<SingleItemSearchResult<Item>>();
             var sampleOutOfStockItem = new ApiResponse<SingleItemSearchResult<Item>>();
@@ -101,12 +94,52 @@ namespace Inventory_Sample_App
                 }));
                 messageBox.ShowAsync();
             }
-
-
-
-            
+         
         }
 
+        private async void OutOfStockItem_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            //Fetch Item Details
+            var sampleOutOfStockItem = new ApiResponse<SingleItemSearchResult<Item>>();
+            try
+            {
+                using (ClientContext clientContext = new XOMNI.SDK.Public.ClientContext(AppSettings.ApiUsername, AppSettings.ApiUserPass, AppSettings.ApiUri))
+                {
+                    var itemClient = clientContext.Of<XOMNI.SDK.Public.Clients.Catalog.ItemClient>();
+                    sampleOutOfStockItem = await itemClient.GetAsync(Int32.Parse(AppSettings.OutOfStockItemId), true, true, true, AssetDetailType.IncludeOnlyDefault);
+
+                    ItemDetailScreen.DataContext = sampleOutOfStockItem.Data.Item;
+                }
+                commonProgressRing.IsActive = false;
+                ItemDetailGrid.Opacity = 100;
+
+                //Check InStock Status of InStockItemId  
+                var isInStock = sampleOutOfStockItem.Data.Item.InStoreMetadata.Any(x => x.Key == "instock" && x.Value == "true");
+                if (!sampleOutOfStockItem.Data.Item.InStoreMetadata.Any() || !isInStock)
+                {
+                    txtInStock.Visibility = Visibility.Collapsed;
+                    btnInStock.Visibility = Visibility.Collapsed;
+                    btnOutOfStock.Visibility = Visibility.Visible;
+                }
+                else if (isInStock)
+                {
+                    txtInStock.Visibility = Visibility.Visible;
+                    btnInStock.Visibility = Visibility.Visible;
+                    btnOutOfStock.Visibility = Visibility.Collapsed;
+                }
+            }
+            catch (Exception ex)
+            {
+                var messageBox = new MessageDialog(ex.Message, "An error occurred");
+                messageBox.Commands.Add(new UICommand("Close", (command) =>
+                {
+                    ItemDetailError_Out.Begin();
+                    commonProgressRing.IsActive = false;
+                    ItemDetailScreen.IsHitTestVisible = false;
+                }));
+                messageBox.ShowAsync();
+            }
+        }
 
         private async void btnOutOfStock_Tapped(object sender, TappedRoutedEventArgs e)
         {
@@ -116,7 +149,7 @@ namespace Inventory_Sample_App
                 using (ClientContext clientContext = new XOMNI.SDK.Public.ClientContext(AppSettings.ApiUsername, AppSettings.ApiUserPass, AppSettings.ApiUri))
                 {
                     // Fetching the In-Store Metadata CompanyWide 
-                    var metadataList = await clientContext.Of<ItemInStoreMetadataClient>().GetAsync(Int32.Parse(AppSettings.ItemId),0,100,keyPrefix: "instock",companyWide: true);
+                    var metadataList = await clientContext.Of<ItemInStoreMetadataClient>().GetAsync(Int32.Parse(AppSettings.OutOfStockItemId),0,100,keyPrefix: "instock",companyWide: true);
                     
                     //Picking "instock" stores only
                     var inStockStoreMetadataList = new List<InStoreMetadata>();
