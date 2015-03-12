@@ -44,6 +44,8 @@ namespace Inventory_Sample_App
             //Check if the app is already setup with required config data.
             if (string.IsNullOrEmpty(AppSettings.ApiUri))
             {
+                BlackScreen.IsHitTestVisible = true;
+                BlackScreen.Opacity = 0.6;
                 AppSettingsFlyout settingsFlyout = new AppSettingsFlyout();
                 settingsFlyout.ShowIndependent();
             }
@@ -54,6 +56,7 @@ namespace Inventory_Sample_App
         private async void Item_Tapped(object sender, TappedRoutedEventArgs e)
         {           
             //Prepare Screen
+            BlackScreen.IsHitTestVisible = true;
             ItemDetail_In.Begin();
             ItemDetailScreen.IsHitTestVisible = true;
 
