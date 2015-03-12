@@ -7,7 +7,8 @@ namespace Inventory_Sample_App
         private const string apiServiceUriConfigKey = "ApiURI";
         private const string apiUserNameConfigKey = "ApiUserName";
         private const string apiUserPassConfigKey = "ApiUserPass";
-        private const string itemIdConfigKey = "ItemId";
+        private const string inStockItemIdConfigKey = "ItemId";
+        private const string outOfStockItemIdConfigKey = "ItemId";
 
         public static string ApiUri
         {
@@ -63,12 +64,12 @@ namespace Inventory_Sample_App
             }
         }
 
-        public static string ItemId
+        public static string InStockItemId
         {
             get
             {
                 string retVal = null;
-                object value = ApplicationData.Current.LocalSettings.Values[itemIdConfigKey];
+                object value = ApplicationData.Current.LocalSettings.Values[inStockItemIdConfigKey];
                 if (value != null)
                 {
                     retVal = value.ToString();
@@ -77,9 +78,26 @@ namespace Inventory_Sample_App
             }
             set
             {
-                ApplicationData.Current.LocalSettings.Values[itemIdConfigKey] = value;
+                ApplicationData.Current.LocalSettings.Values[inStockItemIdConfigKey] = value;
             }
         }
 
+        public static string OutOfStockItemId
+        {
+            get
+            {
+                string retVal = null;
+                object value = ApplicationData.Current.LocalSettings.Values[outOfStockItemIdConfigKey];
+                if (value != null)
+                {
+                    retVal = value.ToString();
+                }
+                return retVal;
+            }
+            set
+            {
+                ApplicationData.Current.LocalSettings.Values[outOfStockItemIdConfigKey] = value;
+            }
+        }
     }
 }

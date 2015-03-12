@@ -61,21 +61,23 @@ namespace Inventory_Sample_App
             ItemDetailScreen.IsHitTestVisible = true;
 
             //Fetch Item Details
-            var sampleItem = new ApiResponse<SingleItemSearchResult<Item>>();
+            var sampleInStockItem = new ApiResponse<SingleItemSearchResult<Item>>();
+            var sampleOutOfStockItem = new ApiResponse<SingleItemSearchResult<Item>>();
             try
             {
                 using (ClientContext clientContext = new XOMNI.SDK.Public.ClientContext(AppSettings.ApiUsername, AppSettings.ApiUserPass, AppSettings.ApiUri))
                 {
                     var itemClient = clientContext.Of<XOMNI.SDK.Public.Clients.Catalog.ItemClient>();
-                    sampleItem = await itemClient.GetAsync(Int32.Parse(AppSettings.ItemId), true, true, true, AssetDetailType.IncludeOnlyDefault);
-                    ItemDetailScreen.DataContext = sampleItem.Data.Item;
+                    sampleInStockItem = await itemClient.GetAsync(Int32.Parse(AppSettings.InStockItemId), true, true, true, AssetDetailType.IncludeOnlyDefault);
+
+                    ItemDetailScreen.DataContext = sampleInStockItem.Data.Item;
                 }
                 commonProgressRing.IsActive = false;
                 ItemDetailGrid.Opacity = 100;
 
-                //Check InStock Status  
-                var isInStock = sampleItem.Data.Item.InStoreMetadata.Any(x => x.Key == "instock" && x.Value == "true");
-                if (!sampleItem.Data.Item.InStoreMetadata.Any() || !isInStock)
+                //Check InStock Status of InStockItemId  
+                var isInStock = sampleInStockItem.Data.Item.InStoreMetadata.Any(x => x.Key == "instock" && x.Value == "true");
+                if (!sampleInStockItem.Data.Item.InStoreMetadata.Any() || !isInStock)
                 {
                     txtInStock.Visibility = Visibility.Collapsed;
                     btnInStock.Visibility = Visibility.Collapsed;

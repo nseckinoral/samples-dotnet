@@ -16,8 +16,10 @@
             <TextBox x:Name="txtApiUserName" TextWrapping="Wrap" Width="250" TextChanged="txtApiUserName_TextChanged"/>
             <TextBlock Style="{StaticResource TitleTextBlockStyle}" Text="API Password" FontFamily="Global User Interface" Margin="0,15,0,10" />
             <PasswordBox x:Name="txtApiUserPass" FontFamily="Global User Interface" Width="250" PasswordChanged="txtApiUserPass_PasswordChanged"/>
-            <TextBlock Style="{StaticResource TitleTextBlockStyle}" Text="Item ID" FontFamily="Global User Interface" Margin="0,15,0,10" />
-            <TextBox x:Name="txtItemId" TextWrapping="Wrap" InputScope="Number" Width="250" TextChanged="txtItemId_TextChanged" KeyDown="txtItemId_KeyDown"/>
+            <TextBlock Style="{StaticResource TitleTextBlockStyle}" Text="In Stock Item ID" FontFamily="Global User Interface" Margin="0,15,0,10" />
+            <TextBox x:Name="txtInStockItemId" TextWrapping="Wrap" InputScope="Number" TextChanged="txtInStockItemId_TextChanged" Width="250" KeyDown="txtItemId_KeyDown"/>
+            <TextBlock Style="{StaticResource TitleTextBlockStyle}" Text="Out of Stock Item ID" FontFamily="Global User Interface" Margin="0,15,0,10" />
+            <TextBox x:Name="txtOutOfStockItemId" TextWrapping="Wrap" InputScope="Number" Width="250" TextChanged="txtOutOfStockItemId_TextChanged" KeyDown="txtItemId_KeyDown"/>
             <Button x:Name="btnSave" Content="Save" Background="#FF464646" Foreground="White" HorizontalAlignment="Right" Margin="0,30,0,0" VerticalAlignment="Center" Padding="15,5" ScrollViewer.VerticalScrollBarVisibility="Disabled" Tapped="btnSave_Tapped"/>
         </StackPanel>
     </StackPanel>

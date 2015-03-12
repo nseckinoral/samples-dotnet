@@ -36,14 +36,15 @@ namespace Inventory_Sample_App
             txtApiEndpoint.Text = AppSettings.ApiUri ?? string.Empty;
             txtApiUserName.Text = AppSettings.ApiUsername ?? string.Empty;
             txtApiUserPass.Password = AppSettings.ApiUserPass ?? string.Empty;
-            txtItemId.Text = AppSettings.ItemId ?? string.Empty;
+            txtInStockItemId.Text = AppSettings.InStockItemId ?? string.Empty;
+            txtOutOfStockItemId.Text = AppSettings.OutOfStockItemId ?? string.Empty;
         }
 
         private async void btnSave_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
         {
 
             //Check if Settings are empty or not
-            if (string.IsNullOrEmpty(txtApiEndpoint.Text) || string.IsNullOrEmpty(txtApiUserName.Text) || string.IsNullOrEmpty(txtApiUserPass.Password) || string.IsNullOrEmpty(txtItemId.Text))
+            if (string.IsNullOrEmpty(txtApiEndpoint.Text) || string.IsNullOrEmpty(txtApiUserName.Text) || string.IsNullOrEmpty(txtApiUserPass.Password) || string.IsNullOrEmpty(txtInStockItemId.Text) || string.IsNullOrEmpty(txtOutOfStockItemId.Text))
             {
 
                 MessageDialog messageBox = new MessageDialog("Settings can't be empty.", "An error occured");
@@ -63,16 +64,19 @@ namespace Inventory_Sample_App
                     //Validate through APIs
                     using(var clientContext = new ClientContext(txtApiUserName.Text,txtApiUserPass.Password,txtApiEndpoint.Text))
                     {
-                        var itemId = Int32.Parse(txtItemId.Text);
+                        var inStockItemId = Int32.Parse(txtInStockItemId.Text);
+                        var outOfStockItemId = Int32.Parse(txtInStockItemId.Text);
                         var itemClient = clientContext.Of<ItemClient>();
-                        var itemValidation = await itemClient.GetAsync(itemId);
+                        var inStockItemValidation = await itemClient.GetAsync(inStockItemId);
+                        var outOfStockItemValidation = await itemClient.GetAsync(outOfStockItemId);
                     }
 
                     //Save
                     AppSettings.ApiUri = txtApiEndpoint.Text;
                     AppSettings.ApiUsername = txtApiUserName.Text;
                     AppSettings.ApiUserPass = txtApiUserPass.Password;
-                    AppSettings.ItemId = txtItemId.Text;
+                    AppSettings.InStockItemId = txtInStockItemId.Text;
+                    AppSettings.OutOfStockItemId = txtOutOfStockItemId.Text;
                     btnSave.IsEnabled = false;
                     EnableScreen();
                 }
@@ -106,7 +110,7 @@ namespace Inventory_Sample_App
 
         private void EnableIfSettingsAreNotEmpty()
         {
-            bool IsSaved= !String.IsNullOrEmpty(AppSettings.ApiUri) || !String.IsNullOrEmpty(AppSettings.ApiUsername) || !String.IsNullOrEmpty(AppSettings.ApiUserPass) || !String.IsNullOrEmpty(AppSettings.ItemId);
+            bool IsSaved= !String.IsNullOrEmpty(AppSettings.ApiUri) || !String.IsNullOrEmpty(AppSettings.ApiUsername) || !String.IsNullOrEmpty(AppSettings.ApiUserPass) || !String.IsNullOrEmpty(AppSettings.InStockItemId) || !String.IsNullOrEmpty(AppSettings.OutOfStockItemId);
             if(IsSaved)
             {
                 EnableScreen();
@@ -163,10 +167,23 @@ namespace Inventory_Sample_App
             }
         }
 
-        private void txtItemId_TextChanged(object sender, TextChangedEventArgs e)
+        private void txtOutOfStockItemId_TextChanged(object sender, TextChangedEventArgs e)
         {
 
-            if (AppSettings.ItemId == txtItemId.Text)
+            if (AppSettings.OutOfStockItemId == txtOutOfStockItemId.Text)
+            {
+                btnSave.IsEnabled = false;
+            }
+            else
+            {
+                btnSave.IsEnabled = true;
+            }
+        }
+
+        private void txtInStockItemId_TextChanged(object sender, TextChangedEventArgs e)
+        {
+
+            if (AppSettings.OutOfStockItemId == txtInStockItemId.Text)
             {
                 btnSave.IsEnabled = false;
             }
@@ -184,6 +201,7 @@ namespace Inventory_Sample_App
                 e.Handled = true;
             }
         }
+
     }
 
 }
