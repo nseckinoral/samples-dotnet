@@ -65,7 +65,7 @@ namespace Inventory_Sample_App
                     using(var clientContext = new ClientContext(txtApiUserName.Text,txtApiUserPass.Password,txtApiEndpoint.Text))
                     {
                         var inStockItemId = Int32.Parse(txtInStockItemId.Text);
-                        var outOfStockItemId = Int32.Parse(txtInStockItemId.Text);
+                        var outOfStockItemId = Int32.Parse(txtOutOfStockItemId.Text);
                         var itemClient = clientContext.Of<ItemClient>();
                         var inStockItemValidation = await itemClient.GetAsync(inStockItemId);
                         var outOfStockItemValidation = await itemClient.GetAsync(outOfStockItemId);
