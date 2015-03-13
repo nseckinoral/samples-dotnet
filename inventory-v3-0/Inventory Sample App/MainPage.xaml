@@ -387,8 +387,6 @@
                             <Border x:Name="Border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Margin="3">
                                 <ContentPresenter x:Name="ContentPresenter" AutomationProperties.AccessibilityView="Raw" ContentTemplate="{TemplateBinding ContentTemplate}" ContentTransitions="{TemplateBinding ContentTransitions}" Content="{TemplateBinding Content}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
                             </Border>
-                            <Rectangle x:Name="FocusVisualWhite" IsHitTestVisible="False" Opacity="0" StrokeDashOffset="1.5" StrokeEndLineCap="Square" Stroke="{ThemeResource FocusVisualWhiteStrokeThemeBrush}" StrokeDashArray="1,1"/>
-                            <Rectangle x:Name="FocusVisualBlack" IsHitTestVisible="False" Opacity="0" StrokeDashOffset="0.5" StrokeEndLineCap="Square" Stroke="{ThemeResource FocusVisualBlackStrokeThemeBrush}" StrokeDashArray="1,1"/>
                         </Grid>
                     </ControlTemplate>
                 </Setter.Value>
@@ -489,7 +487,7 @@
                         	</StackPanel>
                     		<ProgressBar Height="15" Value="{Binding Rating, Converter={StaticResource RatingConverter}}" VerticalAlignment="Stretch" Style="{StaticResource RatingStyle}" Width="71" HorizontalAlignment="Right" SmallChange="1" HorizontalContentAlignment="Right" Margin="0,0,3,0"/>
                     	</Grid>
-                        <Button x:Name="btnOutOfStock" Content="Check Availability" HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="45" Width="160" Background="#FFF26722" Foreground="#E5FFFFFF" BorderBrush="{x:Null}" FontFamily="Fonts/PrentonRPCondLight.otf#Prenton RP" FontSize="16" FontWeight="SemiBold" CharacterSpacing="70" Style="{StaticResource btnOutOfStockStyle}" Tapped="btnOutOfStock_Tapped">
+                        <Button x:Name="btnOutOfStock" Content="Check Availability" HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="45" Width="160" Background="#FFF26722" Foreground="#E5FFFFFF" BorderBrush="{x:Null}" FontFamily="Fonts/BluHead Studio - Prenton RP Cond Light.otf#Prenton RP" FontSize="16" FontWeight="Normal" CharacterSpacing="70" Style="{StaticResource btnOutOfStockStyle}" Tapped="btnOutOfStock_Tapped">
                             <Interactivity:Interaction.Behaviors>
                                 <Core:EventTriggerBehavior EventName="Click">
                                     <Media:ControlStoryboardAction Storyboard="{StaticResource StoreList_In}"/>
