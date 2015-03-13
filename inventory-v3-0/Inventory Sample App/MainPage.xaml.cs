@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading;
+using Windows.Data.Html;
 using Windows.Devices.Geolocation;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
@@ -62,6 +63,7 @@ namespace Inventory_Sample_App
                 {
                     var itemClient = clientContext.Of<XOMNI.SDK.Public.Clients.Catalog.ItemClient>();
                     sampleInStockItem = await itemClient.GetAsync(Int32.Parse(AppSettings.InStockItemId), true, true, true, AssetDetailType.IncludeOnlyDefault);
+                    sampleInStockItem.Data.Item.LongDescription = FixHtmlTags(sampleInStockItem.Data.Item.LongDescription);
 
                     ItemDetailScreen.DataContext = sampleInStockItem.Data.Item;
                 }
@@ -107,6 +109,7 @@ namespace Inventory_Sample_App
                 {
                     var itemClient = clientContext.Of<XOMNI.SDK.Public.Clients.Catalog.ItemClient>();
                     sampleOutOfStockItem = await itemClient.GetAsync(Int32.Parse(AppSettings.OutOfStockItemId), true, true, true, AssetDetailType.IncludeOnlyDefault);
+                    sampleOutOfStockItem.Data.Item.LongDescription = FixHtmlTags(sampleOutOfStockItem.Data.Item.LongDescription);
 
                     ItemDetailScreen.DataContext = sampleOutOfStockItem.Data.Item;
                 }
@@ -141,6 +144,17 @@ namespace Inventory_Sample_App
             }
         }
 
+        //Replaces all double "\r\n"s with a single one and removes the first one in the beginning
+        private string FixHtmlTags(string sourceString)
+        {
+            var rawText = HtmlUtilities.ConvertToText(sourceString);
+            var croppedText = rawText.Replace("\r\n\r\n", "\r\n");           
+            int index = croppedText.IndexOf("\r\n");
+            string cleanPath = (index < 0)
+                ? croppedText
+                : croppedText.Remove(index, "\r\n".Length);
+            return cleanPath;
+        }
         private async void btnOutOfStock_Tapped(object sender, TappedRoutedEventArgs e)
         {
             var storeList = new List<Store>();
