@@ -40,8 +40,9 @@ namespace KioskApp
                 AppSettingsFlyout settingsFlyout = new AppSettingsFlyout();
                 settingsFlyout.ShowIndependent();
             }
-            else
+            if(AppSettings.IsRegistered == "true")
             {
+                EnableMainPage();
                 pollingTimer.Start();
             }
         }
@@ -140,8 +141,7 @@ namespace KioskApp
                 }
                 catch
                 {
-                    MessageDialog dialog = new MessageDialog("An error occurred. Please try again.");
-                    dialog.ShowAsync();
+                    return;
                 }
             }
         }
@@ -183,5 +183,12 @@ namespace KioskApp
                 return await clientContext.Of<QRCodeClient>().GetAsync(8, loginUrl);
             }
         }
+
+        public void EnableMainPage()
+        {
+            this.mainPageDisabled.Opacity = 0;
+            this.mainPageDisabled.IsHitTestVisible = false;
+        }
+
     }
 }
