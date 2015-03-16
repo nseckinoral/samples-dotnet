@@ -494,7 +494,7 @@
                     <Grid x:Name="ContentGrid" HorizontalAlignment="Right" Height="348" VerticalAlignment="Center" Width="414" Margin="0,82,25,187">
                         <TextBlock x:Name="txtTitle" Height="40" Text="{Binding Title}" VerticalAlignment="Top" FontSize="44" Foreground="#FF2982B7" IsHitTestVisible="False" MaxLines="1" IsColorFontEnabled="False" TextTrimming="CharacterEllipsis" FontFamily="Fonts/BluHead Studio - Prenton RP Cond Light.otf#Prenton RP" CharacterSpacing="30"/>
                         <Path x:Name="TopLine" Data="M641,198 L1027.03,198" Fill="#FFB7B7B7" Height="1" Stretch="Fill" UseLayoutRounding="False" VerticalAlignment="Top" Margin="0,50,25,0" Stroke="#FFB7B7B7"/>
-                        <ScrollViewer Height="285" VerticalAlignment="Bottom" Margin="0,0,0,5" HorizontalScrollMode="Disabled" VerticalScrollMode="Auto" ZoomMode="Disabled" VerticalScrollBarVisibility="Auto" UseLayoutRounding="False">
+                        <ScrollViewer x:Name="scrollViewer" Height="285" VerticalAlignment="Bottom" Margin="0,0,0,5" HorizontalScrollMode="Disabled" VerticalScrollMode="Auto" ZoomMode="Disabled" VerticalScrollBarVisibility="Auto" UseLayoutRounding="False">
                             <TextBlock x:Name="txtDescription" TextWrapping="Wrap" Text="{Binding LongDescription}" Foreground="#FF2982B7" FontSize="21.333" TextAlignment="Justify" FontFamily="Fonts/BluHead Studio - Prenton RP Cond Light.otf#Prenton RP" HorizontalAlignment="Center" Width="386" Margin="0,0,20,0"/>
                         </ScrollViewer>
                         <Path x:Name="BottomLine" Data="M641,198 L1027.03,198" Fill="#FFB7B7B7" Height="1" Stretch="Fill" UseLayoutRounding="False" VerticalAlignment="Bottom" Stroke="#FFB7B7B7" Margin="0,0,24,0"/>
