@@ -18,6 +18,15 @@ The code repository for the .NET SDK used in this article can be found [here](ht
 Feel free to jump into our developer portal to look for more APIs and related documentation. 
 
 [Developer Portal: Public APIs for v3.0](http://dev.xomni.com/v3-0/http-api/public-apis)
+# What is "In-Store Metadata?" #
+In-Store Metadata is a **store based** metadata that may be used to store contextual and optional data about an item.
+
+In "**Inventory Sample App**", it is used in 2 different ways:
+
+- Fetch a single item, check if it's available to buy.
+- If it's not available, see other stores the product can be bought from.
+
+To see other stores available, first we fetched In-Store metadata of the item across multiple stores. Then we fetched nearby stores. After all, we took the matching Store IDs and presented them in a map control.
 
 #Flow Diagram#
 ![](https://github.com/nseckinoral/samples-dotnet/blob/dev/inventory-v3-0/InventorySampleAppFlowDiagram.PNG?raw=true)
@@ -26,11 +35,13 @@ Feel free to jump into our developer portal to look for more APIs and related do
 
 ## Create a New Client Context ##
 
-First step is to create a clientcontext instance with valid credentials and a valid tenant URL, if you're using our **Public APIs**.
+First step is to create a clientcontext instance with valid credentials and a valid tenant URL.
 
 		ClientContext sampleClientContext = new ClientContext("UserName","Password","Service URL");
 ## Fetch a Single Item ##
 Fetching a single item is fairly easy. All you need to do is to use the **GetAsync** method of **ItemClient**.
+
+**Note:** If you're going to fetch a single item to see InStore Metadata of an item for **your store**, make sure the Store ID associated with your **license** is defined in the InStore Metadata.
 
 **Usage:**
 
@@ -39,6 +50,7 @@ Fetching a single item is fairly easy. All you need to do is to use the **GetAsy
 	        var itemClient = new clientContext.Of<ItemClient>();
             var sampleItem = await itemClient.GetAsync(ItemId, includeItemInStoreMetadata :true, imageAssetDetail: AssetDetailType.IncludeOnlyDefault);
 	    }
+
 
 Make sure you set "**includeItemInStoreMetadata**" paramater to **true** as we're going to use InStoreMetadata of the item to see stock details.
 
@@ -52,8 +64,18 @@ Make sure you set "**includeItemInStoreMetadata**" paramater to **true** as we'r
 
 After fetching the Item you desire, you can simply use the **InStoreMetadata** of the item to see if the product is **in stock**. 
 
+**Example Response:**
+	
+
+
+	"InStoreMetadata":[
+				{
+					"Key":"instock",
+					"Value":"false"
+				}],
+
 ## Fetching the In-Store Metadata Across Multiple Stores ##
-If you need the **In-Store Metadata** of an item **for all stores**, you need to use the **GetAsync** method of **ItemInStoreMetadataClient**
+If you need the **In-Store Metadata** of an item **for all stores**, you need to use the **GetAsync** method of **ItemInStoreMetadataClient**.
 
 **Usage:**
 
@@ -68,7 +90,32 @@ Fetching in-store metadata has two different ways. You can use a **key-value** p
 		companyWide: true);
     }
 
-If your search includes a **key-value** pair (e.g. key= "instock" value= "true"), you will only get **exact matching results**. (Only the items in stock in this case.)
+If your search includes a **key-value** pair (e.g. key= "instock" value= "true"), you will only get **exact matching results**.
+
+**Example Response:**
+
+	{
+		"Data":[
+			{
+				"StoreId":1,
+				"Key":"instock",
+				"Value":"true"
+			},
+			{
+				"StoreId":2,
+				"Key":"instock",
+				"Value":"true"
+			},
+			{
+				"StoreId":3,
+				"Key":"instock",
+				"Value":"true"
+			}
+		]
+	}
+
+----------
+
 
 **Using KeyPrefix:**
 
@@ -79,4 +126,48 @@ If your search includes a **key-value** pair (e.g. key= "instock" value= "true")
 		companyWide: true);
     }
 
-However, if you search with a **keyprefix** (e.g. keyprefix= **"instock"**), you can fetch **more than one key** including your keyprefix. (e.g. Results: key= "instock" value= "true", key= "instock_quantity" value="100" etc.)
+However, if you search with a **keyprefix** (e.g. keyprefix= **"instock"**), you can fetch **more than one key** including your keyprefix.
+
+
+**Example Response:**
+
+	{
+		"Data":[
+			{
+				"StoreId":1,
+				"Key":"instock",
+				"Value":"true"
+			},
+			{
+				"StoreId":1,
+				"Key":"instock_quantity",
+				"Value":"25"
+			},
+			{
+				"StoreId":2,
+				"Key":"instock",
+				"Value":"true"
+			},
+			{
+				"StoreId":3,
+				"Key":"instock",
+				"Value":"true"
+			},
+			{
+				"StoreId":4,
+				"Key":"instock",
+				"Value":"false"
+			},
+			
+			{	
+				"StoreId":2,
+				"Key":"instock_quantity",
+				"Value":"25"
+			},
+			{
+				"StoreId":3,
+				"Key":"instock_quantity",
+				"Value":"40"
+			}
+		]
+	}
