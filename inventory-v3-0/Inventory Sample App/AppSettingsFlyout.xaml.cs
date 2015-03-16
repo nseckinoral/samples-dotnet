@@ -42,7 +42,7 @@ namespace Inventory_Sample_App
 
         private async void btnSave_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
         {
-
+            AppSettingsFlyout settingsFlyOut = new AppSettingsFlyout();
             //Check if Settings are empty or not
             if (string.IsNullOrEmpty(txtApiEndpoint.Text) || string.IsNullOrEmpty(txtApiUserName.Text) || string.IsNullOrEmpty(txtApiUserPass.Password) || string.IsNullOrEmpty(txtInStockItemId.Text) || string.IsNullOrEmpty(txtOutOfStockItemId.Text))
             {
@@ -50,7 +50,6 @@ namespace Inventory_Sample_App
                 MessageDialog messageBox = new MessageDialog("Settings can't be empty.", "An error occured");
                 messageBox.Commands.Add(new UICommand("Close", (command) =>
                 {
-                    AppSettingsFlyout settingsFlyOut = new AppSettingsFlyout();
                     settingsFlyOut.Show();
                 }));
                 await messageBox.ShowAsync();
@@ -87,9 +86,7 @@ namespace Inventory_Sample_App
                     {
                         mainPage.commonProgressRing.IsActive = false;
                         EnableIfSettingsAreNotEmpty();
-                        AppSettingsFlyout settingsFlyOut = new AppSettingsFlyout();
                         settingsFlyOut.Show();
-
                     }));
                     messageBox.ShowAsync();
                 }
@@ -100,7 +97,6 @@ namespace Inventory_Sample_App
                     {
                         mainPage.commonProgressRing.IsActive = false;
                         EnableIfSettingsAreNotEmpty();
-                        AppSettingsFlyout settingsFlyOut = new AppSettingsFlyout();
                         settingsFlyOut.Show();
                     }));
                     messageBox.ShowAsync();
