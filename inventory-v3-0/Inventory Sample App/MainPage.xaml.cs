@@ -45,8 +45,8 @@ namespace Inventory_Sample_App
             //Check if the app is already setup with required config data.
             if (string.IsNullOrEmpty(AppSettings.ApiUri))
             {
-                BlackScreen.IsHitTestVisible = true;
-                BlackScreen.Opacity = 0.6;
+                DisablingBlackScreen.IsHitTestVisible = true;
+                DisablingBlackScreen.Opacity = 0.6;
                 AppSettingsFlyout settingsFlyout = new AppSettingsFlyout();
                 settingsFlyout.ShowIndependent();
             }

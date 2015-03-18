@@ -115,14 +115,14 @@ namespace Inventory_Sample_App
 
         private void EnableScreen()
         {
-            mainPage.BlackScreen.Opacity = 0;
-            mainPage.BlackScreen.IsHitTestVisible = false;
+            mainPage.DisablingBlackScreen.Opacity = 0;
+            mainPage.DisablingBlackScreen.IsHitTestVisible = false;
             mainPage.commonProgressRing.IsActive = false;
         }
         private void DisableScreen()
         {
-            mainPage.BlackScreen.Opacity = 0.6;
-            mainPage.BlackScreen.IsHitTestVisible = true;
+            mainPage.DisablingBlackScreen.Opacity = 0.6;
+            mainPage.DisablingBlackScreen.IsHitTestVisible = true;
             mainPage.commonProgressRing.IsActive = true;
         }
 

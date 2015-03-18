@@ -571,6 +571,7 @@
                         </StackPanel>
                     </StackPanel>
                 </Grid>
+                <Rectangle x:Name="DisablingBlackScreen" x:FieldModifier="Public"  Fill="Black" Stroke="Black" StrokeThickness="0" Opacity="0" IsHitTestVisible="False"/>
                 <ProgressRing x:Name="commonProgressRing" x:FieldModifier="Public" Width="40" Height="40" HorizontalAlignment="Center" VerticalAlignment="Center" IsActive="False" Foreground="#FF97C93D"/>
             </Grid>
         </Grid>
