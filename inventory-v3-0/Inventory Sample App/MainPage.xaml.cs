@@ -133,7 +133,7 @@ namespace Inventory_Sample_App
                 using (ClientContext clientContext = new XOMNI.SDK.Public.ClientContext(AppSettings.ApiUsername, AppSettings.ApiUserPass, AppSettings.ApiUri))
                 {
                     // Fetching the In-Store Metadata CompanyWide 
-                    var metadataList = await clientContext.Of<ItemInStoreMetadataClient>().GetAsync(AppSettings.ItemIds[1],0,100,keyPrefix: "instock",companyWide: true);
+                    var metadataList = await clientContext.Of<ItemInStoreMetadataClient>().GetAsync(tappedItemId,0,100,keyPrefix: "instock",companyWide: true);
                     
                     //Picking "instock" stores only
                     var inStockStoreMetadataList = new List<InStoreMetadata>();
