@@ -163,6 +163,7 @@ namespace Inventory_Sample_App
         }
         private async void btnOutOfStock_Tapped(object sender, TappedRoutedEventArgs e)
         {
+            Map.Children.Clear();
             var storeList = new List<Store>();
             try
             {
