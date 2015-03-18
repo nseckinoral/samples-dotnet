@@ -62,11 +62,11 @@ namespace Inventory_Sample_App
             var tappedGrid = sender as Grid;
             if(tappedGrid == InStockItem)
             {
-                tappedItemId = Int32.Parse(AppSettings.InStockItemId);
+                tappedItemId = AppSettings.ItemIds[0];
             }
             else
             {
-                tappedItemId = Int32.Parse(AppSettings.OutOfStockItemId);
+                tappedItemId = AppSettings.ItemIds[1];
             }
 
             //Fetch Item Details
@@ -133,7 +133,7 @@ namespace Inventory_Sample_App
                 using (ClientContext clientContext = new XOMNI.SDK.Public.ClientContext(AppSettings.ApiUsername, AppSettings.ApiUserPass, AppSettings.ApiUri))
                 {
                     // Fetching the In-Store Metadata CompanyWide 
-                    var metadataList = await clientContext.Of<ItemInStoreMetadataClient>().GetAsync(Int32.Parse(AppSettings.OutOfStockItemId),0,100,keyPrefix: "instock",companyWide: true);
+                    var metadataList = await clientContext.Of<ItemInStoreMetadataClient>().GetAsync(AppSettings.ItemIds[1],0,100,keyPrefix: "instock",companyWide: true);
                     
                     //Picking "instock" stores only
                     var inStockStoreMetadataList = new List<InStoreMetadata>();
