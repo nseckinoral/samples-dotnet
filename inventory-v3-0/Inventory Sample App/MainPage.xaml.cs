@@ -60,7 +60,7 @@ namespace Inventory_Sample_App
             //Check Item
             var sampleItem = new ApiResponse<SingleItemSearchResult<Item>>();
             var tappedGrid = sender as Grid;
-            if(tappedGrid == InStockItem)
+            if(tappedGrid == FirstItem)
             {
                 tappedItemId = AppSettings.ItemIds[0];
             }
