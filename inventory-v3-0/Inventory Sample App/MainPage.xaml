@@ -513,6 +513,7 @@
                             <Interactivity:Interaction.Behaviors>
                                 <Core:EventTriggerBehavior EventName="Click">
                                     <Media:ControlStoryboardAction Storyboard="{StaticResource StoreList_In}"/>
+                                    <Core:ChangePropertyAction TargetObject="{Binding ElementName=StoreListContentGrid}" PropertyName="IsHitTestVisible" Value="false" />
                                 </Core:EventTriggerBehavior>
                             </Interactivity:Interaction.Behaviors>
                         </Button>

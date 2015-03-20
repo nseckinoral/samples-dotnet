@@ -186,6 +186,7 @@ namespace Inventory_Sample_App
                 StoreList.ItemsSource = storeList;
                 commonProgressRing.IsActive = false;
                 StoreListContentGrid.Opacity = 100;
+                StoreListContentGrid.IsHitTestVisible = true;
             }
             catch (Exception ex)
             {
