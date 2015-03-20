@@ -115,7 +115,7 @@
                     <ControlTemplate TargetType="ProgressBar">
                         <Grid>
                             <Border x:Name="DeterminateRoot" Background="{TemplateBinding Background}">
-                                <Rectangle x:Name="ProgressBarIndicator" StrokeThickness="0" Height="23" HorizontalAlignment="Left" Margin="1,0" Fill="#FFB7B7B7"/>
+                                <Rectangle x:Name="ProgressBarIndicator" StrokeThickness="0" Height="23" HorizontalAlignment="Left" Margin="1,1" Fill="#FFB7B7B7"/>
                             </Border>
                             <Grid Margin="0">
                                 <Image Margin="0" Source="Assets/stars.png" Stretch="Fill"/>
