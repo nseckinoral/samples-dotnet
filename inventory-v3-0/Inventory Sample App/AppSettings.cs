@@ -1,15 +1,13 @@
 ﻿using Windows.Storage;
 
-namespace KioskApp
+namespace Inventory_Sample_App
 {
     public static class AppSettings
     {
         private const string apiServiceUriConfigKey = "ApiURI";
         private const string apiUserNameConfigKey = "ApiUserName";
         private const string apiUserPassConfigKey = "ApiUserPass";
-        private const string loginUrlConfigKey = "LoginURL";
-        private const string deviceIdConfigKey = "DeviceId";
-        private const string isRegisteredConfigKey = "false";
+        private const string itemIdConfigKey = "ItemId";
 
         public static string ApiUri
         {
@@ -65,12 +63,12 @@ namespace KioskApp
             }
         }
 
-        public static string LoginUrl
+        public static string ItemId
         {
             get
             {
                 string retVal = null;
-                object value = ApplicationData.Current.LocalSettings.Values[loginUrlConfigKey];
+                object value = ApplicationData.Current.LocalSettings.Values[itemIdConfigKey];
                 if (value != null)
                 {
                     retVal = value.ToString();
@@ -79,45 +77,9 @@ namespace KioskApp
             }
             set
             {
-                ApplicationData.Current.LocalSettings.Values[loginUrlConfigKey] = value;
+                ApplicationData.Current.LocalSettings.Values[itemIdConfigKey] = value;
             }
         }
 
-        public static string DeviceId
-        {
-            get
-            {
-                string retVal = null;
-                object value = ApplicationData.Current.LocalSettings.Values[deviceIdConfigKey];
-                if (value != null)
-                {
-                    retVal = value.ToString();
-                }
-                return retVal;
-            }
-            set
-            {
-                ApplicationData.Current.LocalSettings.Values[deviceIdConfigKey] = value;
-            }
-        }
-
-        public static string IsRegistered
-        {
-            get
-            {
-                string retVal = null;
-                object value = ApplicationData.Current.LocalSettings.Values[isRegisteredConfigKey];
-                if (value != null)
-                {
-                    retVal = value.ToString();
-                }
-                return retVal;
-            }
-            set
-            {
-                ApplicationData.Current.LocalSettings.Values[isRegisteredConfigKey] = value;
-            }
-        }
     }
 }
-
