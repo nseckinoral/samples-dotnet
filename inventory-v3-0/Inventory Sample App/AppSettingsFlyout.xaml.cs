@@ -60,7 +60,7 @@ namespace Inventory_Sample_App
                 //Parse Item Ids
                 var stringItemIds = txtItemId.Text.Split(',');
                 //Check if Item Ids are in a correct format
-                if (stringItemIds.Count() != 2 || stringItemIds[0] == stringItemIds[1])
+                if (stringItemIds.Count() != 2 || stringItemIds[0] == stringItemIds[1] || stringItemIds.Contains(string.Empty))
                 {
                     MessageDialog messageBox = new MessageDialog("Item Ids are not in the correct format. Please make sure they're seperated with a comma (,) and there're only 2 Ids. Item Ids cannot be identical.", "An error occured");
                     messageBox.Commands.Add(new UICommand("Close", (command) =>
@@ -71,11 +71,12 @@ namespace Inventory_Sample_App
                 }
                 else 
                 {
-                    //Store Item Ids in a list of int
-                    var parsedItemIds = stringItemIds.Select(int.Parse).ToList();
+
                     try
                     {
                         DisableScreen();
+                        //Store Item Ids in a list of int
+                        var parsedItemIds = stringItemIds.Select(int.Parse).ToList();
                         //Validate through APIs
                         using (var clientContext = new ClientContext(txtApiUserName.Text, txtApiUserPass.Password, txtApiEndpoint.Text))
                         {
