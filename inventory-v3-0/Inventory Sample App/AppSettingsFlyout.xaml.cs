@@ -112,6 +112,15 @@ namespace Inventory_Sample_App
                 btnSave.IsEnabled = true;
             }
         }
+
+        private void txtItemId_KeyDown(object sender, KeyRoutedEventArgs e)
+        {
+            if ((e.Key < VirtualKey.Number0) || (e.Key > VirtualKey.Number9))
+            {
+                // If it's not a numeric character, prevent the TextBox from handling the keystroke
+                e.Handled = true;
+            }
+        }
     }
 
 }
