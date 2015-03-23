@@ -104,19 +104,34 @@ namespace Inventory_Sample_App
 
         private async void btnOutOfStock_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            var storeList = new ApiResponse<PaginatedContainer<Store>>();
+            var storeList = new List<Store>();
             try
             {
                 using (ClientContext clientContext = new XOMNI.SDK.Public.ClientContext(AppSettings.ApiUsername, AppSettings.ApiUserPass, AppSettings.ApiUri))
                 {
                     // Fetching the In-Store Metadata CompanyWide 
-                    //var metadataList = await clientContext.Of<ItemInStoreMetadataClient>().GetAsync(Int32.Parse(AppSettings.ItemId), 0, 100, "instock", "true", null, true);
+                    var metadataList = await clientContext.Of<ItemInStoreMetadataClient>().GetAsync(Int32.Parse(AppSettings.ItemId),0,100,keyPrefix: "instock",companyWide: true);
                     
+                    //Picking "instock" stores only
+                    var inStockStoreMetadataList = new List<InStoreMetadata>();
+                    inStockStoreMetadataList = metadataList.Data.Where(x => x.Key == "instock" && x.Value == "true").ToList();
+
                     //Searching Stores With GPS Location
-                    storeList = await clientContext.Of<StoreClient>().GetAsync(new XOMNI.SDK.Public.Models.Location() { Longitude = -75.952134, Latitude = 40.801112}, 1, 0, 10);
-                    storeList.Data.Results.RemoveAt(3);
-                    StoreList.ItemsSource = storeList.Data.Results;
+                    var nearStoreList = await clientContext.Of<StoreClient>().GetAsync(new XOMNI.SDK.Public.Models.Location() { Longitude = -75.952134, Latitude = 40.801112}, 1, 0, 10);
+
+                    //Matching Store Ids of InStock items
+                    foreach (var firstData in inStockStoreMetadataList)
+                    {
+                        foreach (var secondData in nearStoreList.Data.Results)
+                        {
+                            if (firstData.StoreId == secondData.Id)
+                            {
+                                storeList.Add(secondData);
+                            }
+                        }
+                    }
                 }
+                StoreList.ItemsSource = storeList;
                 commonProgressRing.IsActive = false;
                 StoreListContentGrid.Opacity = 100;
             }
@@ -138,11 +153,11 @@ namespace Inventory_Sample_App
             //Preparing pushpins for stores
             try
             {
-                for (int i = 0; i < storeList.Data.TotalCount - 1; i++)
+                for (int i = 0; i < storeList.Count; i++)
                 {
                     var pin = new Pushpin();
                     pin.Text = (i + 1).ToString();
-                    MapLayer.SetPosition(pin, new Bing.Maps.Location((double)storeList.Data.Results[i].Location.Latitude, (double)storeList.Data.Results[i].Location.Longitude));
+                    MapLayer.SetPosition(pin, new Bing.Maps.Location((double)storeList[i].Location.Latitude, (double)storeList[i].Location.Longitude));
                     Map.Children.Add(pin);
                 }
             }
