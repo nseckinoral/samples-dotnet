@@ -8,6 +8,7 @@ using System.Threading;
 using Windows.Devices.Geolocation;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -149,6 +150,10 @@ namespace Inventory_Sample_App
             //Preparing the map for fake location
             Bing.Maps.Location myFakeLocation = new Bing.Maps.Location(40.801112, -75.952134);
             Map.SetView(myFakeLocation, 14.0f);
+            var myPin = new Pushpin();
+            myPin.Background = new SolidColorBrush(Colors.Red);
+            MapLayer.SetPosition(myPin, myFakeLocation);
+            Map.Children.Add(myPin);
 
             //Preparing pushpins for stores
             try
