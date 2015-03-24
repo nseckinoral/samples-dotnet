@@ -10,6 +10,8 @@ In "**Inventory Sample App**", it is used in 2 different ways:
 - **Fetch a single item**, check if it's available to buy.
 - If it's not available, see other stores the product can be bought from by **fetching the in-store metadata across multiple stores**.
 
+After fetching the in-store metadata across multiple stores, we represented them in a map that is provided by Bing Maps. You can find the reference link at the bottom.
+
 Two different instore metadata has been created for sample items in this project. One of them was for showing the **item availability**, another one was for showing the **quantity**.
 
 **Example Response:**
@@ -235,3 +237,10 @@ The code repository for the .NET SDK used in this article can be found [here](ht
 Feel free to jump into our developer portal to look for more APIs and related documentation. 
 
 [Developer Portal: Public APIs for v3](http://dev.xomni.com/v3-0/http-api/public-apis)
+
+#Bing Maps SDK for Windows 8.1 Apps#
+
+This SDK includes controls for apps built using JavaScript, as well as apps built using C#, C++, and Visual Basic, and requires a Bing Maps Key for a Windows Store app.
+
+[Reference Link]( https://visualstudiogallery.msdn.microsoft.com/224eb93a-ebc4-46ba-9be7-90ee777ad9e1)
+
