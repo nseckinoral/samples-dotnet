@@ -136,7 +136,7 @@ namespace KioskApp
                             string omniTicket = latestOmniTicket.OmniTicket.Substring(1, latestOmniTicket.OmniTicket.Length - 1);
 
                             var omniTicketClient = clientContext.Of<OmniTicketClient>();
-                            omniSession = await omniTicketClient.PostSessionAsync(new OmniTicket { Ticket = Guid.Parse(omniTicket) });
+                            omniSession = await omniTicketClient.PostSessionAsync(new OmniTicket { Ticket = omniTicket });
                         }
                     }
                 }
