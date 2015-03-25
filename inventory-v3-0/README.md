@@ -1,18 +1,18 @@
 # Introduction #
-This is a sample project showcasing how you can use [InStoreMetadata APIs](http://dev.xomni.com/v3-0/http-api/public-apis/catalog/item-in-store-metadata) to see stock details of products for a spesific store or look-up across multiple stores for availability. Even though in this document we are only going to discuss inventory aspect of our APIs, InStoreMetadata APIs are designed in a generic way to give you flexibility implementing different scenarios where you might need store specific contextual data.
+This is a sample project showcasing how you can use [InStoreMetadata APIs](http://dev.xomni.com/v3-0/http-api/public-apis/catalog/item-in-store-metadata) to enable inventory related scenarios in the retail industry. In our sample implementation you can run queries for a specific stores or look-up across multiple stores for product availability. Keep in mind that in this document we are only going to discuss inventory aspect of our APIs, InStoreMetadata APIs are designed in a generic way to give you the flexibility you need to implement different scenarios where you might need store specific contextual data.
 
 # What is "In-Store Metadata?" #
-In-Store Metadata is a **store based** metadata that may be used to store contextual and optional data about an item.
+In-Store Metadata is a **store based** metadata that may be used to store contextual and optional data about an item for a particular store.
 
-# How to Support Inventory With In-Store Metadata#
-In "**Inventory Sample App**", it is used in 2 different ways:
+# How to Support Inventory With In-Store Metadata APIs?#
+In our "**Inventory Sample App**", the APIs are used in two different ways:
 
-- **Fetch a single item**, check if it's available to buy.
-- If it's not available, see other stores the product can be bought from by **fetching the in-store metadata across multiple stores**.
+- **Fetch a single item** and check if it's available for purchase within the current store.
+- If it's not available in the current store, see other stores where the product can be bought from by **fetching the in-store metadata across multiple stores**.
 
-After fetching the in-store metadata across multiple stores, we represented them in a map that is provided by Bing Maps. You can find the reference link at the bottom.
+After fetching the in-store metadata across multiple stores, we represent them in a simple map. We have used Bing Maps for the client implementation. You can find the reference link at the bottom for more information about the client control.
 
-Two different instore metadata has been created for sample items in this project. One of them was for showing the **item availability**, another one was for showing the **quantity**.
+Two different instore metadata have been created for the sample items in this project. One of them is to show the **item availability**, the other one is to show the **stock quantity**.
 
 **Example Response:**
 
@@ -42,9 +42,9 @@ Two different instore metadata has been created for sample items in this project
 	}
 
 
-If you **fetch a single item** to view its in-store metadata, you can do it only for the **current store** (which is associated with your license). If you want to view it across **multiple stores**, you should do a **company wide** search instead.
+If you **fetch a single item** to view its in-store metadata, you can do it only for the **current store** (which is associated with your license). If you want to query availability across **multiple stores**, you need to execute a **company wide** search instead.
 
-XOMNI InStoreMetadata APIs provide **two options** for a **company wide** search. You can either use a "**key-value**" pair to fetch **exact information** you need or you can use a "**keyprefix**". 
+XOMNI InStoreMetadata APIs provide **two options** for a **company wide** search. You can either use a "**key-value**" pair to fetch **exact information** you need or you can use a "**keyprefix**" to get multiple key/value pairs related to a particular store. 
 
 While "**key-value**" pair is a **clean** way of searching, "**keyprefix**" is a more **flexible** way as you can fetch multiple metadata matching your magic word.
 
@@ -55,12 +55,12 @@ All steps are explained in detail below.
 
 #How To#
 
-## Fetch a Single Item ##
+## Fetch a Single Item? ##
 
 Fetching a single item is fairly easy. All you need to do is to use the **GetAsync** method of **ItemClient**. As always, you need to create a 
 **clientcontext** instance with **valid credentials** and a **valid tenant URL** first.
 
-**Note:** If you're going to fetch a single item to see InStore Metadata of an item for **your store**, make sure the Store ID associated with your **license** is defined in the InStore Metadata.
+**Note:** If you're going to fetch a single item to see InStore Metadata of an item for the **current store**, make sure the Store ID associated with your **license** is defined in the InStore Metadata. **TODO:I DONT UNDERSTAND THIS**
 
 **Usage:**
 
@@ -72,7 +72,7 @@ Fetching a single item is fairly easy. All you need to do is to use the **GetAsy
 	    }
 
 
-Make sure you set "**includeItemInStoreMetadata**" paramater to **true** as we're going to use InStoreMetadata of the item to see stock details.
+Make sure you set "**includeItemInStoreMetadata**" paramater to **true** as we need to accesse InStoreMetadata of the item to see stock details.
 
 **Possible Enumarable Values for AssetDetailTypes:**
 
@@ -82,7 +82,7 @@ Make sure you set "**includeItemInStoreMetadata**" paramater to **true** as we'r
  - **4** : Includes all image assets
  - **8** : Includes all image assets with metadata
 
-After fetching the Item you desire, you can simply use the **InStoreMetadata** of the item to see if the product is **in stock**. 
+After fetching the Item you need, you can simply use the **InStoreMetadata** of the item to see if the product is **in stock**. 
 
 **Example Response:**
 	
@@ -97,13 +97,13 @@ After fetching the Item you desire, you can simply use the **InStoreMetadata** o
 ## Fetching the In-Store Metadata Across Multiple Stores ##
 If you need the **In-Store Metadata** of an item **for all stores**, you need to use the **GetAsync** method of **ItemInStoreMetadataClient**. 
 
-If you provide a location, In-Store Metadata search query will be executed on stores nearby to given location. When you execute a location based search,you must set companyWide parameter to true.
+If you provide a location, In-Store Metadata search query will be executed on stores nearby to the given location. When you execute a location based search, you must set **companyWide** parameter to **true**.
 
-**Note:** Search distance is Maximum search distance in miles for given search location.
+**Note:** Search distance is the maximum search distance in miles for a given search location.
 
 **Usage:**
 
-Fetching in-store metadata has two different ways. You can use a **key-value** pair or a **keyprefix**.
+Fetching in-store metadata is possible through two different ways. You can use a **key-value** pair or a **keyprefix**.
 
 **Using Key-Value Pair:**
 
