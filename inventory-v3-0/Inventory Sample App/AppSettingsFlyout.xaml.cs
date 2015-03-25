@@ -23,6 +23,8 @@ namespace Inventory_Sample_App
 {
     public sealed partial class AppSettingsFlyout : SettingsFlyout
     {
+        static Frame  frame = (Frame)Window.Current.Content;
+        static MainPage mainPage = (MainPage)frame.Content;
         public AppSettingsFlyout()
         {
             this.InitializeComponent();
@@ -57,6 +59,7 @@ namespace Inventory_Sample_App
             {
                 try
                 {
+                    DisableScreen();
                     //Validate through APIs
                     using(var clientContext = new ClientContext(txtApiUserName.Text,txtApiUserPass.Password,txtApiEndpoint.Text))
                     {
@@ -71,28 +74,56 @@ namespace Inventory_Sample_App
                     AppSettings.ApiUserPass = txtApiUserPass.Password;
                     AppSettings.ItemId = txtItemId.Text;
                     btnSave.IsEnabled = false;
+                    EnableScreen();
                 }
                 catch(XOMNI.SDK.Public.Exceptions.XOMNIPublicAPIException ex)
                 {
                     var messageBox = new MessageDialog("Make sure your settings are valid.", "Validation failed");
                     messageBox.Commands.Add(new UICommand("Close", (command) =>
                     {
+                        mainPage.commonProgressRing.IsActive = false;
+                        EnableIfSettingsAreNotEmpty();
                         AppSettingsFlyout settingsFlyOut = new AppSettingsFlyout();
                         settingsFlyOut.Show();
+
                     }));
-                    messageBox.ShowAsync();                  
+                    messageBox.ShowAsync();
                 }
                 catch (Exception ex)
                 {
                     var messageBox = new MessageDialog(ex.Message, "An error occurred");
                     messageBox.Commands.Add(new UICommand("Close", (command) =>
                     {
+                        mainPage.commonProgressRing.IsActive = false;
+                        EnableIfSettingsAreNotEmpty();
                         AppSettingsFlyout settingsFlyOut = new AppSettingsFlyout();
                         settingsFlyOut.Show();
                     }));
                     messageBox.ShowAsync();
                 }
             }
+        }
+
+        private void EnableIfSettingsAreNotEmpty()
+        {
+            bool IsSaved= !String.IsNullOrEmpty(AppSettings.ApiUri) || !String.IsNullOrEmpty(AppSettings.ApiUsername) || !String.IsNullOrEmpty(AppSettings.ApiUserPass) || !String.IsNullOrEmpty(AppSettings.ItemId);
+            if(IsSaved)
+            {
+                EnableScreen();
+            }
+        }
+
+        private void EnableScreen()
+        {
+            mainPage.BlackScreen.Opacity = 0;
+            mainPage.BlackScreen.IsHitTestVisible = false;
+            mainPage.commonProgressRing.IsActive = false;
+        }
+        private void DisableScreen()
+        {
+            mainPage.BlackScreen.Opacity = 0.6;
+            mainPage.BlackScreen.IsHitTestVisible = true;
+            mainPage.commonProgressRing.IsActive = true;
         }
 
         private void txtApiEndpoint_TextChanged(object sender, TextChangedEventArgs e)
