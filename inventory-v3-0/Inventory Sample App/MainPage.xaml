@@ -453,8 +453,8 @@
             </Grid.Background>
             <Image Source="Assets/InventorySampleAppItems.png" Stretch="Fill" Tapped="Item_Tapped" />
             <Button x:Name="btnLogin" Content="Login" HorizontalAlignment="Right" Height="43" Margin="0,20,30,0" VerticalAlignment="Top" Width="110" Background="White" Foreground="#FF2982B7" FontFamily="Fonts/BluHead Studio - Prenton RP Cond.otf#Prenton RP" CharacterSpacing="100" FontSize="18" BorderThickness="0" Style="{StaticResource CommonButtonStyle}" FontWeight="Normal" />
+            <Rectangle x:Name="BlackScreen" x:FieldModifier="Public"  Fill="Black" Stroke="Black" StrokeThickness="0" Opacity="0" IsHitTestVisible="False"/>
             <Grid x:Name="ItemDetailScreen" IsHitTestVisible="False">
-                <Rectangle x:Name="BlackScreen" Fill="Black" Stroke="Black" StrokeThickness="0" Opacity="0"/>
                 <Rectangle x:Name="ItemDetailWhiteBackground" Fill="White" HorizontalAlignment="Center" Height="617" Stroke="Black" VerticalAlignment="Center" Width="793" Margin="286,75" StrokeThickness="0" RenderTransformOrigin="0.5,0.5" Opacity="0">
                     <Rectangle.RenderTransform>
                         <CompositeTransform/>
@@ -502,6 +502,7 @@
                             <Core:EventTriggerBehavior EventName="Click">
                                 <Media:ControlStoryboardAction Storyboard="{StaticResource ItemDetail_Out}"/>
                                 <Core:ChangePropertyAction TargetObject="{Binding ElementName=ItemDetailScreen}" PropertyName="IsHitTestVisible" Value="false" />
+                                <Core:ChangePropertyAction TargetObject="{Binding ElementName=BlackScreen}" PropertyName="IsHitTestVisible" Value="false" />
                             </Core:EventTriggerBehavior>
                         </Interactivity:Interaction.Behaviors>
                     </Button>
@@ -546,7 +547,7 @@
                         </StackPanel>
                     </StackPanel>
                 </Grid>
-                <ProgressRing x:Name="commonProgressRing" Width="40" Height="40" HorizontalAlignment="Center" VerticalAlignment="Center" IsActive="False" Foreground="#FF97C93D"/>
+                <ProgressRing x:Name="commonProgressRing" x:FieldModifier="Public" Width="40" Height="40" HorizontalAlignment="Center" VerticalAlignment="Center" IsActive="False" Foreground="#FF97C93D"/>
             </Grid>
         </Grid>
     </Viewbox>
