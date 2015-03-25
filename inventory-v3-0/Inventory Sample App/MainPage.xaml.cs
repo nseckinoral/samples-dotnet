@@ -53,7 +53,10 @@ namespace Inventory_Sample_App
         }
 
         private async void InStockItem_Tapped(object sender, TappedRoutedEventArgs e)
-        {           
+        {
+            //Reset Scroll Bar Position
+            scrollViewer.ChangeView(0,0,null);
+       
             //Fetch Item Details
             var sampleInStockItem = new ApiResponse<SingleItemSearchResult<Item>>();
             var sampleOutOfStockItem = new ApiResponse<SingleItemSearchResult<Item>>();
@@ -101,6 +104,9 @@ namespace Inventory_Sample_App
 
         private async void OutOfStockItem_Tapped(object sender, TappedRoutedEventArgs e)
         {
+            //Reset Scroll Bar Position
+            scrollViewer.ChangeView(0, 0, null);
+
             //Fetch Item Details
             var sampleOutOfStockItem = new ApiResponse<SingleItemSearchResult<Item>>();
             try
