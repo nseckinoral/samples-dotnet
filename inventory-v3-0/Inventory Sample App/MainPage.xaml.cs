@@ -159,16 +159,8 @@ namespace Inventory_Sample_App
                     var nearStoreList = await clientContext.Of<StoreClient>().GetAsync(new XOMNI.SDK.Public.Models.Location() { Longitude = -75.952134, Latitude = 40.801112}, 1, 0, 10);
 
                     //Matching Store Ids of InStock items
-                    foreach (var firstData in inStockStoreMetadataList)
-                    {
-                        foreach (var secondData in nearStoreList.Data.Results)
-                        {
-                            if (firstData.StoreId == secondData.Id)
-                            {
-                                storeList.Add(secondData);
-                            }
-                        }
-                    }
+
+                    storeList = nearStoreList.Data.Results.Where(a => inStockStoreMetadataList.Any(b => b.StoreId == a.Id)).ToList();
                 }
                 StoreList.ItemsSource = storeList;
                 commonProgressRing.IsActive = false;
