@@ -16,7 +16,7 @@ namespace KioskApp
             this.InitializeComponent();
             this.Loaded += AppSettingsFlyout_Loaded;
         }
-
+        bool isFirstInitialize = String.IsNullOrEmpty(AppSettings.ApiUri);
         void AppSettingsFlyout_Loaded(object sender, RoutedEventArgs e)
         {
             txtApiEndpoint.Text = AppSettings.ApiUri ?? string.Empty;
@@ -120,67 +120,78 @@ namespace KioskApp
 
         private async Task RegisterDevice()
         {
-                    using (var clientContext = new ClientContext(AppSettings.ApiUsername, AppSettings.ApiUserPass, AppSettings.ApiUri))
+            ClientContext clientContext;
+            if(isFirstInitialize)
+            {
+                clientContext = new ClientContext(txtApiUserName.Text, txtApiUserPass.Password, txtApiEndpoint.Text);
+            }
+            else
+            {
+                clientContext = new ClientContext(AppSettings.ApiUsername, AppSettings.ApiUserPass, AppSettings.ApiUri);
+            }
+
+            using (clientContext)
+            {
+                var deviceClient = clientContext.Of<DeviceClient>();
+                try
+                {
+                    var registeredDevice = (await deviceClient.PostAsync(new Device()
                     {
-                        var deviceClient = clientContext.Of<DeviceClient>();
-                        try
-                        {
-                            var registeredDevice = (await deviceClient.PostAsync(new Device()
-                            {
-                                DeviceId = txtDeviceId.Text,
-                                Description = Helpers.DeviceIdentity.GetFriendlyName()
-                            })).Data;
-                            AppSettings.DeviceId = txtDeviceId.Text;
+                        DeviceId = txtDeviceId.Text,
+                        Description = Helpers.DeviceIdentity.GetFriendlyName()
+                    })).Data;
+                    AppSettings.DeviceId = txtDeviceId.Text;
 
-                            var messageBox = new MessageDialog(string.Format("Device ID '{0}' is successfully registered.", registeredDevice.DeviceId), "Success!");
-                            messageBox.Commands.Add(new UICommand("OK", (command) =>
-                            {
-                                var frame = (Frame)Window.Current.Content;
-                                var mainPage = (MainPage)frame.Content;
-                                mainPage.EnableMainPage();
-                                mainPage.mainPageProgressRing.IsActive = false;
-                            }));
-                            await messageBox.ShowAsync();
-                            AppSettings.IsRegistered = "true";
-                        }
+                    var messageBox = new MessageDialog(string.Format("Device ID '{0}' is successfully registered.", registeredDevice.DeviceId), "Success!");
+                    messageBox.Commands.Add(new UICommand("OK", (command) =>
+                    {
+                        var frame = (Frame)Window.Current.Content;
+                        var mainPage = (MainPage)frame.Content;
+                        mainPage.EnableMainPage();
+                        mainPage.mainPageProgressRing.IsActive = false;
+                    }));
+                    await messageBox.ShowAsync();
+                    AppSettings.IsRegistered = "true";
+                }
 
-                        catch (XOMNI.SDK.Public.Exceptions.XOMNIPublicAPIException ex)
-                        {
-                            var messageBox = new MessageDialog(ex.Message, "Please try again!");
-                            messageBox.Commands.Add(new UICommand("Close", (command) =>
-                            {
-                                AppSettingsFlyout settingsFlyOut = new AppSettingsFlyout();
-                                settingsFlyOut.Show();
+                catch (XOMNI.SDK.Public.Exceptions.XOMNIPublicAPIException ex)
+                {
+                    var messageBox = new MessageDialog(ex.Message, "Please try again!");
+                    messageBox.Commands.Add(new UICommand("Close", (command) =>
+                    {
+                        AppSettingsFlyout settingsFlyOut = new AppSettingsFlyout();
+                        settingsFlyOut.Show();
 
-                            }));
-                            messageBox.ShowAsync();
+                    }));
+                    messageBox.ShowAsync();
 
-                            var frame = (Frame)Window.Current.Content;
-                            var mainPage = (MainPage)frame.Content;
-                            mainPage.mainPageDisabled.IsHitTestVisible = true;
-                            mainPage.mainPageProgressRing.IsActive = false;
-                        }
-                        catch (System.Exception)
-                        {
-                            var messageBox = new MessageDialog("We're having trouble accomplishing your request. Please make sure your API Settings are correct.", "Please try again!");
-                            messageBox.Commands.Add(new UICommand("Close", (command) =>
-                            {
-                                AppSettingsFlyout settingsFlyOut = new AppSettingsFlyout();
-                                settingsFlyOut.Show();
+                    var frame = (Frame)Window.Current.Content;
+                    var mainPage = (MainPage)frame.Content;
+                    mainPage.mainPageDisabled.IsHitTestVisible = true;
+                    mainPage.mainPageProgressRing.IsActive = false;
+                }
+                catch (System.Exception)
+                {
+                    var messageBox = new MessageDialog("We're having trouble accomplishing your request. Please make sure your API Settings are correct.", "Please try again!");
+                    messageBox.Commands.Add(new UICommand("Close", (command) =>
+                    {
+                        AppSettingsFlyout settingsFlyOut = new AppSettingsFlyout();
+                        settingsFlyOut.Show();
 
-                            }));
-                            messageBox.ShowAsync();
-                            var frame = (Frame)Window.Current.Content;
-                            var mainPage = (MainPage)frame.Content;
-                            mainPage.mainPageDisabled.IsHitTestVisible = true;
-                            mainPage.mainPageProgressRing.IsActive = false;
-                        }
-                    }
+                    }));
+                    messageBox.ShowAsync();
+                    var frame = (Frame)Window.Current.Content;
+                    var mainPage = (MainPage)frame.Content;
+                    mainPage.mainPageDisabled.IsHitTestVisible = true;
+                    mainPage.mainPageProgressRing.IsActive = false;
+                }
+            }
         }
 
         private async Task UnRegisterDevice()
         {
-
+            if (!isFirstInitialize)
+            {
                 using (var clientContext = new ClientContext(AppSettings.ApiUsername, AppSettings.ApiUserPass, AppSettings.ApiUri))
                 {
                     var deviceClient = clientContext.Of<DeviceClient>();
@@ -195,10 +206,11 @@ namespace KioskApp
                         AppSettings.IsRegistered = "false";
                     }
                 }
-                AppSettings.ApiUri = txtApiEndpoint.Text;
-                AppSettings.ApiUsername = txtApiUserName.Text;
-                AppSettings.ApiUserPass = txtApiUserPass.Password;
-                AppSettings.LoginUrl = txtLoginUrl.Text;
+            }
+            AppSettings.ApiUri = txtApiEndpoint.Text;
+            AppSettings.ApiUsername = txtApiUserName.Text;
+            AppSettings.ApiUserPass = txtApiUserPass.Password;
+            AppSettings.LoginUrl = txtLoginUrl.Text;
         }
 
         private void txtApiEndpoint_TextChanged(object sender, TextChangedEventArgs e)
