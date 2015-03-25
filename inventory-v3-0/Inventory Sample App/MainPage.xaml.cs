@@ -45,8 +45,8 @@ namespace Inventory_Sample_App
             //Check if the app is already setup with required config data.
             if (string.IsNullOrEmpty(AppSettings.ApiUri))
             {
-                BlackScreen.IsHitTestVisible = true;
-                BlackScreen.Opacity = 0.6;
+                DisablingBlackScreen.IsHitTestVisible = true;
+                DisablingBlackScreen.Opacity = 0.6;
                 AppSettingsFlyout settingsFlyout = new AppSettingsFlyout();
                 settingsFlyout.ShowIndependent();
             }
@@ -163,6 +163,7 @@ namespace Inventory_Sample_App
         }
         private async void btnOutOfStock_Tapped(object sender, TappedRoutedEventArgs e)
         {
+            Map.Children.Clear();
             var storeList = new List<Store>();
             try
             {
@@ -185,6 +186,7 @@ namespace Inventory_Sample_App
                 StoreList.ItemsSource = storeList;
                 commonProgressRing.IsActive = false;
                 StoreListContentGrid.Opacity = 100;
+                StoreListContentGrid.IsHitTestVisible = true;
             }
             catch (Exception ex)
             {
