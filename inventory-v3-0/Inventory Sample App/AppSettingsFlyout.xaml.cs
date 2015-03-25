@@ -92,7 +92,7 @@ namespace Inventory_Sample_App
                 }
                 catch (Exception ex)
                 {
-                    var messageBox = new MessageDialog(ex.Message, "An error occurred");
+                    var messageBox = new MessageDialog("An error occured while sending the request. Please try again.", "An error occurred");
                     messageBox.Commands.Add(new UICommand("Close", (command) =>
                     {
                         mainPage.commonProgressRing.IsActive = false;
