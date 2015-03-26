@@ -127,24 +127,17 @@ namespace Inventory_Sample_App
         private async void btnOutOfStock_Tapped(object sender, TappedRoutedEventArgs e)
         {
             Map.Children.Clear();
-            var storeList = new List<Store>();
+            var storeList = new List<GroupedInStoreMetadataContainer>();
             try
             {
                 using (ClientContext clientContext = new XOMNI.SDK.Public.ClientContext(AppSettings.ApiUsername, AppSettings.ApiUserPass, AppSettings.ApiUri))
                 {
+                    var myLocation = new XOMNI.SDK.Public.Models.Location { Longitude = -75.952134, Latitude = 40.801112 };
                     // Fetching the In-Store Metadata CompanyWide 
-                    var metadataList = await clientContext.Of<ItemInStoreMetadataClient>().GetAsync(tappedItemId,0,100,keyPrefix: "instock",companyWide: true);
-                    
+                    var metadataList = await clientContext.Of<ItemInStoreMetadataClient>().GetAsync(tappedItemId,keyPrefix: "instock",companyWide: true,location: myLocation,searchDistance: 1);
+                    var metadataListData = metadataList.Data;
                     //Picking "instock" stores only
-                    var inStockStoreMetadataList = new List<InStoreMetadata>();
-                    inStockStoreMetadataList = metadataList.Data.Where(x => x.Key == "instock" && x.Value == "true").ToList();
-
-                    //Searching Stores With GPS Location
-                    var nearStoreList = await clientContext.Of<StoreClient>().GetAsync(new XOMNI.SDK.Public.Models.Location() { Longitude = -75.952134, Latitude = 40.801112}, 1, 0, 10);
-
-                    //Matching Store Ids of InStock items
-
-                    storeList = nearStoreList.Data.Results.Where(a => inStockStoreMetadataList.Any(b => b.StoreId == a.Id)).ToList();
+                    storeList = metadataListData.Where(a => a.Metadata.Any(b => b.Key == "instock" && b.Value == "true")).ToList();
                 }
                 StoreList.ItemsSource = storeList;
                 commonProgressRing.IsActive = false;
