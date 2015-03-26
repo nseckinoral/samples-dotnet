@@ -199,9 +199,9 @@
     <Reference Include="System.Net.Http.Primitives">
       <HintPath>..\packages\Microsoft.Net.Http.2.2.22\lib\win8\System.Net.Http.Primitives.dll</HintPath>
     </Reference>
-    <Reference Include="XOMNI.SDK.Public, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="XOMNI.SDK.Public, Version=3.0.3.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\XOMNI.SDK.Public.3.0.1\lib\portable-net451+win81+wpa81\XOMNI.SDK.Public.dll</HintPath>
+      <HintPath>..\packages\XOMNI.SDK.Public.3.0.3\lib\portable-net451+win81+wpa81\XOMNI.SDK.Public.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup />
