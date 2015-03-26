@@ -13,6 +13,7 @@ using XOMNI.SDK.Public.Models.OmniPlay;
 using Windows.UI.Popups;
 using XOMNI.SDK.Public.Clients.OmniPlay;
 using XOMNI.SDK.Public.Models.Catalog;
+using XOMNI.SDK.Public.Models;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -66,7 +67,7 @@ namespace KioskApp
                     var wishlistGuids = await wishlistClient.GetAsync();
 
                     Guid latestWishlistUniqueKey = wishlistGuids.Data.Last();
-                    var latestWishlistItems = await wishlistClient.GetAsync(latestWishlistUniqueKey, sampleLongitude, sampleLatitude, true, false, false,
+                    var latestWishlistItems = await wishlistClient.GetAsync(latestWishlistUniqueKey, new Location() {Longitude=sampleLongitude, Latitude=sampleLatitude }, true, false, false,
                         AssetDetailType.IncludeOnlyDefault,
                         AssetDetailType.None,
                         AssetDetailType.None,
@@ -135,7 +136,7 @@ namespace KioskApp
                             string omniTicket = latestOmniTicket.OmniTicket.Substring(1, latestOmniTicket.OmniTicket.Length - 1);
 
                             var omniTicketClient = clientContext.Of<OmniTicketClient>();
-                            omniSession = await omniTicketClient.PostSessionAsync(new OmniTicket { Ticket = Guid.Parse(omniTicket) });
+                            omniSession = await omniTicketClient.PostSessionAsync(new OmniTicket { Ticket = omniTicket });
                         }
                     }
                 }

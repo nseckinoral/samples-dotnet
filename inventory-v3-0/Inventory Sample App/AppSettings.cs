@@ -1,4 +1,6 @@
 ﻿using Windows.Storage;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Inventory_Sample_App
 {
@@ -7,7 +9,7 @@ namespace Inventory_Sample_App
         private const string apiServiceUriConfigKey = "ApiURI";
         private const string apiUserNameConfigKey = "ApiUserName";
         private const string apiUserPassConfigKey = "ApiUserPass";
-        private const string itemIdConfigKey = "ItemId";
+        private const string itemIdsConfigKey = "1,2";
 
         public static string ApiUri
         {
@@ -63,21 +65,24 @@ namespace Inventory_Sample_App
             }
         }
 
-        public static string ItemId
+        public static List<int> ItemIds
         {
             get
             {
-                string retVal = null;
-                object value = ApplicationData.Current.LocalSettings.Values[itemIdConfigKey];
+                List<int> retVal = null;
+                object value = ApplicationData.Current.LocalSettings.Values[itemIdsConfigKey];
                 if (value != null)
                 {
-                    retVal = value.ToString();
+                    var stringItemIds = value.ToString().Split(',');
+                    var itemIds = stringItemIds.Select(int.Parse).ToList();
+                    retVal = itemIds;
                 }
                 return retVal;
             }
             set
             {
-                ApplicationData.Current.LocalSettings.Values[itemIdConfigKey] = value;
+                var stringItemIds = string.Format("{0},{1}", value[0], value[1]);
+                ApplicationData.Current.LocalSettings.Values[itemIdsConfigKey] = stringItemIds;
             }
         }
 

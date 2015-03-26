@@ -35,7 +35,7 @@ namespace MobileLoginPage.Controllers
 
             try
             {
-              await clientcontext.Of<DeviceClient>().SubscribeToDevice(deviceId);
+              await clientcontext.Of<DeviceClient>().SubscribeToDeviceAsync(deviceId);
               return RedirectToAction("Success", "Login");
             }
             catch 

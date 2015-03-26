@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading;
+using Windows.Data.Html;
 using Windows.Devices.Geolocation;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
@@ -44,36 +45,45 @@ namespace Inventory_Sample_App
             //Check if the app is already setup with required config data.
             if (string.IsNullOrEmpty(AppSettings.ApiUri))
             {
-                BlackScreen.IsHitTestVisible = true;
-                BlackScreen.Opacity = 0.6;
+                DisablingBlackScreen.IsHitTestVisible = true;
+                DisablingBlackScreen.Opacity = 0.6;
                 AppSettingsFlyout settingsFlyout = new AppSettingsFlyout();
                 settingsFlyout.ShowIndependent();
             }
         }
-
-
-
+        private int tappedItemId;
         private async void Item_Tapped(object sender, TappedRoutedEventArgs e)
-        {           
-            //Prepare Screen
-            BlackScreen.IsHitTestVisible = true;
-            ItemDetail_In.Begin();
-            ItemDetailScreen.IsHitTestVisible = true;
+        {
+            //Reset Scroll Bar Position
+            scrollViewer.ChangeView(0, 0, null);
+
+            //Check Item
+            var sampleItem = new ApiResponse<SingleItemSearchResult<Item>>();
+            var tappedGrid = sender as Grid;
+            if(tappedGrid == FirstItem)
+            {
+                tappedItemId = AppSettings.ItemIds[0];
+            }
+            else
+            {
+                tappedItemId = AppSettings.ItemIds[1];
+            }
 
             //Fetch Item Details
-            var sampleItem = new ApiResponse<SingleItemSearchResult<Item>>();
             try
             {
                 using (ClientContext clientContext = new XOMNI.SDK.Public.ClientContext(AppSettings.ApiUsername, AppSettings.ApiUserPass, AppSettings.ApiUri))
                 {
                     var itemClient = clientContext.Of<XOMNI.SDK.Public.Clients.Catalog.ItemClient>();
-                    sampleItem = await itemClient.GetAsync(Int32.Parse(AppSettings.ItemId), true, true, true, AssetDetailType.IncludeOnlyDefault);
+                    sampleItem = await itemClient.GetAsync(tappedItemId, true, true, true, AssetDetailType.IncludeOnlyDefault);
+                    sampleItem.Data.Item.LongDescription = FixHtmlTags(sampleItem.Data.Item.LongDescription);
+
                     ItemDetailScreen.DataContext = sampleItem.Data.Item;
                 }
                 commonProgressRing.IsActive = false;
                 ItemDetailGrid.Opacity = 100;
 
-                //Check InStock Status  
+                //Check InStock Status of InStockItemId  
                 var isInStock = sampleItem.Data.Item.InStoreMetadata.Any(x => x.Key == "instock" && x.Value == "true");
                 if (!sampleItem.Data.Item.InStoreMetadata.Any() || !isInStock)
                 {
@@ -90,7 +100,7 @@ namespace Inventory_Sample_App
             }
             catch (Exception ex)
             {
-               var messageBox = new MessageDialog(ex.Message, "An error occurred");
+                var messageBox = new MessageDialog(ex.Message, "An error occurred");
                 messageBox.Commands.Add(new UICommand("Close", (command) =>
                 {
                     ItemDetailError_Out.Begin();
@@ -99,22 +109,31 @@ namespace Inventory_Sample_App
                 }));
                 messageBox.ShowAsync();
             }
-
-
-
-            
         }
 
 
+
+        //Replaces all double "\r\n"s with a single one and removes the first one in the beginning
+        private string FixHtmlTags(string sourceString)
+        {
+            var rawText = HtmlUtilities.ConvertToText(sourceString);
+            var croppedText = rawText.Replace("\r\n\r\n", "\r\n");           
+            int index = croppedText.IndexOf("\r\n");
+            string cleanPath = (index < 0)
+                ? croppedText
+                : croppedText.Remove(index, "\r\n".Length);
+            return cleanPath;
+        }
         private async void btnOutOfStock_Tapped(object sender, TappedRoutedEventArgs e)
         {
+            Map.Children.Clear();
             var storeList = new List<Store>();
             try
             {
                 using (ClientContext clientContext = new XOMNI.SDK.Public.ClientContext(AppSettings.ApiUsername, AppSettings.ApiUserPass, AppSettings.ApiUri))
                 {
                     // Fetching the In-Store Metadata CompanyWide 
-                    var metadataList = await clientContext.Of<ItemInStoreMetadataClient>().GetAsync(Int32.Parse(AppSettings.ItemId),0,100,keyPrefix: "instock",companyWide: true);
+                    var metadataList = await clientContext.Of<ItemInStoreMetadataClient>().GetAsync(tappedItemId,0,100,keyPrefix: "instock",companyWide: true);
                     
                     //Picking "instock" stores only
                     var inStockStoreMetadataList = new List<InStoreMetadata>();
@@ -124,20 +143,13 @@ namespace Inventory_Sample_App
                     var nearStoreList = await clientContext.Of<StoreClient>().GetAsync(new XOMNI.SDK.Public.Models.Location() { Longitude = -75.952134, Latitude = 40.801112}, 1, 0, 10);
 
                     //Matching Store Ids of InStock items
-                    foreach (var firstData in inStockStoreMetadataList)
-                    {
-                        foreach (var secondData in nearStoreList.Data.Results)
-                        {
-                            if (firstData.StoreId == secondData.Id)
-                            {
-                                storeList.Add(secondData);
-                            }
-                        }
-                    }
+
+                    storeList = nearStoreList.Data.Results.Where(a => inStockStoreMetadataList.Any(b => b.StoreId == a.Id)).ToList();
                 }
                 StoreList.ItemsSource = storeList;
                 commonProgressRing.IsActive = false;
                 StoreListContentGrid.Opacity = 100;
+                StoreListContentGrid.IsHitTestVisible = true;
             }
             catch (Exception ex)
             {

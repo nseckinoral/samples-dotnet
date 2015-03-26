@@ -25,10 +25,12 @@ namespace Inventory_Sample_App
     {
         static Frame  frame = (Frame)Window.Current.Content;
         static MainPage mainPage = (MainPage)frame.Content;
+        static string deserializedItemIds;
         public AppSettingsFlyout()
         {
             this.InitializeComponent();
             this.Loaded += AppSettingsFlyout_Loaded;
+            deserializedItemIds = DeserializeItemIdList(AppSettings.ItemIds);
         }
 
         void AppSettingsFlyout_Loaded(object sender, RoutedEventArgs e)
@@ -36,12 +38,12 @@ namespace Inventory_Sample_App
             txtApiEndpoint.Text = AppSettings.ApiUri ?? string.Empty;
             txtApiUserName.Text = AppSettings.ApiUsername ?? string.Empty;
             txtApiUserPass.Password = AppSettings.ApiUserPass ?? string.Empty;
-            txtItemId.Text = AppSettings.ItemId ?? string.Empty;
+            txtItemId.Text = deserializedItemIds ?? string.Empty;
         }
 
         private async void btnSave_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
         {
-
+            AppSettingsFlyout settingsFlyOut = new AppSettingsFlyout();
             //Check if Settings are empty or not
             if (string.IsNullOrEmpty(txtApiEndpoint.Text) || string.IsNullOrEmpty(txtApiUserName.Text) || string.IsNullOrEmpty(txtApiUserPass.Password) || string.IsNullOrEmpty(txtItemId.Text))
             {
@@ -49,80 +51,104 @@ namespace Inventory_Sample_App
                 MessageDialog messageBox = new MessageDialog("Settings can't be empty.", "An error occured");
                 messageBox.Commands.Add(new UICommand("Close", (command) =>
                 {
-                    AppSettingsFlyout settingsFlyOut = new AppSettingsFlyout();
                     settingsFlyOut.Show();
                 }));
                 await messageBox.ShowAsync();
             }
-
             else
             {
-                try
+                //Parse Item Ids
+                var stringItemIds = txtItemId.Text.Split(',');
+                //Check if Item Ids are in a correct format
+                if (stringItemIds.Count() != 2 || stringItemIds[0] == stringItemIds[1] || stringItemIds.Contains(string.Empty))
                 {
-                    DisableScreen();
-                    //Validate through APIs
-                    using(var clientContext = new ClientContext(txtApiUserName.Text,txtApiUserPass.Password,txtApiEndpoint.Text))
+                    MessageDialog messageBox = new MessageDialog("Item Ids are not in the correct format. Please make sure they're seperated with a comma (,) and there're only 2 Ids. Item Ids cannot be identical.", "An error occured");
+                    messageBox.Commands.Add(new UICommand("Close", (command) =>
                     {
-                        var itemId = Int32.Parse(txtItemId.Text);
-                        var itemClient = clientContext.Of<ItemClient>();
-                        var itemValidation = await itemClient.GetAsync(itemId);
+                        settingsFlyOut.Show();
+                    }));
+                    await messageBox.ShowAsync();
+                }
+                else 
+                {
+
+                    try
+                    {
+                        DisableScreen();
+                        //Store Item Ids in a list of int
+                        var parsedItemIds = stringItemIds.Select(int.Parse).ToList();
+                        //Validate through APIs
+                        using (var clientContext = new ClientContext(txtApiUserName.Text, txtApiUserPass.Password, txtApiEndpoint.Text))
+                        {
+                            var itemClient = clientContext.Of<ItemClient>();
+                            foreach (var item in parsedItemIds)
+                            {
+                                var validateditem = await itemClient.GetAsync(item);
+                            }
+                        }
+
+                        //Save
+                        AppSettings.ApiUri = txtApiEndpoint.Text;
+                        AppSettings.ApiUsername = txtApiUserName.Text;
+                        AppSettings.ApiUserPass = txtApiUserPass.Password;
+                        AppSettings.ItemIds = parsedItemIds;
+                        btnSave.IsEnabled = false;
+                        EnableScreen();
                     }
-
-                    //Save
-                    AppSettings.ApiUri = txtApiEndpoint.Text;
-                    AppSettings.ApiUsername = txtApiUserName.Text;
-                    AppSettings.ApiUserPass = txtApiUserPass.Password;
-                    AppSettings.ItemId = txtItemId.Text;
-                    btnSave.IsEnabled = false;
-                    EnableScreen();
-                }
-                catch(XOMNI.SDK.Public.Exceptions.XOMNIPublicAPIException ex)
-                {
-                    var messageBox = new MessageDialog("Make sure your settings are valid.", "Validation failed");
-                    messageBox.Commands.Add(new UICommand("Close", (command) =>
+                    catch (XOMNI.SDK.Public.Exceptions.XOMNIPublicAPIException ex)
                     {
-                        mainPage.commonProgressRing.IsActive = false;
-                        EnableIfSettingsAreNotEmpty();
-                        AppSettingsFlyout settingsFlyOut = new AppSettingsFlyout();
-                        settingsFlyOut.Show();
-
-                    }));
-                    messageBox.ShowAsync();
-                }
-                catch (Exception ex)
-                {
-                    var messageBox = new MessageDialog(ex.Message, "An error occurred");
-                    messageBox.Commands.Add(new UICommand("Close", (command) =>
+                        var messageBox = new MessageDialog("Make sure your settings are valid.", "Validation failed");
+                        messageBox.Commands.Add(new UICommand("Close", (command) =>
+                        {
+                            mainPage.commonProgressRing.IsActive = false;
+                            EnableIfSettingsAreNotEmpty();
+                            settingsFlyOut.Show();
+                        }));
+                        messageBox.ShowAsync();
+                    }
+                    catch (Exception ex)
                     {
-                        mainPage.commonProgressRing.IsActive = false;
-                        EnableIfSettingsAreNotEmpty();
-                        AppSettingsFlyout settingsFlyOut = new AppSettingsFlyout();
-                        settingsFlyOut.Show();
-                    }));
-                    messageBox.ShowAsync();
-                }
+                        var messageBox = new MessageDialog("An error occured while sending the request. Please try again.", "An error occurred");
+                        messageBox.Commands.Add(new UICommand("Close", (command) =>
+                        {
+                            mainPage.commonProgressRing.IsActive = false;
+                            EnableIfSettingsAreNotEmpty();
+                            settingsFlyOut.Show();
+                        }));
+                        messageBox.ShowAsync();
+                    }
+                }               
             }
         }
 
         private void EnableIfSettingsAreNotEmpty()
         {
-            bool IsSaved= !String.IsNullOrEmpty(AppSettings.ApiUri) || !String.IsNullOrEmpty(AppSettings.ApiUsername) || !String.IsNullOrEmpty(AppSettings.ApiUserPass) || !String.IsNullOrEmpty(AppSettings.ItemId);
+            bool IsSaved = !String.IsNullOrEmpty(AppSettings.ApiUri) || !String.IsNullOrEmpty(AppSettings.ApiUsername) || !String.IsNullOrEmpty(AppSettings.ApiUserPass) || !String.IsNullOrEmpty(deserializedItemIds);
             if(IsSaved)
             {
                 EnableScreen();
             }
         }
 
+        private string DeserializeItemIdList(List<int> itemIdList)
+        {
+            if(itemIdList != null)
+            {
+                var stringItemIds = string.Format("{0},{1}", itemIdList[0], itemIdList[1]);
+                return stringItemIds;
+            }
+            return String.Empty;
+        }
         private void EnableScreen()
         {
-            mainPage.BlackScreen.Opacity = 0;
-            mainPage.BlackScreen.IsHitTestVisible = false;
+            mainPage.DisablingBlackScreen.Opacity = 0;
+            mainPage.DisablingBlackScreen.IsHitTestVisible = false;
             mainPage.commonProgressRing.IsActive = false;
         }
         private void DisableScreen()
         {
-            mainPage.BlackScreen.Opacity = 0.6;
-            mainPage.BlackScreen.IsHitTestVisible = true;
+            mainPage.DisablingBlackScreen.Opacity = 0.6;
+            mainPage.DisablingBlackScreen.IsHitTestVisible = true;
             mainPage.commonProgressRing.IsActive = true;
         }
 
@@ -166,7 +192,7 @@ namespace Inventory_Sample_App
         private void txtItemId_TextChanged(object sender, TextChangedEventArgs e)
         {
 
-            if (AppSettings.ItemId == txtItemId.Text)
+            if (deserializedItemIds == txtItemId.Text)
             {
                 btnSave.IsEnabled = false;
             }
@@ -178,12 +204,17 @@ namespace Inventory_Sample_App
 
         private void txtItemId_KeyDown(object sender, KeyRoutedEventArgs e)
         {
-            if ((e.Key < VirtualKey.Number0) || (e.Key > VirtualKey.Number9))
+            if ((e.Key == (VirtualKey)188))
+            {
+                return;
+            }
+            else if ((e.Key < VirtualKey.Number0) || (e.Key > VirtualKey.Number9) )
             {
                 // If it's not a numeric character, prevent the TextBox from handling the keystroke
                 e.Handled = true;
             }
         }
+
     }
 
 }
