@@ -51,80 +51,41 @@ namespace Inventory_Sample_App
                 settingsFlyout.ShowIndependent();
             }
         }
-
-        private async void InStockItem_Tapped(object sender, TappedRoutedEventArgs e)
-        {
-            //Reset Scroll Bar Position
-            scrollViewer.ChangeView(0,0,null);
-       
-            //Fetch Item Details
-            var sampleInStockItem = new ApiResponse<SingleItemSearchResult<Item>>();
-            var sampleOutOfStockItem = new ApiResponse<SingleItemSearchResult<Item>>();
-            try
-            {
-                using (ClientContext clientContext = new XOMNI.SDK.Public.ClientContext(AppSettings.ApiUsername, AppSettings.ApiUserPass, AppSettings.ApiUri))
-                {
-                    var itemClient = clientContext.Of<XOMNI.SDK.Public.Clients.Catalog.ItemClient>();
-                    sampleInStockItem = await itemClient.GetAsync(Int32.Parse(AppSettings.InStockItemId), true, true, true, AssetDetailType.IncludeOnlyDefault);
-                    sampleInStockItem.Data.Item.LongDescription = FixHtmlTags(sampleInStockItem.Data.Item.LongDescription);
-
-                    ItemDetailScreen.DataContext = sampleInStockItem.Data.Item;
-                }
-                commonProgressRing.IsActive = false;
-                ItemDetailGrid.Opacity = 100;
-
-                //Check InStock Status of InStockItemId  
-                var isInStock = sampleInStockItem.Data.Item.InStoreMetadata.Any(x => x.Key == "instock" && x.Value == "true");
-                if (!sampleInStockItem.Data.Item.InStoreMetadata.Any() || !isInStock)
-                {
-                    txtInStock.Visibility = Visibility.Collapsed;
-                    btnInStock.Visibility = Visibility.Collapsed;
-                    btnOutOfStock.Visibility = Visibility.Visible;
-                }
-                else if (isInStock)
-                {
-                    txtInStock.Visibility = Visibility.Visible;
-                    btnInStock.Visibility = Visibility.Visible;
-                    btnOutOfStock.Visibility = Visibility.Collapsed;
-                }
-            }
-            catch (Exception ex)
-            {
-               var messageBox = new MessageDialog(ex.Message, "An error occurred");
-                messageBox.Commands.Add(new UICommand("Close", (command) =>
-                {
-                    ItemDetailError_Out.Begin();
-                    commonProgressRing.IsActive = false;
-                    ItemDetailScreen.IsHitTestVisible = false;
-                }));
-                messageBox.ShowAsync();
-            }
-         
-        }
-
-        private async void OutOfStockItem_Tapped(object sender, TappedRoutedEventArgs e)
+        private int tappedItemId;
+        private async void Item_Tapped(object sender, TappedRoutedEventArgs e)
         {
             //Reset Scroll Bar Position
             scrollViewer.ChangeView(0, 0, null);
 
+            //Check Item
+            var sampleItem = new ApiResponse<SingleItemSearchResult<Item>>();
+            var tappedGrid = sender as Grid;
+            if(tappedGrid == FirstItem)
+            {
+                tappedItemId = AppSettings.ItemIds[0];
+            }
+            else
+            {
+                tappedItemId = AppSettings.ItemIds[1];
+            }
+
             //Fetch Item Details
-            var sampleOutOfStockItem = new ApiResponse<SingleItemSearchResult<Item>>();
             try
             {
                 using (ClientContext clientContext = new XOMNI.SDK.Public.ClientContext(AppSettings.ApiUsername, AppSettings.ApiUserPass, AppSettings.ApiUri))
                 {
                     var itemClient = clientContext.Of<XOMNI.SDK.Public.Clients.Catalog.ItemClient>();
-                    sampleOutOfStockItem = await itemClient.GetAsync(Int32.Parse(AppSettings.OutOfStockItemId), true, true, true, AssetDetailType.IncludeOnlyDefault);
-                    sampleOutOfStockItem.Data.Item.LongDescription = FixHtmlTags(sampleOutOfStockItem.Data.Item.LongDescription);
+                    sampleItem = await itemClient.GetAsync(tappedItemId, true, true, true, AssetDetailType.IncludeOnlyDefault);
+                    sampleItem.Data.Item.LongDescription = FixHtmlTags(sampleItem.Data.Item.LongDescription);
 
-                    ItemDetailScreen.DataContext = sampleOutOfStockItem.Data.Item;
+                    ItemDetailScreen.DataContext = sampleItem.Data.Item;
                 }
                 commonProgressRing.IsActive = false;
                 ItemDetailGrid.Opacity = 100;
 
                 //Check InStock Status of InStockItemId  
-                var isInStock = sampleOutOfStockItem.Data.Item.InStoreMetadata.Any(x => x.Key == "instock" && x.Value == "true");
-                if (!sampleOutOfStockItem.Data.Item.InStoreMetadata.Any() || !isInStock)
+                var isInStock = sampleItem.Data.Item.InStoreMetadata.Any(x => x.Key == "instock" && x.Value == "true");
+                if (!sampleItem.Data.Item.InStoreMetadata.Any() || !isInStock)
                 {
                     txtInStock.Visibility = Visibility.Collapsed;
                     btnInStock.Visibility = Visibility.Collapsed;
@@ -150,6 +111,8 @@ namespace Inventory_Sample_App
             }
         }
 
+
+
         //Replaces all double "\r\n"s with a single one and removes the first one in the beginning
         private string FixHtmlTags(string sourceString)
         {
@@ -170,7 +133,7 @@ namespace Inventory_Sample_App
                 using (ClientContext clientContext = new XOMNI.SDK.Public.ClientContext(AppSettings.ApiUsername, AppSettings.ApiUserPass, AppSettings.ApiUri))
                 {
                     // Fetching the In-Store Metadata CompanyWide 
-                    var metadataList = await clientContext.Of<ItemInStoreMetadataClient>().GetAsync(Int32.Parse(AppSettings.OutOfStockItemId),0,100,keyPrefix: "instock",companyWide: true);
+                    var metadataList = await clientContext.Of<ItemInStoreMetadataClient>().GetAsync(tappedItemId,0,100,keyPrefix: "instock",companyWide: true);
                     
                     //Picking "instock" stores only
                     var inStockStoreMetadataList = new List<InStoreMetadata>();
