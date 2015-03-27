@@ -60,7 +60,7 @@ All steps are explained in detail below.
 Fetching a single item is fairly easy. All you need to do is to use the **GetAsync** method of **ItemClient**. As always, you need to create a 
 **clientcontext** instance with **valid credentials** and a **valid tenant URL** first.
 
-**Note:** If you're going to fetch a single item to see InStore Metadata of an item for the **current store**, make sure the Store ID associated with your **license** is defined in the InStore Metadata. **TODO:I DONT UNDERSTAND THIS**
+
 
 **Usage:**
 
@@ -72,7 +72,7 @@ Fetching a single item is fairly easy. All you need to do is to use the **GetAsy
 	    }
 
 
-Make sure you set "**includeItemInStoreMetadata**" paramater to **true** as we need to accesse InStoreMetadata of the item to see stock details.
+Make sure you set "**includeItemInStoreMetadata**" paramater to **true** as we need to access InStoreMetadata of the item to see stock details.
 
 **Possible Enumarable Values for AssetDetailTypes:**
 
