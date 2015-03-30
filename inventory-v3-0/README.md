@@ -1,5 +1,5 @@
 # Introduction #
-This is a sample project showcasing how you can use [InStoreMetadata APIs](http://dev.xomni.com/v3-0/http-api/public-apis/catalog/item-in-store-metadata) to enable inventory related scenarios in the retail industry. In our sample implementation you can run queries for a specific stores or look-up across multiple stores for product availability. Keep in mind that in this document we are only going to discuss inventory aspect of our APIs, InStoreMetadata APIs are designed in a generic way to give you the flexibility you need to implement different scenarios where you might need store specific contextual data.
+This is a sample project showcasing how you can use [InStoreMetadata APIs](http://dev.xomni.com/v3-0/http-api/public-apis/catalog/item-in-store-metadata) to enable inventory-related scenarios in the retail industry. In our sample implementation, you can run queries for a specific store or run a look-up across multiple stores for product availability. Keep in mind that in this document we are only going to discuss inventory aspect of our APIs. InStoreMetadata APIs are designed in a generic way to give you the flexibility you need to implement different scenarios where you might need store specific contextual data.
 
 # What is "In-Store Metadata?" #
 In-Store Metadata is a **store based** metadata that may be used to store contextual and optional data about an item for a particular store.
@@ -10,7 +10,7 @@ In our "**Inventory Sample App**", the APIs are used in two different ways:
 - **Fetch a single item** and check if it's available for purchase within the current store.
 - If it's not available in the current store, see other stores where the product can be bought from by **fetching the in-store metadata across multiple stores**.
 
-After fetching the in-store metadata across multiple stores, we represent them in a simple map. We have used Bing Maps for the client implementation. You can find the reference link at the bottom for more information about the client control.
+After fetching, the in-store metadata across multiple stores, we represent them in a simple map. We have used Bing Maps for the client implementation. You can find the reference link at the bottom for more information about the client control.
 
 Two different instore metadata have been created for the sample items in this project. One of them is to show the **item availability**, the other one is to show the **stock quantity**.
 
@@ -97,7 +97,7 @@ After fetching the Item you need, you can simply use the **InStoreMetadata** of 
 ## Fetching the In-Store Metadata Across Multiple Stores ##
 If you need the **In-Store Metadata** of an item **for all stores**, you need to use the **GetAsync** method of **ItemInStoreMetadataClient**. 
 
-If you provide a location, In-Store Metadata search query will be executed on stores nearby to the given location. When you execute a location based search, you must set **companyWide** parameter to **true**.
+If you provide a location, In-Store Metadata search query will be executed on stores nearby to the given location. When you execute a location-based search, you must set **companyWide** parameter to **true**.
 
 **Note:** Search distance is the maximum search distance in miles for a given search location.
 
@@ -115,7 +115,7 @@ Fetching in-store metadata is possible through two different ways. You can use a
 		location: myLocation,searchDistance: 1);
     }
 
-If your search includes a **key-value** pair (e.g. key= "instock" value= "true"), you will get only the **exact matching results**.
+If your search includes a **key-value** pair (e.g. key= "instock" value= "true"), you will only get the **exact matching results**.
 
 **Example Response:**
 
