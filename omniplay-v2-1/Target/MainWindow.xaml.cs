@@ -7,6 +7,9 @@ using System.Text;
 using System.Windows;
 using System.Windows.Threading;
 using Target.Models;
+using System.Configuration;
+using XOMNI.SDK.Public;
+using XOMNI.SDK.Public.Clients.Company;
 
 namespace Target
 {
@@ -17,6 +20,9 @@ namespace Target
     {
         string currentTargetDeviceId;
         string incommingOmniTicket;
+        private static readonly string ApiEndpointUri = ConfigurationManager.AppSettings["XOMNI:ApiEndpointUri"];
+        private static readonly string ApiClientAccessLicenceName = ConfigurationManager.AppSettings["XOMNI:ApiClientAccessLicenceName"];
+        private static readonly string ApiClientAccessLicencePass = ConfigurationManager.AppSettings["XOMNI:ApiClientAccessLicencePass"];
 
         public MainWindow()
         {
@@ -112,26 +118,26 @@ namespace Target
 
         async void btn_RegisterDevice_Click(object sender, RoutedEventArgs e)
         {
-            //See for reference: http://dev.xomni.com/v2-1/http-api/public-apis/company/device/registering-a-device-to-a-specific-license
-
-            XomniClient xomniClient = new XomniClient();
-            Device reqOb = new Device()
+            ////See for reference: http://dev.xomni.com/v3-0/http-api/public-apis/company/device/registering-a-device-to-a-specific-license
+            using (ClientContext clientContext = new ClientContext(ApiClientAccessLicenceName, ApiClientAccessLicencePass, ApiEndpointUri))
             {
-                Description = "This is a device created on " + DateTime.Now.ToLongDateString() + " | " + DateTime.Now.ToLongTimeString(),
-                DeviceId = Guid.NewGuid().ToString()
-            };
-            RegisterDeviceResponseObject response = await xomniClient.RegisterDeviceAsync(reqOb);
-            if (response.IsSuccess)
-            {
-                //Save the DeviceId to be used in Omni-Discovery Polling
-                currentTargetDeviceId = reqOb.DeviceId;
-                MessageBox.Show("Registration succeeded");
-            }
-            else
-            {
-                //Reset the DeviceId
-                currentTargetDeviceId = "";
-                MessageBox.Show("Registration failed.");
+                XOMNI.SDK.Public.Models.Company.Device sampleDevice = new XOMNI.SDK.Public.Models.Company.Device()
+                {
+                    Description = "This is a device created on " + DateTime.Now.ToLongDateString() + " | " + DateTime.Now.ToLongTimeString(),
+                    DeviceId = Guid.NewGuid().ToString()
+                };
+                var deviceClient = clientContext.Of<DeviceClient>();
+                try
+                {
+                    var response = await deviceClient.PostAsync(sampleDevice);
+                    currentTargetDeviceId = response.Data.DeviceId;
+                    MessageBox.Show("Registration succeeded");
+                }
+                catch
+                {
+                    currentTargetDeviceId = "";
+                    MessageBox.Show("Registration failed.");
+                }
             }
         }
         #endregion
