@@ -5,6 +5,8 @@ using System.Net;
 using System.Windows;
 using XOMNI.SDK.Public;
 using XOMNI.SDK.Public.Clients.OmniPlay;
+using XOMNI.SDK.Public.Clients.PII;
+using XOMNI.SDK.Public.Models.PII;
 
 namespace Source
 {
@@ -59,22 +61,31 @@ namespace Source
         }
         #endregion
 
-        #region Creating An Anoymous PII
+        #region Creating An Anonymous PII
 
         async void btn_AnonymousPII_Click(object sender, RoutedEventArgs e)
         {
-            //See for reference: http://dev.xomni.com/v2-1/http-api/public-apis/pii/anonymous/requesting-an-anonymous-pii
-            PII_RequestObject reqOb = new PII_RequestObject()
+            //See for reference: http://dev.xomni.com/v3-0/http-api/public-apis/pii/anonymous/requesting-an-anonymous-pii
+
+            using(ClientContext clientContext = new ClientContext(ApiClientAccessLicenceName,ApiClientAccessLicencePass,ApiEndpointUri))
             {
+                var anonymousUser = new AnonymousUser(){
                 UserName = "Sample User" + Guid.NewGuid().ToString(),
-                Name = "SampleUser" + Guid.NewGuid().ToString()
-            };
-            XomniClient xomniClient = new XomniClient();
-            PII_ResponseObject anonoymousPii = await xomniClient.RequestAnonymousPiiAsync(reqOb);
-            if (anonoymousPii != null)
-            {
-                txt_PIIPassword.Text = anonoymousPii.Data.Password;
-                txt_PIIPassword.Tag = anonoymousPii.Data.UserName;
+                Name = "SampleUser" + Guid.NewGuid().ToString()};
+                var anonymousClient = clientContext.Of<AnonymousClient>();
+                try
+                {
+                    var response = await anonymousClient.PostAsync(new AnonymousUserRequest() { Name = anonymousUser.Name, UserName = anonymousUser.UserName });
+                    if (response != null)
+                    {
+                        txt_PIIPassword.Text = response.Data.Password;
+                        txt_PIIPassword.Tag = response.Data.UserName;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Requesting an anonymous PII failed.");
+                }
             }
         }
         #endregion
@@ -121,7 +132,7 @@ namespace Source
                 string piiUser = txt_PIIPassword.Tag.ToString();
                 string piiPassword = txt_PIIPassword.Text;
                 XomniClient client = new XomniClient();
-                Wishlist wishlist = new Wishlist()
+                Source.Models.Wishlist wishlist = new Source.Models.Wishlist()
                 {
                     IsPublic = true,
                     //Name of a wishlist.PII User can enter any name for this field.
@@ -135,7 +146,7 @@ namespace Source
                 CreateWishlistResponseObject response = await client.CreateWishlistAsync(wishlist, piiUser, piiPassword);
                 if (response.IsSuccess)
                 {
-                    WishlistItem item1 = new WishlistItem()
+                    Source.Models.WishlistItem item1 = new Source.Models.WishlistItem()
                     {
                         ItemId = SampleItemId1
                     };
@@ -144,7 +155,7 @@ namespace Source
                     AddWishlistItemResponse itemResponse = await client.AddWishlistItemAsync(item1, response.Data.UniqueKey.ToString(), piiUser, piiPassword);
                     if (itemResponse.IsSuccess)
                     {
-                        WishlistItem item2 = new WishlistItem()
+                        Source.Models.WishlistItem item2 = new Source.Models.WishlistItem()
                         {
                             ItemId = SampleItemId2
                         };
