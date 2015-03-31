@@ -10,7 +10,7 @@ In our "**Inventory Sample App**", the APIs are used in two different ways:
 - **Fetch a single item** and check if it's available for purchase within the current store.
 - If it's not available in the current store, see other stores where the product can be bought from by **fetching the in-store metadata across multiple stores**.
 
-After fetching, the in-store metadata across multiple stores, we represent them in a simple map. We have used Bing Maps for the client implementation. You can find the reference link at the bottom for more information about the client control.
+After fetching the in-store metadata across multiple stores, we represent them in a simple map. We have used Bing Maps for the client implementation. You can find the reference link at the bottom for more information about the client control.
 
 Two different instore metadata have been created for the sample items in this project. One of them is to show the **item availability**, the other one is to show the **stock quantity**.
 
