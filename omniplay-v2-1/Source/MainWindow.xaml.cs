@@ -1,7 +1,10 @@
 ﻿using Source.Models;
 using System;
+using System.Configuration;
 using System.Net;
 using System.Windows;
+using XOMNI.SDK.Public;
+using XOMNI.SDK.Public.Clients.OmniPlay;
 
 namespace Source
 {
@@ -13,6 +16,9 @@ namespace Source
         //Sample item ids. We're using these hardcoded items to populate sample wishlist.
         private const int SampleItemId1 = 1;
         private const int SampleItemId2 = 2;
+        private static readonly string ApiEndpointUri = ConfigurationManager.AppSettings["XOMNI:ApiEndpointUri"];
+        private static readonly string ApiClientAccessLicenceName = ConfigurationManager.AppSettings["XOMNI:ApiClientAccessLicenceName"];
+        private static readonly string ApiClientAccessLicencePass = ConfigurationManager.AppSettings["XOMNI:ApiClientAccessLicencePass"];
 
         public MainWindow()
         {
@@ -24,7 +30,7 @@ namespace Source
         }
 
         #region Omni-Play
-        //See for reference : http://dev.xomni.com/v2-1/http-api/public-apis/omniplay/device/subscribing-to-omniplay-device-queue
+        //See for reference : http://dev.xomni.com/v3-0/http-api/public-apis/omniplay/device/subscribing-to-omniplay-device-queue
         async void btn_Move_Click(object sender, RoutedEventArgs e)
         {
             if (list_DevicesFound.SelectedItem != null)
@@ -34,16 +40,21 @@ namespace Source
 
                 string PIIPassword = txt_PIIPassword.Text;
                 string PIIUser = (string)txt_PIIPassword.Tag;
-                XomniClient xomniClient = new XomniClient();
-                bool isSuccess = await xomniClient.SubscribeQueueAsync(PIIUser, PIIPassword, ((Device)list_DevicesFound.SelectedItem).DeviceId);
-                if (isSuccess)
+                using(ClientContext clientContext = new ClientContext(ApiClientAccessLicenceName,ApiClientAccessLicencePass,ApiEndpointUri))
                 {
-                    MessageBox.Show("Session successfull queued for Omni-Play.");
+                    try
+                    {
+                        var deviceClient = clientContext.Of<DeviceClient>();
+                        var deviceId = ((XOMNI.SDK.Public.Models.Company.Device)list_DevicesFound.SelectedItem).DeviceId;
+                        await deviceClient.SubscribeToDeviceAsync(deviceId);
+                        MessageBox.Show("Session successfully queued for Omni-Play.");
+                    }
+                    catch(Exception ex)
+                    {
+                        MessageBox.Show("Omni-Play failed.");
+                    }
                 }
-                else
-                {
-                    MessageBox.Show("Omni-Play failed.");
-                }
+
             }
         }
         #endregion
