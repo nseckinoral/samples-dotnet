@@ -10,6 +10,8 @@ using Target.Models;
 using System.Configuration;
 using XOMNI.SDK.Public;
 using XOMNI.SDK.Public.Clients.Company;
+using XOMNI.SDK.Public.Clients.PII;
+using XOMNI.SDK.Public.Exceptions;
 
 namespace Target
 {
@@ -38,68 +40,79 @@ namespace Target
         {
             timerPolling.Stop();
 
-            //Check for incomming sessions.
-            //See for reference: http://dev.xomni.com/v2-1/http-api/public-apis/omniplay/device/fetching-pii-user-omnitickets-on-omniplay-device-queue
 
-            XomniClient xomniClient = new XomniClient();
-            PollingResponseObject pollingResult = await xomniClient.GetIncomingDevicesAsync(currentTargetDeviceId);
-            if (pollingResult.IsSuccess)
+            try 
             {
-                //Getting the first session in the queue
-                if (pollingResult.Data != null)
+                using (ClientContext clientContext = new ClientContext(ApiClientAccessLicenceName, ApiClientAccessLicencePass, ApiEndpointUri))
                 {
-                    incommingOmniTicket = pollingResult.Data.FirstOrDefault().OmniTicket;
-                    //Removing the "P" prefix from the ticket which means it's a PII related OmniTicket
-                    incommingOmniTicket = incommingOmniTicket.Substring(1, incommingOmniTicket.Length - 1);
-                    btn_PollSession.Content = "Polling stopped.";
-                    //Polling needs to be started again in order to receive 
-                    //the rest of incomming sessions or future incomming sessions.
-
-                    //Time to exchange incomming Omni-Token with a PII Session.
-                    //See for reference: http://dev.xomni.com/v2-1/http-api/public-apis/omniplay/omniticket/using-omniticket-for-a-pii
-                    PIISession session = await xomniClient.ExchangeOmniTokenWithPiiSessionAsync(incommingOmniTicket);
-                    if (session != null)
+                    //Check for incomming sessions.
+                    //See for reference: http://dev.xomni.com/v3-0/http-api/public-apis/omniplay/device/fetching-pii-user-omnitickets-on-omniplay-device-queue
+                    var deviceClient = clientContext.Of<XOMNI.SDK.Public.Clients.OmniPlay.DeviceClient>();
+                    var pollingResult = await deviceClient.GetIncomingsAsync(currentTargetDeviceId);
+                    if (pollingResult.Data != null)
                     {
-                        //Fetching wishlists of PII User
-                        //See for reference : http://dev.xomni.com/v2-1/http-api/public-apis/pii/wishlist/fetching-all-wish-lists
-                        WishlistUniqueKeyResponse uniqueKeys = await xomniClient.GetWishlistUniqueKeysAsync(session.Data.SessionGuid);
-                        if (uniqueKeys.IsSuccess)
+                        //Getting the first session in the queue
+                        incommingOmniTicket = pollingResult.Data.FirstOrDefault().OmniTicket;
+                        //Removing the "P" prefix from the ticket which means it's a PII related OmniTicket
+                        incommingOmniTicket = incommingOmniTicket.Substring(1, incommingOmniTicket.Length - 1);
+                        btn_PollSession.Content = "Polling stopped.";
+                        //Polling needs to be started again in order to receive the rest of incomming sessions or future incomming sessions.
+
+                        //Time to exchange incomming Omni-Token with a PII Session.
+                        //See for reference: http://dev.xomni.com/v3-0/http-api/public-apis/omniplay/omniticket/using-omniticket-for-a-pii
+                        clientContext.PIIUser = new XOMNI.SDK.Public.Models.PII.User() { UserName="",Password="" };
+                        var omniTicketClient = clientContext.Of<XOMNI.SDK.Public.Clients.OmniPlay.OmniTicketClient>();
+                        var session = await omniTicketClient.PostSessionAsync(new XOMNI.SDK.Public.Models.OmniPlay.OmniTicket() { Ticket = incommingOmniTicket });
+
+                        if (session != null)
                         {
-                            Guid uniqueKey = uniqueKeys.Data.FirstOrDefault();
-                            if (uniqueKey != default(Guid))
+                            //Fetching wishlists of PII User
+                            //See for reference : http://dev.xomni.com/v3-0/http-api/public-apis/pii/wishlist/fetching-all-wish-lists
+                            var wishlistClient = clientContext.Of<WishlistClient>();
+                            var uniqueKeys = await wishlistClient.GetAsync();
+                            if (uniqueKeys != null)
                             {
+                                var firstKey = uniqueKeys.Data.FirstOrDefault();
+
                                 //Fetching wishlist items in a wishlist.
                                 //See for reference : http://dev.xomni.com/v2-1/http-api/public-apis/pii/wishlist/fetching-a-wish-list-with-a-wish-list-unique-key
-                                WishlistResponse wishlist = await xomniClient.GetWishlistAsync(uniqueKey.ToString(), session.Data.SessionGuid);
-                                List<int> itemIds = wishlist.Data.WishlistItems.Select(t => t.Item.Id).ToList();
-                                MessageBox.Show(string.Format("Wishlist name : {0}\nIds of items in wishlist:{1},{2}", wishlist.Data.Name, itemIds[0], itemIds[1]));
+                                var wishlist = await wishlistClient.GetAsync(firstKey);
+                                var itemIdList = wishlist.Data.WishlistItems.Select(x => x.Item.Id).ToList();
+                                MessageBox.Show(string.Format("Wishlist name : {0}\nIds of items in wishlist:{1},{2}", wishlist.Data.Name, itemIdList[0], itemIdList[1]));
                             }
+                        }
+                        else
+                        {
+                            MessageBox.Show("Omni-Ticket Exchange failed.");
                         }
                     }
                     else
                     {
-                        MessageBox.Show("Omni-Ticket Exchange failed.");
+                        incommingOmniTicket = "";
+                        if (!string.IsNullOrEmpty(currentTargetDeviceId))
+                        {
+                            timerPolling.Start();
+                        }
                     }
                 }
-                else
+
+            }
+            catch(XOMNIPublicAPIException ex)
+            {
+                if(ex.ApiExceptionResult.HttpStatusCode == HttpStatusCode.NotFound)
                 {
+                    //No incomming session found.
                     incommingOmniTicket = "";
-                    if (!string.IsNullOrEmpty(currentTargetDeviceId))
+                    if(!String.IsNullOrEmpty(currentTargetDeviceId))
                     {
                         timerPolling.Start();
                     }
                 }
             }
-            else if (pollingResult.HttpStatusCode == HttpStatusCode.NotFound)
-            {
-                //No incomming session found.
-                incommingOmniTicket = "";
-                if (!string.IsNullOrEmpty(currentTargetDeviceId))
-                {
-                    timerPolling.Start();
-                }
-            }
+           
+
         }
+
 
         DispatcherTimer timerPolling = new DispatcherTimer();
         void btn_PollSession_Click(object sender, RoutedEventArgs e)
