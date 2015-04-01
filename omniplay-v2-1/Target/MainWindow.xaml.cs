@@ -38,8 +38,6 @@ namespace Target
         async void timerPolling_Tick(object sender, EventArgs e)
         {
             timerPolling.Stop();
-
-
             try 
             {
                 using (ClientContext clientContext = new ClientContext(ApiClientAccessLicenceName, ApiClientAccessLicencePass, ApiEndpointUri))
@@ -108,6 +106,12 @@ namespace Target
                     }
                 }
             }
+            catch(Exception ex)
+            {
+                timerPolling.Stop();
+                btn_PollSession.Content = "Start Omni-Play Polling";
+                MessageBox.Show("An error occured while processing your request. Please try again.");
+            }
            
 
         }
@@ -116,11 +120,15 @@ namespace Target
         DispatcherTimer timerPolling = new DispatcherTimer();
         void btn_PollSession_Click(object sender, RoutedEventArgs e)
         {
-            btn_PollSession.Content = "Polling Started";
             timerPolling.Interval = TimeSpan.FromSeconds(1);
             if (!string.IsNullOrEmpty(currentTargetDeviceId))
             {
                 timerPolling.Start();
+                btn_PollSession.Content = "Polling Started";
+            }
+            else
+            {
+                MessageBox.Show("Please register your device first.");
             }
         }
 
