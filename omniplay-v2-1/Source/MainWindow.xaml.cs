@@ -47,6 +47,7 @@ namespace Source
                 string PIIUser = (string)txt_PIIPassword.Tag;
                 using(ClientContext clientContext = new ClientContext(ApiClientAccessLicenceName,ApiClientAccessLicencePass,ApiEndpointUri))
                 {
+                    clientContext.PIIUser = new User() { UserName= PIIUser, Password= PIIPassword };
                     try
                     {
                         var deviceClient = clientContext.Of<DeviceClient>();
@@ -59,7 +60,10 @@ namespace Source
                         MessageBox.Show("Omni-Play failed.");
                     }
                 }
-
+            }
+            else
+            {
+                MessageBox.Show("Please pick a target device and make sure to create an Anonymous PII.");
             }
         }
         #endregion
