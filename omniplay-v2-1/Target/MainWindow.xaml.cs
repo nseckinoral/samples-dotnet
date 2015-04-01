@@ -6,7 +6,6 @@ using System.Net;
 using System.Text;
 using System.Windows;
 using System.Windows.Threading;
-using Target.Models;
 using System.Configuration;
 using XOMNI.SDK.Public;
 using XOMNI.SDK.Public.Clients.Company;
