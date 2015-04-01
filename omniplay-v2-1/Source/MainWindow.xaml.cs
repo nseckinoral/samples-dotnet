@@ -1,9 +1,11 @@
 ﻿using Source.Models;
 using System;
 using System.Configuration;
+using System.Linq;
 using System.Net;
 using System.Windows;
 using XOMNI.SDK.Public;
+using XOMNI.SDK.Public.Clients.Catalog;
 using XOMNI.SDK.Public.Clients.OmniPlay;
 using XOMNI.SDK.Public.Clients.PII;
 using XOMNI.SDK.Public.Exceptions;
@@ -127,6 +129,7 @@ namespace Source
 
         private async void Btn_CreateAndPopulateWishlist_Click(object sender, RoutedEventArgs e)
         {
+
             if (txt_PIIPassword.Tag == null || string.IsNullOrEmpty(txt_PIIPassword.Tag.ToString()))
             {
                 MessageBox.Show("Please create an anonymous PII first.");
@@ -135,48 +138,49 @@ namespace Source
             {
                 string piiUser = txt_PIIPassword.Tag.ToString();
                 string piiPassword = txt_PIIPassword.Text;
-                XomniClient client = new XomniClient();
-                Source.Models.Wishlist wishlist = new Source.Models.Wishlist()
+                var wishlist = new XOMNI.SDK.Public.Models.PII.Wishlist()
                 {
                     IsPublic = true,
                     //Name of a wishlist.PII User can enter any name for this field.
                     //We put a random GUID for demo purposes. 
                     Name = Guid.NewGuid().ToString(),
-                    LastSeenLocation = new Location(12, 12)
+                    LastSeenLocation = new XOMNI.SDK.Public.Models.Location() { Latitude=12,Longitude=12 }
                 };
-
-                //Creating a wishlist
-                //See for reference : http://dev.xomni.com/v2-1/http-api/public-apis/pii/wishlist/creating-a-wish-list
-                CreateWishlistResponseObject response = await client.CreateWishlistAsync(wishlist, piiUser, piiPassword);
-                if (response.IsSuccess)
+                using(ClientContext clientContext = new ClientContext(ApiClientAccessLicenceName,ApiClientAccessLicencePass,ApiEndpointUri))
                 {
-                    Source.Models.WishlistItem item1 = new Source.Models.WishlistItem()
+                    try
                     {
-                        ItemId = SampleItemId1
-                    };
-                    //Adding sample items to wishlist created above.
-                    //See for reference : http://dev.xomni.com/v2-1/http-api/public-apis/pii/wishlist-item/adding-an-item-to-a-wish-list
-                    AddWishlistItemResponse itemResponse = await client.AddWishlistItemAsync(item1, response.Data.UniqueKey.ToString(), piiUser, piiPassword);
-                    if (itemResponse.IsSuccess)
-                    {
-                        Source.Models.WishlistItem item2 = new Source.Models.WishlistItem()
+                        clientContext.PIIUser = new User() { UserName = piiUser, Password = piiPassword };
+                        //Creating a wishlist
+                        //See for reference : http://dev.xomni.com/v3-0/http-api/public-apis/pii/wishlist/creating-a-wish-list
+                        var wishlistClient = clientContext.Of<WishlistClient>();
+                        var wishlistResponse = await wishlistClient.PostWishlistAsync(wishlist);
+
+                        //Fetching all items. We're going to use some of them to add in our wishlist
+                        var itemClient = clientContext.Of<ItemClient>();
+                        var itemResponse = await itemClient.SearchAsync(new XOMNI.SDK.Public.Models.Catalog.ItemSearchRequest() {Skip = 0, Take = 2, IncludeItemStaticProperties= true });
+
+                        var firstSampleItem = new XOMNI.SDK.Public.Models.PII.WishlistItem()
                         {
-                            ItemId = SampleItemId2
+                           ItemId = itemResponse.Data.SearchResult.Items.FirstOrDefault().Id
                         };
-                        itemResponse = await client.AddWishlistItemAsync(item2, response.Data.UniqueKey.ToString(), piiUser, piiPassword);
-                        if (itemResponse.IsSuccess)
+                        var secondSampleItem = new XOMNI.SDK.Public.Models.PII.WishlistItem()
                         {
-                            MessageBox.Show(String.Format("Wishlist created and populated.\nWishlistName:{0}\nId of items in wishlist:{1},{2}", response.Data.Name, SampleItemId1.ToString(), SampleItemId2.ToString()));
-                        }
-                        else
-                        {
-                            MessageBox.Show("An error occured while populating wishlist. Please try again");
-                        }
+                           ItemId = itemResponse.Data.SearchResult.Items.LastOrDefault().Id
+                        };
+
+                        //Adding sample items to wishlist created above.
+                        //See for reference : http://dev.xomni.com/v3-0/http-api/public-apis/pii/wishlist-item/adding-an-item-to-a-wish-list
+                        var wishlistItemClient = clientContext.Of<WishlistItemClient>();
+                        var firstSampleItemResponse = await wishlistItemClient.PostAsync(wishlistResponse.Data.UniqueKey,firstSampleItem);
+                        var secondSampleItemResponse = await wishlistItemClient.PostAsync(wishlistResponse.Data.UniqueKey,secondSampleItem);
+                        MessageBox.Show(String.Format("Wishlist created and populated.\nWishlistName: {0}\nId of items in wishlist: {1},{2}", wishlistResponse.Data.Name, firstSampleItem.ItemId.ToString(), secondSampleItem.ItemId.ToString()));
                     }
-                    else
+                    catch(Exception ex)
                     {
-                        MessageBox.Show("An error occured while populating wishlist. Please try again");
+                        MessageBox.Show("An error occured while populating wishlist. Please try again.");
                     }
+
                 }
             }
         }
