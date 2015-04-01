@@ -6,6 +6,7 @@ using System.Windows;
 using XOMNI.SDK.Public;
 using XOMNI.SDK.Public.Clients.OmniPlay;
 using XOMNI.SDK.Public.Clients.PII;
+using XOMNI.SDK.Public.Exceptions;
 using XOMNI.SDK.Public.Models.PII;
 
 namespace Source
@@ -92,29 +93,32 @@ namespace Source
 
         #region Omni-Discovery
 
-        //See for reference: http://dev.xomni.com/v2-1/http-api/public-apis/company/device/fetching-a-list-of-devices-in-the-nearest-store-using-license
+        //See for reference: http://dev.xomni.com/v3-0/http-api/public-apis/company/device/fetching-a-list-of-devices-in-the-nearest-store-using-license
         async void btn_OmniDiscover_Click(object sender, RoutedEventArgs e)
         {
             //Getting a list of discoverable devices in the current store
             //The current store refers to the store where the client access license for current client is mapped in XOMNI.
-            XomniClient xomniClient = new XomniClient();
-            DiscoveryResponseObject pollingResult = await xomniClient.GetDiscoverableDevicesAsync();
-            if (pollingResult.IsSuccess)
+            using(ClientContext clientContext = new ClientContext(ApiClientAccessLicenceName,ApiClientAccessLicencePass,ApiEndpointUri))
             {
-                //Getting the first session in the queue
-                if (pollingResult.Data != null)
+                var deviceClient = clientContext.Of<XOMNI.SDK.Public.Clients.Company.DeviceClient>();
+                try
                 {
-                    list_DevicesFound.ItemsSource = pollingResult.Data;
+                    //Getting the first session in the queue
+                    var response = await deviceClient.GetAsync();
+                    list_DevicesFound.ItemsSource = response.Data;
                 }
-                else
+                catch(XOMNIPublicAPIException ex)
                 {
-                    MessageBox.Show("No device found");
+                    if(ex.ApiExceptionResult.HttpStatusCode == HttpStatusCode.NotFound)
+                    {
+                        //No device found.
+                        MessageBox.Show("No device found");
+                    }
                 }
-            }
-            else if (pollingResult.HttpStatusCode == HttpStatusCode.NotFound)
-            {
-                //No device found.
-                MessageBox.Show("No device found");
+                catch(Exception ex)
+                {
+                    MessageBox.Show("An error occured while processing the request.");
+                }
             }
         }
         #endregion
