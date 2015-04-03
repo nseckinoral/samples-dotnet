@@ -72,7 +72,7 @@ namespace Target
                                 var firstKey = uniqueKeys.Data.FirstOrDefault();
 
                                 //Fetching wishlist items in a wishlist.
-                                //See for reference : http://dev.xomni.com/v2-1/http-api/public-apis/pii/wishlist/fetching-a-wish-list-with-a-wish-list-unique-key
+                                //See for reference : http://dev.xomni.com/v3-0/http-api/public-apis/pii/wishlist/fetching-a-wish-list-with-a-wish-list-unique-key
                                 var wishlist = await wishlistClient.GetAsync(firstKey);
                                 var itemIdList = wishlist.Data.WishlistItems.Select(x => x.Item.Id).ToList();
                                 MessageBox.Show(string.Format("Wishlist name : {0}\nIds of items in wishlist:{1},{2}", wishlist.Data.Name, itemIdList[0], itemIdList[1]));
