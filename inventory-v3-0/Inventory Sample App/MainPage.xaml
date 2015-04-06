@@ -474,7 +474,7 @@
                     </Core:EventTriggerBehavior>
                 </Interactivity:Interaction.Behaviors>
             </Grid>
-            <Button x:Name="btnLogin" Content="Login" HorizontalAlignment="Right" Height="43" Margin="0,20,30,0" VerticalAlignment="Top" Width="110" Background="White" Foreground="#FF2982B7" FontFamily="Fonts/BluHead Studio - Prenton RP Cond.otf#Prenton RP" CharacterSpacing="100" FontSize="18" BorderThickness="0" Style="{StaticResource CommonButtonStyle}" FontWeight="Normal" />
+            <Button x:Name="btnLogin" Content="Login" IsHitTestVisible="False" HorizontalAlignment="Right" Height="43" Margin="0,20,30,0" VerticalAlignment="Top" Width="110" Background="White" Foreground="#FF2982B7" FontFamily="Fonts/BluHead Studio - Prenton RP Cond.otf#Prenton RP" CharacterSpacing="100" FontSize="18" BorderThickness="0" Style="{StaticResource CommonButtonStyle}" FontWeight="Normal" />
             <Rectangle x:Name="BlackScreen" x:FieldModifier="Public"  Fill="Black" Stroke="Black" StrokeThickness="0" Opacity="0" IsHitTestVisible="False"/>
             <Grid x:Name="ItemDetailScreen" IsHitTestVisible="False">
                 <Rectangle x:Name="ItemDetailWhiteBackground" Fill="White" HorizontalAlignment="Center" Height="617" Stroke="Black" VerticalAlignment="Center" Width="793" Margin="286,75" StrokeThickness="0" RenderTransformOrigin="0.5,0.5" Opacity="0">
