@@ -488,7 +488,7 @@
                     </Grid.RenderTransform>
                     <Canvas x:Name="imgProduct" HorizontalAlignment="Left" Height="348" VerticalAlignment="Center" Width="259" Margin="75,0,0,100">
                         <Canvas.Background>
-                            <ImageBrush ImageSource="{Binding ImageAssets[0].AssetUrl}" Stretch="Fill"/>
+                            <ImageBrush ImageSource="{Binding ImageAssets[0].AssetUrl}" Stretch="Uniform"/>
                         </Canvas.Background>
                     </Canvas>
                     <Grid x:Name="ContentGrid" HorizontalAlignment="Right" Height="348" VerticalAlignment="Center" Width="414" Margin="0,82,25,187">
