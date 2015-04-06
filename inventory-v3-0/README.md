@@ -225,7 +225,7 @@ However, if you search with a **keyprefix** (e.g. keyprefix= **"instock"**), you
  - [Catalog/Item In-Store Metadata/**Fetching the in-store metadata of an item**](http://dev.xomni.com/v3-0/http-api/public-apis/catalog/item-in-store-metadata/fetching-the-in-store-metadata-of-an-item)
 
 
-**Note:**  The API version used in this sample is **v3.0.3**
+**Note:**  The API version used in this sample is **v3.0** and the Public SDK version is **v3.0.5**
 
 # XOMNI SDK for .NET #
 
