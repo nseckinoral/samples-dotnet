@@ -17,9 +17,6 @@ namespace Source
     /// </summary>
     public partial class MainWindow : Window
     {
-        //Sample item ids. We're using these hardcoded items to populate sample wishlist.
-        private const int SampleItemId1 = 1;
-        private const int SampleItemId2 = 2;
         private static readonly string ApiEndpointUri = ConfigurationManager.AppSettings["XOMNI:ApiEndpointUri"];
         private static readonly string ApiClientAccessLicenceName = ConfigurationManager.AppSettings["XOMNI:ApiClientAccessLicenceName"];
         private static readonly string ApiClientAccessLicencePass = ConfigurationManager.AppSettings["XOMNI:ApiClientAccessLicencePass"];
