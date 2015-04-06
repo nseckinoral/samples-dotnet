@@ -60,9 +60,9 @@ namespace Inventory_Sample_App
                 //Parse Item Ids
                 var stringItemIds = txtItemId.Text.Split(',');
                 //Check if Item Ids are in a correct format
-                if (stringItemIds.Count() != 2 || stringItemIds[0] == stringItemIds[1] || stringItemIds.Contains(string.Empty))
+                if (stringItemIds.Count() != 2 || stringItemIds[0] == stringItemIds[1] || stringItemIds.Contains(string.Empty) || stringItemIds.Contains("0"))
                 {
-                    MessageDialog messageBox = new MessageDialog("Item Ids are not in the correct format. Please make sure they're seperated with a comma (,) and there're only 2 Ids. Item Ids cannot be identical.", "An error occured");
+                    MessageDialog messageBox = new MessageDialog("Item Ids are not in the correct format. Please make sure they're seperated with a comma (,) and there're only 2 Ids. Item Ids should be greater than 0 and they can't be identical.", "An error occured");
                     messageBox.Commands.Add(new UICommand("Close", (command) =>
                     {
                         settingsFlyOut.Show();

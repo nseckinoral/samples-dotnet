@@ -38,6 +38,7 @@ namespace Inventory_Sample_App
         {
             this.InitializeComponent();
             this.Loaded += MainPage_Loaded;
+            this.Map.Culture = "en-US";
         }
 
         void MainPage_Loaded(object sender, RoutedEventArgs e)

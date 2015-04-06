@@ -474,7 +474,7 @@
                     </Core:EventTriggerBehavior>
                 </Interactivity:Interaction.Behaviors>
             </Grid>
-            <Button x:Name="btnLogin" Content="Login" HorizontalAlignment="Right" Height="43" Margin="0,20,30,0" VerticalAlignment="Top" Width="110" Background="White" Foreground="#FF2982B7" FontFamily="Fonts/BluHead Studio - Prenton RP Cond.otf#Prenton RP" CharacterSpacing="100" FontSize="18" BorderThickness="0" Style="{StaticResource CommonButtonStyle}" FontWeight="Normal" />
+            <Button x:Name="btnLogin" Content="Login" IsHitTestVisible="False" HorizontalAlignment="Right" Height="43" Margin="0,20,30,0" VerticalAlignment="Top" Width="110" Background="White" Foreground="#FF2982B7" FontFamily="Fonts/BluHead Studio - Prenton RP Cond.otf#Prenton RP" CharacterSpacing="100" FontSize="18" BorderThickness="0" Style="{StaticResource CommonButtonStyle}" FontWeight="Normal" />
             <Rectangle x:Name="BlackScreen" x:FieldModifier="Public"  Fill="Black" Stroke="Black" StrokeThickness="0" Opacity="0" IsHitTestVisible="False"/>
             <Grid x:Name="ItemDetailScreen" IsHitTestVisible="False">
                 <Rectangle x:Name="ItemDetailWhiteBackground" Fill="White" HorizontalAlignment="Center" Height="617" Stroke="Black" VerticalAlignment="Center" Width="793" Margin="286,75" StrokeThickness="0" RenderTransformOrigin="0.5,0.5" Opacity="0">
@@ -488,12 +488,12 @@
                     </Grid.RenderTransform>
                     <Canvas x:Name="imgProduct" HorizontalAlignment="Left" Height="348" VerticalAlignment="Center" Width="259" Margin="75,0,0,100">
                         <Canvas.Background>
-                            <ImageBrush ImageSource="{Binding ImageAssets[0].AssetUrl}" Stretch="Fill"/>
+                            <ImageBrush ImageSource="{Binding ImageAssets[0].AssetUrl}" Stretch="Uniform"/>
                         </Canvas.Background>
                     </Canvas>
                     <Grid x:Name="ContentGrid" HorizontalAlignment="Right" Height="348" VerticalAlignment="Center" Width="414" Margin="0,82,25,187">
-                        <TextBlock x:Name="txtTitle" Height="40" Text="{Binding Title}" VerticalAlignment="Top" FontSize="44" Foreground="#FF2982B7" IsHitTestVisible="False" MaxLines="1" IsColorFontEnabled="False" TextTrimming="CharacterEllipsis" FontFamily="Fonts/BluHead Studio - Prenton RP Cond Light.otf#Prenton RP" CharacterSpacing="30"/>
-                        <Path x:Name="TopLine" Data="M641,198 L1027.03,198" Fill="#FFB7B7B7" Height="1" Stretch="Fill" UseLayoutRounding="False" VerticalAlignment="Top" Margin="0,50,25,0" Stroke="#FFB7B7B7"/>
+                        <TextBlock x:Name="txtTitle" Height="50" Text="{Binding Title}" VerticalAlignment="Top" FontSize="44" Foreground="#FF2982B7" IsHitTestVisible="False" MaxLines="1" IsColorFontEnabled="False" TextTrimming="CharacterEllipsis" FontFamily="Fonts/BluHead Studio - Prenton RP Cond Light.otf#Prenton RP" CharacterSpacing="30"/>
+                        <Path x:Name="TopLine" Data="M641,198 L1027.03,198" Fill="#FFB7B7B7" Height="1" Stretch="Fill" UseLayoutRounding="False" VerticalAlignment="Top" Margin="0,55,25,0" Stroke="#FFB7B7B7"/>
                         <ScrollViewer x:Name="scrollViewer" Height="285" VerticalAlignment="Bottom" Margin="0,0,0,5" HorizontalScrollMode="Disabled" VerticalScrollMode="Auto" ZoomMode="Disabled" VerticalScrollBarVisibility="Auto" UseLayoutRounding="False">
                             <TextBlock x:Name="txtDescription" TextWrapping="Wrap" Text="{Binding LongDescription}" Foreground="#FF2982B7" FontSize="21.333" TextAlignment="Justify" FontFamily="Fonts/BluHead Studio - Prenton RP Cond Light.otf#Prenton RP" HorizontalAlignment="Center" Width="386" Margin="0,0,20,0"/>
                         </ScrollViewer>
