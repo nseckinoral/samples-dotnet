@@ -57,7 +57,6 @@ namespace Target
 
                         //Time to exchange incomming Omni-Token with a PII Session.
                         //See for reference: http://dev.xomni.com/v3-0/http-api/public-apis/omniplay/omniticket/using-omniticket-for-a-pii
-                        clientContext.PIIUser = new XOMNI.SDK.Public.Models.PII.User() { UserName="",Password="" };
                         var omniTicketClient = clientContext.Of<XOMNI.SDK.Public.Clients.OmniPlay.OmniTicketClient>();
                         var session = await omniTicketClient.PostSessionAsync(new XOMNI.SDK.Public.Models.OmniPlay.OmniTicket() { Ticket = incommingOmniTicket });
 
