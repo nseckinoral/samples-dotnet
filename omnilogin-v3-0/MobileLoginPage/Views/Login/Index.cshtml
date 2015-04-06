@@ -3,8 +3,8 @@
     @using (Html.BeginForm())
     
     {
-        @Html.TextBoxFor(t => t.Username, new { placeholder = "Username", autocomplete= "off", maxlength="10"})
-        @Html.PasswordFor(t => t.Password, new { placeholder = "Password", autocomplete = "off", maxlength = "10" })
+        @Html.TextBoxFor(t => t.Username, new { placeholder = "Username", autocomplete= "off", maxlength="20"})
+        @Html.PasswordFor(t => t.Password, new { placeholder = "Password", autocomplete = "off", maxlength = "20" })
         <input type="submit" class="loginBttn fontit" value="Login"/>
     }
 </div>
