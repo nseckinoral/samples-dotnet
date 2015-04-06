@@ -59,7 +59,7 @@ namespace Target
                         //See for reference: http://dev.xomni.com/v3-0/http-api/public-apis/omniplay/omniticket/using-omniticket-for-a-pii
                         var omniTicketClient = clientContext.Of<XOMNI.SDK.Public.Clients.OmniPlay.OmniTicketClient>();
                         var session = await omniTicketClient.PostSessionAsync(new XOMNI.SDK.Public.Models.OmniPlay.OmniTicket() { Ticket = incommingOmniTicket });
-
+                        clientContext.OmniSession = session.Data;
                         if (session != null)
                         {
                             //Fetching wishlists of PII User
